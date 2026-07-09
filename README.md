@@ -30,6 +30,7 @@ Without the key everything still works — the AI buttons fall back to built-in 
 
 - **Spaced repetition** — Leitner-style boxes (repeat failed cards immediately; known cards come back after 1 / 3 / 7 / 21 days)
 - **Topics** — toggle categories on/off with the chips above the card deck
+- **Rounds ("Pro Runde")** — practice in chunks of 5 / 10 / 15 / 25 cards instead of everything at once; the done screen shows how many cards are still due and starts the next chunk
 - **Unlimited words** — add your own words in the *+ Neu* tab
 - **AI assist** — type just the German word and the AI fills in the article, translation, example sentence and a grammar note
 - **Search & edit** — full word list with search, inline edit and delete
@@ -42,6 +43,7 @@ Without the key everything still works — the AI buttons fall back to built-in 
 | Adjektive | 16 | common adjectives |
 | Präpositionen | 14 | prepositions with case notes |
 | Sätze & Floskeln | 421 | *Moin, Deutsch! Band II — Sätze & Floskeln* (everyday phrases, 23 chapters: greetings, small talk, bakery, checkout, restaurant, trains, doctor, Amt, phone, work, housing, occasions, Norddeutsch) |
+| Grundwortschatz | 633 | *Moin, Deutsch!* Band I word list (30 chapters: articles, pronouns, verbs, question words, numbers, family, time, food, home, body, city, work, clothing, colors, weather & nature, particles, useful nouns/verbs, shopping). 54 entries that already exist in the other categories were left out to avoid duplicate cards |
 
 ### Notes on the *Sätze & Floskeln* cards
 
