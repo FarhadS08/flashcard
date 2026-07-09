@@ -829,17 +829,7 @@ function grundPack(){
     mk('','denken','to think','',43),
     mk('','nehmen','to take','',44),
     mk('','brauchen','to need','',45),
-    // Kapitel 06 — Fragewörter
-    mk('','wer','who','',46),
-    mk('','was','what','',47),
-    mk('','wo','where','',48),
-    mk('','wann','when','',49),
-    mk('','warum','why','',50),
-    mk('','wie','how','',51),
-    mk('','welcher','which','',52),
-    mk('','woher','from where','',53),
-    mk('','wohin','to where','',54),
-    mk('','wie viel','how much, how many','',55),
+    // Kapitel 06 — Fragewörter → eigene Kategorie "W-Wörter" (wwoerterPack)
     // Kapitel 07 — Präpositionen
     mk('','unter','under, below','',56),
     mk('','vor','before, in front of','',57),
@@ -1445,6 +1435,55 @@ function grundPack(){
   ];
 }
 
+function wwoerterPack(){
+  const now=Date.now();
+  const mk=(de,en,ex,note,i)=>({id:'ww'+i,art:'',de,en,ex,note,topic:'W-Wörter',box:1,due:0,created:now});
+  return[
+    // wer und seine Formen
+    mk('wer','who','Wer ist das?','nur für Personen · Nominativ',1),
+    mk('wen','whom','Wen siehst du?','Akkusativ von wer',2),
+    mk('wem','(to) whom','Wem gehört die Tasche?','Dativ von wer',3),
+    mk('wessen','whose','Wessen Auto ist das?','Genitiv von wer · eher formell',4),
+    // die Basis-Fragewörter
+    mk('was','what','Was machst du am Wochenende?','',5),
+    mk('wo','where','Wo wohnst du?','Ort — keine Bewegung',6),
+    mk('wohin','where to','Wohin fährst du im Urlaub?','Richtung · Bewegung',7),
+    mk('woher','where from','Woher kommst du?','Herkunft',8),
+    mk('wann','when','Wann beginnt der Film?','',9),
+    mk('seit wann','since when','Seit wann lernst du Deutsch?','',10),
+    mk('bis wann','until when','Bis wann bleibst du?','',11),
+    mk('warum','why','Warum lernst du Deutsch?','',12),
+    mk('wieso','why, how come','Wieso fragst du?','wie warum, etwas lockerer',13),
+    mk('weshalb / weswegen','why, for what reason','Weshalb sind Sie hier?','formeller als warum',14),
+    mk('wozu','what for','Wozu brauchst du das?','fragt nach dem Zweck',15),
+    mk('welcher / welche / welches','which','Welcher Bus fährt zum Zentrum?','dekliniert wie der/die/das',16),
+    mk('was für ein','what kind of','Was für ein Handy hast du?','fragt nach der Art',17),
+    // wie + Kombinationen
+    mk('wie','how','Wie funktioniert das?','',18),
+    mk('wie viel','how much','Wie viel kostet das?','+ Singular (nicht zählbar)',19),
+    mk('wie viele','how many','Wie viele Geschwister hast du?','+ Plural (zählbar)',20),
+    mk('wie lange','how long','Wie lange dauert der Kurs?','',21),
+    mk('wie oft','how often','Wie oft machst du Sport?','',22),
+    mk('wie alt','how old','Wie alt bist du?','',23),
+    mk('wie spät','what time','Wie spät ist es?','Antwort: Es ist … Uhr',24),
+    mk('wie weit','how far','Wie weit ist es bis zum Bahnhof?','',25),
+    // wo(r)- + Präposition — fragt nach Dingen
+    mk('womit','with what','Womit fährst du zur Arbeit?','mit + was',26),
+    mk('wofür','for what','Wofür ist das gut?','für + was',27),
+    mk('worauf','on what, for what','Worauf wartest du?','auf + was · wor- vor Vokal',28),
+    mk('worüber','about what','Worüber sprecht ihr?','über + was',29),
+    mk('wovon','of what, from what','Wovon träumst du?','von + was',30),
+    mk('woran','of what, on what','Woran denkst du?','an + was',31),
+    mk('wonach','after what, for what','Wonach suchst du?','nach + was',32),
+    mk('wobei','during what, with what','Wobei kann ich dir helfen?','bei + was',33),
+    mk('wodurch','through what, how','Wodurch ist der Fehler passiert?','durch + was',34),
+    mk('worum','about what','Worum geht es in dem Film?','um + was',35),
+    mk('wovor','of what (fear, before)','Wovor hast du Angst?','vor + was',36),
+    mk('wogegen','against what','Wogegen hilft dieses Medikament?','gegen + was',37),
+    mk('woraus','out of what','Woraus ist das gemacht?','aus + was',38)
+  ];
+}
+
 function migrate(){
   let changed=false;
   deck.words.forEach(w=>{if(!w.topic){w.topic='Meine Wörter';changed=true;}});
@@ -1454,6 +1493,11 @@ function migrate(){
   if(deck.packs.indexOf('praepositionen')<0){deck.words=deck.words.concat(prepPack());deck.packs.push('praepositionen');changed=true;}
   if(deck.packs.indexOf('floskeln')<0){deck.words=deck.words.concat(floskelnPack());deck.packs.push('floskeln');changed=true;}
   if(deck.packs.indexOf('grundwortschatz')<0){deck.words=deck.words.concat(grundPack());deck.packs.push('grundwortschatz');changed=true;}
+  if(deck.packs.indexOf('wwoerter')<0){
+    const rm=['gw46','gw47','gw48','gw49','gw50','gw51','gw52','gw53','gw54','gw55'];
+    deck.words=deck.words.filter(w=>rm.indexOf(w.id)<0);
+    deck.words=deck.words.concat(wwoerterPack());deck.packs.push('wwoerter');changed=true;
+  }
   return changed;
 }
 
