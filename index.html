@@ -72,6 +72,7 @@ h1{font-size:26px;font-weight:700;letter-spacing:-.01em;line-height:1.1}
 .trans{font-size:27px;font-weight:600;text-align:center;margin-bottom:14px;letter-spacing:-.01em;line-height:1.2}
 .trans.long{font-size:21px;line-height:1.3}
 .ex{font-size:15.5px;font-style:italic;color:#555555;text-align:center;line-height:1.55;max-width:420px}
+.ext{font-size:13px;color:#9A9A9A;text-align:center;line-height:1.45;max-width:420px;margin-top:5px}
 .note{margin-top:16px;font-size:12.5px;color:#0A7A52;background:#E3F2EB;padding:6px 13px;border-radius:999px;font-weight:500;text-align:center}
 .counter{text-align:center;font-size:12.5px;color:#9A9A9A;margin-top:12px}
 
@@ -216,6 +217,7 @@ label{display:block;font-size:11.5px;font-weight:600;letter-spacing:.08em;text-t
       <div class="field"><label>Wort *</label><input id="f-word" class="input" placeholder="Erfindung" onkeydown="enterSave(event)"></div>
       <div class="field"><label>Übersetzung *</label><input id="f-trans" class="input" placeholder="invention" onkeydown="enterSave(event)"></div>
       <div class="field"><label>Beispielsatz</label><input id="f-ex" class="input" placeholder="Die Pizza war eine geniale Erfindung." onkeydown="enterSave(event)"></div>
+      <div class="field"><label>Beispiel-Übersetzung</label><input id="f-ext" class="input" placeholder="Pizza was a brilliant invention." onkeydown="enterSave(event)"></div>
       <div class="field"><label>Notiz</label><input id="f-note" class="input" placeholder="von: erfinden" onkeydown="enterSave(event)"></div>
       <div class="field"><label>Thema</label><input id="f-topic" class="input" list="topics-dl" placeholder="Meine Wörter" onkeydown="enterSave(event)"><datalist id="topics-dl"></datalist></div>
       <button class="btn ai-fill" id="btn-fill" onclick="aiFill(false)"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8zM19 14.5l.9 2.6 2.6.9-2.6.9-.9 2.6-.9-2.6-2.6-.9 2.6-.9z"/></svg>Mit KI ausfüllen</button>
@@ -266,61 +268,61 @@ const store=(window.storage&&typeof window.storage.get==='function')?window.stor
 
 function seedWords(){
   const now=Date.now();
-  const mk=(art,de,en,ex,note,i)=>({id:'w'+(now-i),art,de,en,ex,note,topic:'Meine Wörter',box:1,due:0,created:now-i});
+  const mk=(art,de,en,ex,ext,note,i)=>({id:'w'+(now-i),art,de,en,ex,ext,note,topic:'Meine Wörter',box:1,due:0,created:now-i});
   return[
-    mk('die','Weise','way, manner','Auf diese Weise lernt man schneller.','auf diese Weise = in this way',1),
-    mk('','zubereiten','to prepare (food)','Ich bereite den Salat zu.','trennbar → ich bereite … zu',2),
-    mk('der','Nachteil','disadvantage','Der einzige Nachteil ist der Preis.','Gegenteil: der Vorteil',3),
-    mk('','danach','afterwards, after that','Zuerst kochen wir, danach essen wir.','',4),
-    mk('die','Erfindung','invention','Die Pizza war eine geniale Erfindung.','von: erfinden (to invent)',5),
-    mk('die','Armen','the poor (people)','Früher war das ein Essen für die Armen.','Plural · von: arm (poor)',6),
-    mk('','enthalten','to contain','Cola enthält viel Zucker.','er/sie/es enthält · nicht trennbar',7),
-    mk('','weltbekannt','world-famous','Döner ist heute weltbekannt.','Achtung: doppel-n',8),
-    mk('','dünn','thin','Die Scheiben sind sehr dünn.','Gegenteil: dick',9)
+    mk('die','Weise','way, manner','Auf diese Weise lernt man schneller.','This way you learn faster.','auf diese Weise = in this way',1),
+    mk('','zubereiten','to prepare (food)','Ich bereite den Salat zu.','I am preparing the salad.','trennbar → ich bereite … zu',2),
+    mk('der','Nachteil','disadvantage','Der einzige Nachteil ist der Preis.','The only disadvantage is the price.','Gegenteil: der Vorteil',3),
+    mk('','danach','afterwards, after that','Zuerst kochen wir, danach essen wir.','First we cook, after that we eat.','',4),
+    mk('die','Erfindung','invention','Die Pizza war eine geniale Erfindung.','Pizza was a brilliant invention.','von: erfinden (to invent)',5),
+    mk('die','Armen','the poor (people)','Früher war das ein Essen für die Armen.','It used to be a meal for the poor.','Plural · von: arm (poor)',6),
+    mk('','enthalten','to contain','Cola enthält viel Zucker.','Cola contains a lot of sugar.','er/sie/es enthält · nicht trennbar',7),
+    mk('','weltbekannt','world-famous','Döner ist heute weltbekannt.','Döner is world-famous today.','Achtung: doppel-n',8),
+    mk('','dünn','thin','Die Scheiben sind sehr dünn.','The slices are very thin.','Gegenteil: dick',9)
   ];
 }
 
 function adjPack(){
   const now=Date.now();
-  const mk=(de,en,ex,note,i)=>({id:'adj'+i,art:'',de,en,ex,note,topic:'Adjektive',box:1,due:0,created:now});
+  const mk=(de,en,ex,ext,note,i)=>({id:'adj'+i,art:'',de,en,ex,ext,note,topic:'Adjektive',box:1,due:0,created:now});
   return[
-    mk('groß','big, tall','Hamburg ist eine große Stadt.','Gegenteil: klein',1),
-    mk('klein','small','Wir haben eine kleine Küche.','Gegenteil: groß',2),
-    mk('gut','good','Das ist eine gute Idee.','Gegenteil: schlecht',3),
-    mk('schlecht','bad','Das Wetter ist heute schlecht.','Gegenteil: gut',4),
-    mk('schön','beautiful, nice','Ich wünsche dir einen schönen Tag.','',5),
-    mk('neu','new','Er kauft sich ein neues Handy.','Gegenteil: alt',6),
-    mk('alt','old','Mein Auto ist ziemlich alt.','Gegenteil: neu / jung',7),
-    mk('teuer','expensive','Diese Schuhe sind mir zu teuer.','Gegenteil: billig · dekliniert: teur- (ein teures Auto)',8),
-    mk('billig','cheap','Der Rock war ziemlich billig.','Gegenteil: teuer',9),
-    mk('schnell','fast','Du lernst wirklich schnell.','Gegenteil: langsam',10),
-    mk('langsam','slow','Sprich bitte langsamer!','Gegenteil: schnell',11),
-    mk('einfach','easy, simple','Die Aufgabe ist ganz einfach.','Gegenteil: schwierig',12),
-    mk('schwierig','difficult','Deutsche Artikel sind manchmal schwierig.','Gegenteil: einfach',13),
-    mk('wichtig','important','Das ist ein wichtiger Termin.','',14),
-    mk('müde','tired','Nach der Arbeit bin ich müde.','',15),
-    mk('lecker','tasty','Der Döner hier ist richtig lecker.','',16)
+    mk('groß','big, tall','Hamburg ist eine große Stadt.','Hamburg is a big city.','Gegenteil: klein',1),
+    mk('klein','small','Wir haben eine kleine Küche.','We have a small kitchen.','Gegenteil: groß',2),
+    mk('gut','good','Das ist eine gute Idee.','That is a good idea.','Gegenteil: schlecht',3),
+    mk('schlecht','bad','Das Wetter ist heute schlecht.','The weather is bad today.','Gegenteil: gut',4),
+    mk('schön','beautiful, nice','Ich wünsche dir einen schönen Tag.','I wish you a nice day.','',5),
+    mk('neu','new','Er kauft sich ein neues Handy.','He is buying himself a new phone.','Gegenteil: alt',6),
+    mk('alt','old','Mein Auto ist ziemlich alt.','My car is quite old.','Gegenteil: neu / jung',7),
+    mk('teuer','expensive','Diese Schuhe sind mir zu teuer.','These shoes are too expensive for me.','Gegenteil: billig · dekliniert: teur- (ein teures Auto)',8),
+    mk('billig','cheap','Der Rock war ziemlich billig.','The skirt was quite cheap.','Gegenteil: teuer',9),
+    mk('schnell','fast','Du lernst wirklich schnell.','You learn really fast.','Gegenteil: langsam',10),
+    mk('langsam','slow','Sprich bitte langsamer!','Please speak more slowly!','Gegenteil: schnell',11),
+    mk('einfach','easy, simple','Die Aufgabe ist ganz einfach.','The task is really easy.','Gegenteil: schwierig',12),
+    mk('schwierig','difficult','Deutsche Artikel sind manchmal schwierig.','German articles are sometimes difficult.','Gegenteil: einfach',13),
+    mk('wichtig','important','Das ist ein wichtiger Termin.','That is an important appointment.','',14),
+    mk('müde','tired','Nach der Arbeit bin ich müde.','After work I am tired.','',15),
+    mk('lecker','tasty','Der Döner hier ist richtig lecker.','The döner here is really tasty.','',16)
   ];
 }
 
 function prepPack(){
   const now=Date.now();
-  const mk=(de,en,ex,note,i)=>({id:'prep'+i,art:'',de,en,ex,note,topic:'Präpositionen',box:1,due:0,created:now});
+  const mk=(de,en,ex,ext,note,i)=>({id:'prep'+i,art:'',de,en,ex,ext,note,topic:'Präpositionen',box:1,due:0,created:now});
   return[
-    mk('mit','with','Ich fahre mit dem Bus.','immer + Dativ',1),
-    mk('für','for','Das Geschenk ist für dich.','immer + Akkusativ',2),
-    mk('ohne','without','Ich trinke Kaffee ohne Zucker.','immer + Akkusativ',3),
-    mk('bei','at, with (someone)','Sie wohnt bei ihren Eltern.','immer + Dativ',4),
-    mk('nach','after; to (cities)','Nach dem Essen gehen wir spazieren.','immer + Dativ',5),
-    mk('von','from, of','Das ist ein Geschenk von meiner Oma.','immer + Dativ',6),
-    mk('zu','to (people, places)','Ich gehe heute zu meiner Schwester.','immer + Dativ',7),
-    mk('aus','from, out of','Er kommt aus der Türkei.','immer + Dativ',8),
-    mk('in','in, into','Ich bin in der Küche.','Wechsel: wo? + Dativ · wohin? + Akkusativ',9),
-    mk('auf','on, onto','Der Vogel sitzt auf dem Baum.','Wechsel: wo? + Dativ · wohin? + Akkusativ',10),
-    mk('an','at, on (vertical)','Das Bild hängt an der Wand.','Wechsel: wo? + Dativ · wohin? + Akkusativ',11),
-    mk('über','about; above','Wir sprechen über den Film.','über + Thema: + Akkusativ',12),
-    mk('seit','since, for (time)','Ich lerne seit einem Jahr Deutsch.','immer + Dativ',13),
-    mk('gegen','against','Wir spielen gegen euch.','immer + Akkusativ',14)
+    mk('mit','with','Ich fahre mit dem Bus.','I go by bus.','immer + Dativ',1),
+    mk('für','for','Das Geschenk ist für dich.','The present is for you.','immer + Akkusativ',2),
+    mk('ohne','without','Ich trinke Kaffee ohne Zucker.','I drink coffee without sugar.','immer + Akkusativ',3),
+    mk('bei','at, with (someone)','Sie wohnt bei ihren Eltern.','She lives with her parents.','immer + Dativ',4),
+    mk('nach','after; to (cities)','Nach dem Essen gehen wir spazieren.','After the meal we go for a walk.','immer + Dativ',5),
+    mk('von','from, of','Das ist ein Geschenk von meiner Oma.','This is a present from my grandma.','immer + Dativ',6),
+    mk('zu','to (people, places)','Ich gehe heute zu meiner Schwester.','I am going to my sister’s today.','immer + Dativ',7),
+    mk('aus','from, out of','Er kommt aus der Türkei.','He comes from Turkey.','immer + Dativ',8),
+    mk('in','in, into','Ich bin in der Küche.','I am in the kitchen.','Wechsel: wo? + Dativ · wohin? + Akkusativ',9),
+    mk('auf','on, onto','Der Vogel sitzt auf dem Baum.','The bird is sitting in the tree.','Wechsel: wo? + Dativ · wohin? + Akkusativ',10),
+    mk('an','at, on (vertical)','Das Bild hängt an der Wand.','The picture hangs on the wall.','Wechsel: wo? + Dativ · wohin? + Akkusativ',11),
+    mk('über','about; above','Wir sprechen über den Film.','We are talking about the film.','über + Thema: + Akkusativ',12),
+    mk('seit','since, for (time)','Ich lerne seit einem Jahr Deutsch.','I have been learning German for a year.','immer + Dativ',13),
+    mk('gegen','against','Wir spielen gegen euch.','We are playing against you.','immer + Akkusativ',14)
   ];
 }
 
@@ -1437,50 +1439,50 @@ function grundPack(){
 
 function wwoerterPack(){
   const now=Date.now();
-  const mk=(de,en,ex,note,i)=>({id:'ww'+i,art:'',de,en,ex,note,topic:'W-Wörter',box:1,due:0,created:now});
+  const mk=(de,en,ex,ext,note,i)=>({id:'ww'+i,art:'',de,en,ex,ext,note,topic:'W-Wörter',box:1,due:0,created:now});
   return[
     // wer und seine Formen
-    mk('wer','who','Wer ist das?','nur für Personen · Nominativ',1),
-    mk('wen','whom','Wen siehst du?','Akkusativ von wer',2),
-    mk('wem','(to) whom','Wem gehört die Tasche?','Dativ von wer',3),
-    mk('wessen','whose','Wessen Auto ist das?','Genitiv von wer · eher formell',4),
+    mk('wer','who','Wer ist das?','Who is that?','nur für Personen · Nominativ',1),
+    mk('wen','whom','Wen siehst du?','Whom do you see?','Akkusativ von wer',2),
+    mk('wem','(to) whom','Wem gehört die Tasche?','To whom does the bag belong?','Dativ von wer',3),
+    mk('wessen','whose','Wessen Auto ist das?','Whose car is that?','Genitiv von wer · eher formell',4),
     // die Basis-Fragewörter
-    mk('was','what','Was machst du am Wochenende?','',5),
-    mk('wo','where','Wo wohnst du?','Ort — keine Bewegung',6),
-    mk('wohin','where to','Wohin fährst du im Urlaub?','Richtung · Bewegung',7),
-    mk('woher','where from','Woher kommst du?','Herkunft',8),
-    mk('wann','when','Wann beginnt der Film?','',9),
-    mk('seit wann','since when','Seit wann lernst du Deutsch?','',10),
-    mk('bis wann','until when','Bis wann bleibst du?','',11),
-    mk('warum','why','Warum lernst du Deutsch?','',12),
-    mk('wieso','why, how come','Wieso fragst du?','wie warum, etwas lockerer',13),
-    mk('weshalb / weswegen','why, for what reason','Weshalb sind Sie hier?','formeller als warum',14),
-    mk('wozu','what for','Wozu brauchst du das?','fragt nach dem Zweck',15),
-    mk('welcher / welche / welches','which','Welcher Bus fährt zum Zentrum?','dekliniert wie der/die/das',16),
-    mk('was für ein','what kind of','Was für ein Handy hast du?','fragt nach der Art',17),
+    mk('was','what','Was machst du am Wochenende?','What are you doing at the weekend?','',5),
+    mk('wo','where','Wo wohnst du?','Where do you live?','Ort — keine Bewegung',6),
+    mk('wohin','where to','Wohin fährst du im Urlaub?','Where are you going on holiday?','Richtung · Bewegung',7),
+    mk('woher','where from','Woher kommst du?','Where are you from?','Herkunft',8),
+    mk('wann','when','Wann beginnt der Film?','When does the film start?','',9),
+    mk('seit wann','since when','Seit wann lernst du Deutsch?','Since when have you been learning German?','',10),
+    mk('bis wann','until when','Bis wann bleibst du?','Until when are you staying?','',11),
+    mk('warum','why','Warum lernst du Deutsch?','Why are you learning German?','',12),
+    mk('wieso','why, how come','Wieso fragst du?','Why do you ask?','wie warum, etwas lockerer',13),
+    mk('weshalb / weswegen','why, for what reason','Weshalb sind Sie hier?','For what reason are you here?','formeller als warum',14),
+    mk('wozu','what for','Wozu brauchst du das?','What do you need that for?','fragt nach dem Zweck',15),
+    mk('welcher / welche / welches','which','Welcher Bus fährt zum Zentrum?','Which bus goes to the center?','dekliniert wie der/die/das',16),
+    mk('was für ein','what kind of','Was für ein Handy hast du?','What kind of phone do you have?','fragt nach der Art',17),
     // wie + Kombinationen
-    mk('wie','how','Wie funktioniert das?','',18),
-    mk('wie viel','how much','Wie viel kostet das?','+ Singular (nicht zählbar)',19),
-    mk('wie viele','how many','Wie viele Geschwister hast du?','+ Plural (zählbar)',20),
-    mk('wie lange','how long','Wie lange dauert der Kurs?','',21),
-    mk('wie oft','how often','Wie oft machst du Sport?','',22),
-    mk('wie alt','how old','Wie alt bist du?','',23),
-    mk('wie spät','what time','Wie spät ist es?','Antwort: Es ist … Uhr',24),
-    mk('wie weit','how far','Wie weit ist es bis zum Bahnhof?','',25),
+    mk('wie','how','Wie funktioniert das?','How does that work?','',18),
+    mk('wie viel','how much','Wie viel kostet das?','How much does that cost?','+ Singular (nicht zählbar)',19),
+    mk('wie viele','how many','Wie viele Geschwister hast du?','How many siblings do you have?','+ Plural (zählbar)',20),
+    mk('wie lange','how long','Wie lange dauert der Kurs?','How long does the course take?','',21),
+    mk('wie oft','how often','Wie oft machst du Sport?','How often do you exercise?','',22),
+    mk('wie alt','how old','Wie alt bist du?','How old are you?','',23),
+    mk('wie spät','what time','Wie spät ist es?','What time is it?','Antwort: Es ist … Uhr',24),
+    mk('wie weit','how far','Wie weit ist es bis zum Bahnhof?','How far is it to the station?','',25),
     // wo(r)- + Präposition — fragt nach Dingen
-    mk('womit','with what','Womit fährst du zur Arbeit?','mit + was',26),
-    mk('wofür','for what','Wofür ist das gut?','für + was',27),
-    mk('worauf','on what, for what','Worauf wartest du?','auf + was · wor- vor Vokal',28),
-    mk('worüber','about what','Worüber sprecht ihr?','über + was',29),
-    mk('wovon','of what, from what','Wovon träumst du?','von + was',30),
-    mk('woran','of what, on what','Woran denkst du?','an + was',31),
-    mk('wonach','after what, for what','Wonach suchst du?','nach + was',32),
-    mk('wobei','during what, with what','Wobei kann ich dir helfen?','bei + was',33),
-    mk('wodurch','through what, how','Wodurch ist der Fehler passiert?','durch + was',34),
-    mk('worum','about what','Worum geht es in dem Film?','um + was',35),
-    mk('wovor','of what (fear, before)','Wovor hast du Angst?','vor + was',36),
-    mk('wogegen','against what','Wogegen hilft dieses Medikament?','gegen + was',37),
-    mk('woraus','out of what','Woraus ist das gemacht?','aus + was',38)
+    mk('womit','with what','Womit fährst du zur Arbeit?','What do you go to work with?','mit + was',26),
+    mk('wofür','for what','Wofür ist das gut?','What is that good for?','für + was',27),
+    mk('worauf','on what, for what','Worauf wartest du?','What are you waiting for?','auf + was · wor- vor Vokal',28),
+    mk('worüber','about what','Worüber sprecht ihr?','What are you talking about?','über + was',29),
+    mk('wovon','of what, from what','Wovon träumst du?','What do you dream of?','von + was',30),
+    mk('woran','of what, on what','Woran denkst du?','What are you thinking about?','an + was',31),
+    mk('wonach','after what, for what','Wonach suchst du?','What are you looking for?','nach + was',32),
+    mk('wobei','during what, with what','Wobei kann ich dir helfen?','What can I help you with?','bei + was',33),
+    mk('wodurch','through what, how','Wodurch ist der Fehler passiert?','How (through what) did the error happen?','durch + was',34),
+    mk('worum','about what','Worum geht es in dem Film?','What is the film about?','um + was',35),
+    mk('wovor','of what (fear, before)','Wovor hast du Angst?','What are you afraid of?','vor + was',36),
+    mk('wogegen','against what','Wogegen hilft dieses Medikament?','What does this medicine help against?','gegen + was',37),
+    mk('woraus','out of what','Woraus ist das gemacht?','What is that made of?','aus + was',38)
   ];
 }
 
@@ -1497,6 +1499,12 @@ function migrate(){
     const rm=['gw46','gw47','gw48','gw49','gw50','gw51','gw52','gw53','gw54','gw55'];
     deck.words=deck.words.filter(w=>rm.indexOf(w.id)<0);
     deck.words=deck.words.concat(wwoerterPack());deck.packs.push('wwoerter');changed=true;
+  }
+  if(!deck.extFilled){
+    const m={};
+    seedWords().concat(adjPack(),prepPack(),wwoerterPack()).forEach(w=>{if(w.ext)m[w.de]=w.ext;});
+    deck.words.forEach(w=>{if(w.ex&&!w.ext&&m[w.de])w.ext=m[w.de];});
+    deck.extFilled=true;changed=true;
   }
   return changed;
 }
@@ -1621,6 +1629,7 @@ function cardHtml(w){
         '<div class="term-sm">'+artTxt+esc(w.de)+'</div>'+
         '<div class="trans'+(w.en.length>32?' long':'')+'">'+esc(w.en)+'</div>'+
         (w.ex?'<div class="ex">„'+esc(w.ex)+'“</div>':'')+
+        (w.ex&&w.ext?'<div class="ext">'+esc(w.ext)+'</div>':'')+
         (w.note?'<div class="note">'+esc(w.note)+'</div>':'')+
       '</div>'+
     '</div>'+
@@ -1728,7 +1737,7 @@ function setArt(a,byUser){
 }
 function resetForm(){
   editingId=null;setArt('');artTouched=false;
-  ['f-word','f-trans','f-ex','f-note','f-topic'].forEach(i=>$(i).value='');
+  ['f-word','f-trans','f-ex','f-ext','f-note','f-topic'].forEach(i=>$(i).value='');
   $('form-title').textContent='Neues Wort';
   $('btn-save').textContent='Speichern';
   $('btn-cancel').classList.add('hidden');
@@ -1738,7 +1747,7 @@ function openEdit(id){
   if(!w)return;
   show('add');
   editingId=id;setArt(w.art||'',true);
-  $('f-word').value=w.de;$('f-trans').value=w.en;$('f-ex').value=w.ex||'';$('f-note').value=w.note||'';$('f-topic').value=w.topic||'Meine Wörter';
+  $('f-word').value=w.de;$('f-trans').value=w.en;$('f-ex').value=w.ex||'';$('f-ext').value=w.ext||'';$('f-note').value=w.note||'';$('f-topic').value=w.topic||'Meine Wörter';
   $('form-title').textContent='Wort bearbeiten';
   $('btn-save').textContent='Aktualisieren';
   $('btn-cancel').classList.remove('hidden');
@@ -1800,7 +1809,8 @@ async function aiFill(fromSave){
   let ok=false;
   try{
     const givenTrans=$('f-trans').value.trim();
-    const prompt='Du hilfst einem Deutschlerner (Niveau A2). Wort: "'+word+'".'+(givenTrans?' Die englische Übersetzung ist: "'+givenTrans+'".':'')+' Antworte NUR mit einem JSON-Objekt ohne Markdown, ohne Erklärung: {"wort":"das Wort in korrekter deutscher Schreibweise, ohne Artikel","artikel":"der|die|das|kein","uebersetzung":"kurze englische Übersetzung","beispiel":"ein einfacher deutscher Beispielsatz (A2-Niveau)","notiz":"sehr kurzer Grammatik-Hinweis auf Deutsch (z.B. Gegenteil, Kasus, trennbar, Plural) oder leerer String"}';
+    const givenEx=$('f-ex').value.trim();
+    const prompt='Du hilfst einem Deutschlerner (Niveau A2). Wort: "'+word+'".'+(givenTrans?' Die englische Übersetzung ist: "'+givenTrans+'".':'')+(givenEx?' Der Beispielsatz ist: "'+givenEx+'" — übernimm ihn unverändert als "beispiel" und übersetze genau diesen Satz.':'')+' Antworte NUR mit einem JSON-Objekt ohne Markdown, ohne Erklärung: {"wort":"das Wort in korrekter deutscher Schreibweise, ohne Artikel","artikel":"der|die|das|kein","uebersetzung":"kurze englische Übersetzung","beispiel":"ein einfacher deutscher Beispielsatz (A2-Niveau)","beispiel_uebersetzung":"englische Übersetzung des Beispielsatzes","notiz":"sehr kurzer Grammatik-Hinweis auf Deutsch (z.B. Gegenteil, Kasus, trennbar, Plural) oder leerer String"}';
     const data=await aiMessages({model:AI_MODEL,max_tokens:1000,messages:[{role:'user',content:prompt}]});
     const txt=(data.content||[]).map(c=>c.type==='text'?c.text:'').join('').replace(/```json|```/g,'').trim();
     const j=JSON.parse(txt);
@@ -1811,6 +1821,7 @@ async function aiFill(fromSave){
     }
     if(!$('f-trans').value.trim()&&j.uebersetzung)$('f-trans').value=String(j.uebersetzung).trim();
     if(!$('f-ex').value.trim()&&j.beispiel)$('f-ex').value=String(j.beispiel).trim();
+    if(!$('f-ext').value.trim()&&j.beispiel_uebersetzung)$('f-ext').value=String(j.beispiel_uebersetzung).trim();
     if(!$('f-note').value.trim()&&j.notiz)$('f-note').value=String(j.notiz).trim();
     ok=true;
     if(!fromSave)toast('Ausgefüllt – prüfen und speichern');
@@ -1839,16 +1850,16 @@ async function saveWord(){
     $('btn-save').textContent=editingId?'Aktualisieren':'Speichern';
     saving=false;return;
   }
-  const ex=$('f-ex').value.trim(),note=$('f-note').value.trim();
+  const ex=$('f-ex').value.trim(),ext=$('f-ext').value.trim(),note=$('f-note').value.trim();
   const topic=$('f-topic').value.trim()||'Meine Wörter';
   if(editingId){
     const w=deck.words.find(x=>x.id===editingId);
-    if(w)Object.assign(w,{de,en,ex,note,topic,art:selArt});
+    if(w)Object.assign(w,{de,en,ex,ext,note,topic,art:selArt});
     saveDeck();updateStats();renderTopics();
     toast('Aktualisiert');
     resetForm();show('list');
   }else{
-    const nw={id:'w'+Date.now().toString(36)+Math.random().toString(36).slice(2,5),de,en,ex,note,topic,art:selArt,box:1,due:0,created:Date.now()};
+    const nw={id:'w'+Date.now().toString(36)+Math.random().toString(36).slice(2,5),de,en,ex,ext,note,topic,art:selArt,box:1,due:0,created:Date.now()};
     deck.words.unshift(nw);
     if(topicActive(topic))queue.push(nw.id);
     saveDeck();updateStats();renderTopics();

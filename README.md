@@ -32,7 +32,8 @@ Without the key everything still works — the AI buttons fall back to built-in 
 - **Topics** — toggle categories on/off with the chips above the card deck
 - **Rounds ("Pro Runde")** — practice in chunks of 5 / 10 / 15 / 25 cards instead of everything at once; the done screen shows how many cards are still due and starts the next chunk
 - **Unlimited words** — add your own words in the *+ Neu* tab
-- **AI assist** — type just the German word and the AI fills in the article, translation, example sentence and a grammar note
+- **AI assist** — type just the German word and the AI fills in the article, translation, example sentence (with English translation) and a grammar note
+- **Example translations** — cards with an example sentence show its English translation right below it
 - **Search & edit** — full word list with search, inline edit and delete
 
 ## Built-in categories
