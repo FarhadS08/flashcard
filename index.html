@@ -42,6 +42,9 @@ h1{font-size:26px;font-weight:700;letter-spacing:-.01em;line-height:1.1}
 .tchip:hover{border-color:#C9CFCB}
 .tchip .tick{width:16px;height:16px;border-radius:50%;border:1.5px solid #C9CFCB;display:inline-flex;align-items:center;justify-content:center;flex:none}
 .tchip .tc{font-weight:500;font-size:12px;opacity:.7}
+.tchip .tlbl{display:flex;flex-direction:column;align-items:flex-start;text-align:left;line-height:1.18}
+.tchip .tsub{font-size:10px;font-weight:500;color:#A8ADA9}
+.tchip.on .tsub{color:#3E8F6C}
 .tchip.on{border-color:#0A7A52;background:#E3F2EB;color:#0A7A52}
 .tchip.on .tick{background:#0A7A52;border-color:#0A7A52}
 
@@ -1535,6 +1538,15 @@ function migrate(){
   return changed;
 }
 
+const TOPIC_EN={
+  'Meine Wörter':'my words',
+  'Adjektive':'adjectives',
+  'Präpositionen':'prepositions',
+  'Sätze & Floskeln':'everyday phrases',
+  'Grundwortschatz':'core vocabulary',
+  'W-Wörter':'question words',
+  'Trennbare Verben':'separable verbs'
+};
 let TOPICS=[];
 function allTopics(){
   const s=[];
@@ -1557,9 +1569,15 @@ function renderTopics(){
     const tick=on
       ?'<span class="tick"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 13l5 5L20 7"/></svg></span>'
       :'<span class="tick"></span>';
-    return '<button class="tchip'+(on?' on':'')+'" onclick="toggleTopic('+i+')">'+tick+esc(t)+'<span class="tc">'+n+'</span></button>';
+    const en=TOPIC_EN[t];
+    return '<button class="tchip'+(on?' on':'')+'" onclick="toggleTopic('+i+')">'+tick+
+      '<span class="tlbl">'+esc(t)+(en?'<span class="tsub">'+esc(en)+'</span>':'')+'</span>'+
+      '<span class="tc">'+n+'</span></button>';
   }).join('');
-  $('topics-dl').innerHTML=TOPICS.map(t=>'<option value="'+esc(t)+'">').join('');
+  $('topics-dl').innerHTML=TOPICS.map(t=>{
+    const en=TOPIC_EN[t];
+    return '<option value="'+esc(t)+'"'+(en?' label="'+esc(en)+'"':'')+'>';
+  }).join('');
 }
 
 async function loadDeck(){
