@@ -925,7 +925,6 @@ function grundPack(){
     mk('','schlafen','to sleep','',141),
     mk('','kochen','to cook','',142),
     mk('','öffnen','to open','',143),
-    mk('','anfangen','to begin, to start','auch: beginnen',144),
     mk('','aufstehen','to get up','',145),
     mk('','schließen','to close','',146),
     mk('','bezahlen','to pay','',147),
@@ -1232,7 +1231,6 @@ function grundPack(){
     mk('die','Handschuhe','gloves (plural)','',437),
     mk('die','Brille','glasses','singular in German!',438),
     mk('die','Tasche','bag · pocket','',439),
-    mk('','anziehen','to put on (clothes)','',440),
     mk('der','Regenschirm','umbrella','',441),
     // Kapitel 23 — Farben
     mk('die','Farbe','color','',442),
@@ -1486,6 +1484,29 @@ function wwoerterPack(){
   ];
 }
 
+function trennbarPack(){
+  const now=Date.now();
+  const mk=(de,en,ex,ext,note,i)=>({id:'tv'+i,art:'',de,en,ex,ext,note,topic:'Trennbare Verben',box:1,due:0,created:now});
+  return[
+    mk('abfahren','to depart, drive off','Der Zug fährt um acht Uhr ab.','The train departs at eight o’clock.','trennbar: er fährt … ab',1),
+    mk('abschließen','to lock up','Ich schließe die Tür ab.','I lock the door.','trennbar: ich schließe … ab',2),
+    mk('abschreiben','to copy (text)','Er schreibt die Sätze von der Tafel ab.','He copies the sentences from the board.','trennbar: er schreibt … ab',3),
+    mk('anfangen','to start','Der Kurs fängt gleich an.','The course starts in a moment.','trennbar: er fängt … an · auch: beginnen',4),
+    mk('anhalten','to stop','Das Auto hält an der Ampel an.','The car stops at the traffic light.','trennbar: es hält … an',5),
+    mk('anrufen','to call (phone)','Ich rufe dich morgen an.','I will call you tomorrow.','trennbar: ich rufe … an',6),
+    mk('anziehen','to put on (clothes)','Sie zieht die Jacke an.','She puts on the jacket.','trennbar: sie zieht … an',7),
+    mk('anzünden','to light','Wir zünden die Kerze an.','We light the candle.','trennbar: wir zünden … an',8),
+    mk('aufgehen','to rise (sun), open','Die Sonne geht um sechs Uhr auf.','The sun rises at six o’clock.','trennbar: sie geht … auf',9),
+    mk('aufwachen','to wake up','Ich wache jeden Tag um sieben auf.','I wake up at seven every day.','trennbar: ich wache … auf',10),
+    mk('einschlafen','to fall asleep','Das Baby schläft schnell ein.','The baby falls asleep quickly.','trennbar: es schläft … ein',11),
+    mk('einsteigen','to get in/on (board)','Wir steigen in den Bus ein.','We get on the bus.','trennbar: wir steigen … ein',12),
+    mk('untergehen','to set (sun), go under','Die Sonne geht am Meer unter.','The sun sets by the sea.','trennbar: sie geht … unter',13),
+    mk('umziehen','to move house / change clothes','Wir ziehen nächsten Monat um.','We are moving next month.','trennbar: wir ziehen … um · sich umziehen = Kleidung wechseln',14),
+    mk('weggehen','to go away, leave','Sie geht ohne ein Wort weg.','She leaves without a word.','trennbar: sie geht … weg',15),
+    mk('zuhören','to listen','Hör mir bitte zu!','Please listen to me!','trennbar: hör … zu! · + Dativ',16)
+  ];
+}
+
 function migrate(){
   let changed=false;
   deck.words.forEach(w=>{if(!w.topic){w.topic='Meine Wörter';changed=true;}});
@@ -1499,6 +1520,11 @@ function migrate(){
     const rm=['gw46','gw47','gw48','gw49','gw50','gw51','gw52','gw53','gw54','gw55'];
     deck.words=deck.words.filter(w=>rm.indexOf(w.id)<0);
     deck.words=deck.words.concat(wwoerterPack());deck.packs.push('wwoerter');changed=true;
+  }
+  if(deck.packs.indexOf('trennbare')<0){
+    const rm2=['gw144','gw440'];
+    deck.words=deck.words.filter(w=>rm2.indexOf(w.id)<0);
+    deck.words=deck.words.concat(trennbarPack());deck.packs.push('trennbare');changed=true;
   }
   if(!deck.extFilled){
     const m={};

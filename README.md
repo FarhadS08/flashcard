@@ -44,8 +44,9 @@ Without the key everything still works — the AI buttons fall back to built-in 
 | Adjektive | 16 | common adjectives |
 | Präpositionen | 14 | prepositions with case notes |
 | Sätze & Floskeln | 421 | *Moin, Deutsch! Band II — Sätze & Floskeln* (everyday phrases, 23 chapters: greetings, small talk, bakery, checkout, restaurant, trains, doctor, Amt, phone, work, housing, occasions, Norddeutsch) |
-| Grundwortschatz | 623 | *Moin, Deutsch!* Band I word list (30 chapters: articles, pronouns, verbs, numbers, family, time, food, home, body, city, work, clothing, colors, weather & nature, particles, useful nouns/verbs, shopping). 54 entries that already exist in the other categories were left out to avoid duplicate cards; the question words moved to their own W-Wörter category |
+| Grundwortschatz | 621 | *Moin, Deutsch!* Band I word list (30 chapters: articles, pronouns, verbs, numbers, family, time, food, home, body, city, work, clothing, colors, weather & nature, particles, useful nouns/verbs, shopping). 54 entries that already exist in the other categories were left out to avoid duplicate cards; the question words and two separable verbs moved to their own categories |
 | W-Wörter | 38 | all German question words: wer/wen/wem/wessen, the wie-combinations (wie viel(e), wie lange, wie oft, wie spät …), warum/wieso/weshalb/wozu, and every wo(r)-compound (womit, worauf, woran, worüber …) — each with an example sentence and a grammar note |
+| Trennbare Verben | 16 | separable verbs (abfahren, anrufen, aufwachen, einsteigen, umziehen …) — every card's example sentence shows the prefix split, with English translation and a "trennbar: ich rufe … an" note |
 
 ### Notes on the *Sätze & Floskeln* cards
 
