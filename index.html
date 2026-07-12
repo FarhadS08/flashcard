@@ -81,10 +81,15 @@ h1{font-size:26px;font-weight:700;letter-spacing:-.01em;line-height:1.1}
 
 .btn{border:0;font:inherit;font-weight:600;font-size:15.5px;border-radius:15px;height:54px;cursor:pointer;transition:transform .12s,background .15s,border-color .15s}
 .btn:active{transform:scale(.985)}
-.grade{display:flex;gap:12px}
-.grade .btn{flex:1}
+.grade{display:flex;gap:8px}
+.grade .btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;padding:0 4px;min-width:0}
+.ivl-hint{font-size:10.5px;font-weight:500;opacity:.7;line-height:1}
 .again{background:#F9E7E4;color:#C43020}
 .again:hover{background:#F5DCD7}
+.hard{background:#FBF0DC;color:#A66300}
+.hard:hover{background:#F7E7C8}
+.easy{background:#E3F2EB;color:#0A7A52}
+.easy:hover{background:#D4EBDF}
 .knew{background:#0A7A52;color:#fff;padding:0 26px}
 .knew:hover{background:#086A47}
 .ghost{width:100%;background:#fff;border:1px solid #E4E7E5;color:#333333}
@@ -151,6 +156,8 @@ label{display:block;font-size:11.5px;font-weight:600;letter-spacing:.08em;text-t
   h1{font-size:23px}
   .app{padding:calc(22px + env(safe-area-inset-top,0px)) calc(14px + env(safe-area-inset-right,0px)) calc(50px + env(safe-area-inset-bottom,0px)) calc(14px + env(safe-area-inset-left,0px))}
   .art-opt{font-size:13px}
+  .grade .btn{font-size:13px}
+  .ivl-hint{font-size:9.5px}
 }
 @media (max-height:640px) and (orientation:landscape){
   .card{height:240px}
@@ -239,7 +246,10 @@ label{display:block;font-size:11.5px;font-weight:600;letter-spacing:.08em;text-t
 
 <script>
 const KEY='wortschatz-deck-v1';
-const INTERVALS=[0,0,1,3,7,21];
+// SM-2 (Anki-style) scheduling
+const DAY=864e5,MINUTE=6e4;
+const AGAIN_MIN=1,HARD_NEW_MIN=5,LSTEP_MIN=10,RELEARN_MIN=10;
+const GRAD_IVL=1,EASY_IVL=4,MAX_IVL=365,MIN_EASE=1.3,START_EASE=2.5;
 const TRASH='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/></svg>';
 const AUTO_LABEL='<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8zM19 14.5l.9 2.6 2.6.9-2.6.9-.9 2.6-.9-2.6-2.6-.9 2.6-.9z"/></svg>Auto';
 
@@ -1529,6 +1539,7 @@ function migrate(){
     deck.words=deck.words.filter(w=>rm2.indexOf(w.id)<0);
     deck.words=deck.words.concat(trennbarPack());deck.packs.push('trennbare');changed=true;
   }
+  deck.words.forEach(w=>{if(w.ease==null){nrm(w);changed=true;}});
   if(!deck.extFilled){
     const m={};
     seedWords().concat(adjPack(),prepPack(),wwoerterPack()).forEach(w=>{if(w.ext)m[w.de]=w.ext;});
@@ -1613,6 +1624,55 @@ function shuffle(a){
   return a;
 }
 
+// normalize legacy Leitner cards to SM-2 fields (idempotent)
+function nrm(w){
+  if(w.ease!=null)return w;
+  const map={1:['new',0],2:['review',1],3:['review',3],4:['review',7],5:['review',21]};
+  const m=map[w.box||1]||map[1];
+  w.phase=m[0];w.ivl=m[1];w.ease=START_EASE;w.step=0;w.reps=w.reps||0;w.lapses=w.lapses||0;
+  if(w.due==null)w.due=0;
+  return w;
+}
+function fuzz(d){return d<2?d:Math.round(d*(0.95+Math.random()*0.1));}
+// q: 0=Nochmal 1=Schwer 2=Gut 3=Leicht → next state (does not mutate)
+function schedule(w,q){
+  let phase=w.phase,ivl=w.ivl,ease=w.ease,step=w.step,requeue=false,dueMs=0;
+  if(phase==='new'){
+    if(q===0){phase='learn';step=0;dueMs=AGAIN_MIN*MINUTE;requeue=true;}
+    else if(q===1){phase='learn';step=0;dueMs=HARD_NEW_MIN*MINUTE;requeue=true;}
+    else if(q===2){phase='learn';step=0;dueMs=LSTEP_MIN*MINUTE;requeue=true;}
+    else{phase='review';ivl=EASY_IVL;dueMs=ivl*DAY;}
+  }else if(phase==='learn'){
+    if(q===0){step=0;dueMs=AGAIN_MIN*MINUTE;requeue=true;}
+    else if(q===1){dueMs=LSTEP_MIN*MINUTE;requeue=true;}
+    else if(q===2){phase='review';ivl=GRAD_IVL;dueMs=ivl*DAY;}
+    else{phase='review';ivl=EASY_IVL;dueMs=ivl*DAY;}
+  }else if(phase==='relearn'){
+    if(q===0||q===1){dueMs=RELEARN_MIN*MINUTE;requeue=true;}
+    else if(q===2){phase='review';ivl=Math.max(1,ivl);dueMs=ivl*DAY;}
+    else{phase='review';ivl=Math.max(1,ivl)+1;dueMs=ivl*DAY;}
+  }else{
+    if(q===0){ease=Math.max(MIN_EASE,ease-0.2);ivl=Math.max(1,Math.round(ivl*0.25));phase='relearn';step=0;dueMs=RELEARN_MIN*MINUTE;requeue=true;}
+    else if(q===1){ease=Math.max(MIN_EASE,ease-0.15);ivl=Math.min(MAX_IVL,Math.max(ivl+1,fuzz(Math.round(ivl*1.2))));dueMs=ivl*DAY;}
+    else if(q===2){ivl=Math.min(MAX_IVL,Math.max(ivl+1,fuzz(Math.round(ivl*ease))));dueMs=ivl*DAY;}
+    else{ease=ease+0.15;ivl=Math.min(MAX_IVL,Math.max(ivl+2,fuzz(Math.round(ivl*ease*1.3))));dueMs=ivl*DAY;}
+  }
+  return{phase,ivl,ease,step,dueMs,requeue};
+}
+function fmtDue(ms){
+  const m=Math.round(ms/MINUTE);
+  if(m<60)return m+' Min';
+  const d=Math.max(1,Math.round(ms/DAY));
+  if(d<60)return d+' T';
+  const mo=d/30;
+  return (mo<10?String(Math.round(mo*10)/10).replace('.',','):String(Math.round(mo)))+' Mo';
+}
+function lvl(w){
+  nrm(w);
+  if(w.phase==='new')return 1;
+  if(w.phase==='learn'||w.phase==='relearn')return 2;
+  return w.ivl<6?3:w.ivl<21?4:5;
+}
 function sessionSize(){return deck.sessionSize||0;}
 function setSize(n){
   deck.sessionSize=n;
@@ -1635,7 +1695,10 @@ function nextDueText(){
   const now=Date.now();
   const fut=deck.words.filter(w=>topicActive(w.topic||'Meine Wörter')).map(w=>w.due||0).filter(d=>d>now);
   if(!fut.length)return'';
-  const days=Math.ceil((Math.min.apply(null,fut)-now)/864e5);
+  const diff=Math.min.apply(null,fut)-now;
+  if(diff<36e5)return'Nächste Wiederholung: in ein paar Minuten.';
+  if(diff<DAY)return'Nächste Wiederholung: später heute.';
+  const days=Math.ceil(diff/DAY);
   return days<=1?'Nächste Wiederholung: morgen.':'Nächste Wiederholung: in '+days+' Tagen.';
 }
 
@@ -1667,7 +1730,7 @@ function cardHtml(w){
     '<div class="card-inner">'+
       '<div class="face front">'+
         '<div class="term'+tCls+'">'+artTxt+esc(w.de)+'</div>'+
-        '<div class="dots">'+boxDots(w.box)+'</div>'+
+        '<div class="dots">'+boxDots(lvl(w))+'</div>'+
       '</div>'+
       '<div class="face back">'+
         '<div class="term-sm">'+artTxt+esc(w.de)+'</div>'+
@@ -1716,9 +1779,11 @@ function renderStudy(){
 function renderActions(){
   const acts=$('study-actions');
   if(deck.words.length===0||queue.length===0||qi>=queue.length){acts.innerHTML='';return;}
-  acts.innerHTML=flipped
-    ?'<div class="grade"><button class="btn again" onclick="gradeCard(false)">Nochmal</button><button class="btn knew" onclick="gradeCard(true)">Gewusst</button></div>'
-    :'<button class="btn ghost" onclick="flipCard()">Antwort zeigen</button>';
+  if(!flipped){acts.innerHTML='<button class="btn ghost" onclick="flipCard()">Antwort zeigen</button>';return;}
+  const w=deck.words.find(x=>x.id===queue[qi]);
+  nrm(w);
+  const gb=(q,cls,label)=>'<button class="btn '+cls+'" onclick="gradeCard('+q+')">'+label+'<span class="ivl-hint">'+fmtDue(schedule(w,q).dueMs)+'</span></button>';
+  acts.innerHTML='<div class="grade">'+gb(0,'again','Nochmal')+gb(1,'hard','Schwer')+gb(2,'knew','Gut')+gb(3,'easy','Leicht')+'</div>';
 }
 
 function flipCard(){
@@ -1729,13 +1794,18 @@ function flipCard(){
   renderActions();
 }
 
-function gradeCard(knew){
+function gradeCard(q){
   const w=deck.words.find(x=>x.id===queue[qi]);
   if(!w)return;
-  if(knew){w.box=Math.min(5,(w.box||1)+1);sessionKnew++;}
-  else{w.box=1;sessionAgain++;queue.push(w.id);}
-  const days=INTERVALS[w.box];
-  w.due=days?Date.now()+days*864e5:0;
+  nrm(w);
+  const wasReview=w.phase==='review';
+  const r=schedule(w,q);
+  w.reps=(w.reps||0)+1;
+  if(wasReview&&q===0)w.lapses=(w.lapses||0)+1;
+  w.phase=r.phase;w.ivl=r.ivl;w.ease=r.ease;w.step=r.step;
+  w.due=Date.now()+r.dueMs;
+  if(q===0){sessionAgain++;}else{sessionKnew++;}
+  if(r.requeue)queue.push(w.id);
   qi++;flipped=false;
   saveDeck();
   renderStudy();
@@ -1753,7 +1823,7 @@ function renderList(){
         '<div class="row-de">'+(w.art?w.art+' ':'')+esc(w.de)+'</div>'+
         '<div class="row-en">'+esc(w.en)+'<span class="row-topic"> · '+esc(w.topic||'Meine Wörter')+'</span></div>'+
       '</div>'+
-      '<div class="dots small">'+boxDots(w.box)+'</div>'+
+      '<div class="dots small">'+boxDots(lvl(w))+'</div>'+
       '<button class="icon-btn'+(armedDelete===w.id?' armed':'')+'" onclick="delWord(\''+w.id+'\')" title="Löschen">'+(armedDelete===w.id?'Sicher?':TRASH)+'</button>'+
     '</div>';
   }).join('')||'<div class="empty-list">Nichts gefunden.</div>';
@@ -1903,7 +1973,7 @@ async function saveWord(){
     toast('Aktualisiert');
     resetForm();show('list');
   }else{
-    const nw={id:'w'+Date.now().toString(36)+Math.random().toString(36).slice(2,5),de,en,ex,ext,note,topic,art:selArt,box:1,due:0,created:Date.now()};
+    const nw={id:'w'+Date.now().toString(36)+Math.random().toString(36).slice(2,5),de,en,ex,ext,note,topic,art:selArt,phase:'new',ivl:0,ease:START_EASE,step:0,reps:0,lapses:0,due:0,created:Date.now()};
     deck.words.unshift(nw);
     if(topicActive(topic))queue.push(nw.id);
     saveDeck();updateStats();renderTopics();
@@ -1926,8 +1996,9 @@ document.addEventListener('keydown',e=>{
   const tag=document.activeElement&&document.activeElement.tagName;
   if(tag==='INPUT'||tag==='TEXTAREA')return;
   if(e.code==='Space'){e.preventDefault();flipCard();}
-  else if(flipped&&(e.key==='ArrowLeft'||e.key==='1'))gradeCard(false);
-  else if(flipped&&(e.key==='ArrowRight'||e.key==='2'))gradeCard(true);
+  else if(flipped&&e.key==='ArrowLeft')gradeCard(0);
+  else if(flipped&&e.key==='ArrowRight')gradeCard(2);
+  else if(flipped&&['1','2','3','4'].indexOf(e.key)>=0)gradeCard(Number(e.key)-1);
 });
 
 (async function init(){

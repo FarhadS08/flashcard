@@ -28,7 +28,7 @@ Without the key everything still works — the AI buttons fall back to built-in 
 
 ## Features
 
-- **Spaced repetition** — Leitner-style boxes (repeat failed cards immediately; known cards come back after 1 / 3 / 7 / 21 days)
+- **Spaced repetition (SM-2)** — the Anki-style algorithm: four grades (Nochmal / Schwer / Gut / Leicht) with the projected interval shown on each button, learning steps for new cards (1/10 min), growing review intervals (interval × per-card ease factor, with fuzz), and lapse handling (failed reviews drop into relearning with a reduced interval and ease). Decks from the previous Leitner version migrate automatically with progress preserved
 - **Topics** — toggle categories on/off with the chips above the card deck
 - **Rounds ("Pro Runde")** — practice in chunks of 5 / 10 / 15 / 25 cards instead of everything at once; the done screen shows how many cards are still due and starts the next chunk
 - **Unlimited words** — add your own words in the *+ Neu* tab
@@ -67,4 +67,4 @@ sw.js                 service worker (offline cache)
 icons/                favicon + home-screen icons
 ```
 
-Study keyboard shortcuts: `Space` flips the card, `←`/`1` = again, `→`/`2` = knew it.
+Study keyboard shortcuts: `Space` flips the card, `1`–`4` = Nochmal / Schwer / Gut / Leicht, `←` = Nochmal, `→` = Gut.
