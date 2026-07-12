@@ -208,6 +208,9 @@ label{display:block;font-size:11.5px;font-weight:600;letter-spacing:.08em;text-t
 .foot{margin-top:26px;text-align:center;font-size:12px;color:#B7BCB8}
 .sync-chip{border:0;background:transparent;color:#0A7A52;font:inherit;font-size:12px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:4px;padding:2px 0;margin-top:3px}
 .sync-chip:hover{text-decoration:underline}
+.lang-row{display:inline-flex;align-items:center;gap:4px;margin-top:4px;font-size:12px}
+.lang-sel{border:1px solid #E4E7E5;border-radius:8px;background:#fff;color:#555555;font:inherit;font-size:11.5px;font-weight:600;padding:2px 4px;outline:none;max-width:118px}
+.lang-sel:focus{border-color:#0A7A52}
 .acct-status{font-size:14.5px;color:#555555;line-height:1.6;margin-bottom:16px}
 
 #cookie-note{position:fixed;left:50%;bottom:calc(14px + env(safe-area-inset-bottom,0px));transform:translateX(-50%) translateY(18px);width:calc(100% - 28px);max-width:600px;background:#fff;border:1px solid #E4E7E5;border-radius:18px;box-shadow:0 12px 40px rgba(17,40,30,.16);padding:16px 18px;display:flex;align-items:center;gap:14px;z-index:60;opacity:0;transition:opacity .35s,transform .35s;pointer-events:none}
@@ -257,7 +260,7 @@ label{display:block;font-size:11.5px;font-weight:600;letter-spacing:.08em;text-t
       <div class="eyebrow">Moin, Deutsch!</div>
       <h1>Wortschatz</h1>
     </div>
-    <div class="stats"><b id="stat-total">0</b> Wörter · <b id="stat-due">0</b> fällig<br><button class="sync-chip" id="sync-chip" onclick="show('account')"></button></div>
+    <div class="stats"><b id="stat-total">0</b> Wörter · <b id="stat-due">0</b> fällig<br><button class="sync-chip" id="sync-chip" onclick="show('account')"></button><br><span class="lang-row">🌐<select id="lang-sel" class="lang-sel" onchange="setLang(this.value)" title="Übersetzungssprache"></select></span></div>
   </div>
 
   <div class="tabs">
@@ -1984,6 +1987,7 @@ function startSession(all){
   markPresentations();
   computeRoundInfo();
   qi=0;flipped=false;sessionKnew=0;sessionAgain=0;
+  kickTranslate();
   renderStudy();
 }
 function startRound(ids,opts){
@@ -1993,6 +1997,7 @@ function startRound(ids,opts){
   markPresentations();
   computeRoundInfo();
   qi=0;flipped=false;sessionKnew=0;sessionAgain=0;
+  kickTranslate();
   show('study');
 }
 function repeatRound(){startRound(roundIds,{practice:true});}
@@ -2069,9 +2074,9 @@ function cardHtml(w){
       '</div>'+
       '<div class="face back">'+
         '<div class="term-sm">'+artTxt+esc(w.de)+'</div>'+
-        '<div class="trans'+(w.en.length>32?' long':'')+'">'+esc(w.en)+'</div>'+
+        '<div class="trans'+(locEn(w).length>32?' long':'')+'">'+esc(locEn(w))+'</div>'+
         (w.ex?'<div class="ex">„'+esc(w.ex)+'“</div>':'')+
-        (w.ex&&w.ext?'<div class="ext">'+esc(w.ext)+'</div>':'')+
+        (w.ex&&locExt(w)?'<div class="ext">'+esc(locExt(w))+'</div>':'')+
         (w.note?'<div class="note">'+esc(w.note)+'</div>':'')+
       '</div>'+
     '</div>'+
@@ -2085,9 +2090,9 @@ function presentHtml(w){
   return '<div class="card"><div class="present-face">'+
     '<div class="new-pill">Neues Wort — erst mal ansehen</div>'+
     '<div class="term'+tCls+'">'+artTxt+esc(w.de)+'</div>'+
-    '<div class="trans'+(w.en.length>32?' long':'')+'">'+esc(w.en)+'</div>'+
+    '<div class="trans'+(locEn(w).length>32?' long':'')+'">'+esc(locEn(w))+'</div>'+
     (w.ex?'<div class="ex">„'+esc(w.ex)+'“</div>':'')+
-    (w.ex&&w.ext?'<div class="ext">'+esc(w.ext)+'</div>':'')+
+    (w.ex&&locExt(w)?'<div class="ext">'+esc(locExt(w))+'</div>':'')+
     (w.note?'<div class="note">'+esc(w.note)+'</div>':'')+
   '</div></div>'+
   '<div class="counter">'+(practice?'Übung · ':'')+'Karte '+(qi+1)+' von '+queue.length+(roundInfo&&!practice?' · '+roundInfo:'')+'</div>';
@@ -2200,6 +2205,11 @@ function setListTopic(i){
 function toggleExpand(id){
   expandedId=expandedId===id?null:id;
   renderList();
+  if(expandedId&&curLang()!=='en'){
+    translateWords([expandedId]).then(ok=>{
+      if(ok&&currentView==='list'&&expandedId===id)renderList();
+    });
+  }
 }
 function wordReset(id){
   const w=deck.words.find(x=>x.id===id);
@@ -2229,8 +2239,8 @@ function detailHtml(w){
     '<div class="wd-status"><span class="wd-pill '+st[1]+'">'+st[0]+'</span>'+(due?'<span class="wd-due">'+due+'</span>':'')+'</div>'+
     '<div class="wd-grid">'+
       '<div class="wd-k">Artikel</div><div class="wd-v">'+(w.art?'<b class="art-'+w.art+'-t">'+w.art+'</b>':'—')+'</div>'+
-      '<div class="wd-k">Übersetzung</div><div class="wd-v">'+esc(w.en)+'</div>'+
-      (w.ex?'<div class="wd-k">Beispiel</div><div class="wd-v">„'+esc(w.ex)+'“'+(w.ext?'<br><span class="wd-ext">'+esc(w.ext)+'</span>':'')+'</div>':'')+
+      '<div class="wd-k">Übersetzung</div><div class="wd-v">'+esc(locEn(w))+(curLang()!=='en'&&locEn(w)!==w.en?'<br><span class="wd-ext">EN: '+esc(w.en)+'</span>':'')+'</div>'+
+      (w.ex?'<div class="wd-k">Beispiel</div><div class="wd-v">„'+esc(w.ex)+'“'+(locExt(w)?'<br><span class="wd-ext">'+esc(locExt(w))+'</span>':'')+'</div>':'')+
       (w.note?'<div class="wd-k">Tipp</div><div class="wd-v"><span class="wd-note">'+esc(w.note)+'</span></div>':'')+
       '<div class="wd-k">Thema</div><div class="wd-v">'+esc(w.topic||'Meine Wörter')+'</div>'+
     '</div>'+
@@ -2493,6 +2503,76 @@ function maybeCookieNote(){
   setTimeout(()=>n.classList.add('show'),400);
 }
 
+// ---------- Übersetzungssprache ----------
+const LANGS={en:'English',tr:'Türkçe',az:'Azərbaycanca',ru:'Русский',es:'Español',fr:'Français',it:'Italiano',pt:'Português',pl:'Polski',uk:'Українська',nl:'Nederlands',el:'Ελληνικά',cs:'Čeština',ro:'Română',hu:'Magyar',sv:'Svenska'};
+const LANG_PROMPT={tr:'Turkish',az:'Azerbaijani (Azərbaycan dili)',ru:'Russian',es:'Spanish',fr:'French',it:'Italian',pt:'Portuguese',pl:'Polish',uk:'Ukrainian',nl:'Dutch',el:'Greek',cs:'Czech',ro:'Romanian',hu:'Hungarian',sv:'Swedish'};
+let trCache={},trBusy=false,trWarned=false;
+function curLang(){return deck.lang||'en';}
+function loadTrCache(l){
+  if(trCache[l])return;
+  try{trCache[l]=JSON.parse(localStorage.getItem('wortschatz-tr-'+l))||{};}catch(e){trCache[l]={};}
+}
+function saveTrCache(l){
+  try{localStorage.setItem('wortschatz-tr-'+l,JSON.stringify(trCache[l]));}catch(e){}
+}
+function locEn(w){
+  const l=curLang();
+  if(l==='en')return w.en;
+  loadTrCache(l);
+  const c=trCache[l][w.id];
+  return (c&&c[0])?c[0]:w.en;
+}
+function locExt(w){
+  const l=curLang();
+  if(l==='en')return w.ext||'';
+  loadTrCache(l);
+  const c=trCache[l][w.id];
+  return (c&&c[1])?c[1]:(w.ext||'');
+}
+async function translateWords(ids){
+  const l=curLang();
+  if(l==='en'||trBusy)return false;
+  loadTrCache(l);
+  const todo=ids.map(id=>deck.words.find(w=>w.id===id)).filter(w=>w&&!trCache[l][w.id]).slice(0,30);
+  if(!todo.length)return false;
+  const items=todo.map(w=>({id:w.id,de:(w.art?w.art+' ':'')+w.de,en:w.en,ex:w.ex||''}));
+  trBusy=true;
+  try{
+    const prompt='Du übersetzt Vokabeln für einen Deutschlerner. Zielsprache: '+LANG_PROMPT[l]+'. Für jedes Objekt: übersetze die Bedeutung des deutschen Worts "de" (die englische Übersetzung "en" zeigt die gemeinte Bedeutung) und, falls "ex" nicht leer ist, den Beispielsatz. Antworte NUR mit einem JSON-Array in gleicher Reihenfolge, ohne Markdown: [{"id":"...","t":"Übersetzung des Wortes","x":"Übersetzung des Beispielsatzes oder leerer String"}] Vokabeln: '+JSON.stringify(items);
+    const data=await aiMessages({model:AI_MODEL,max_tokens:4000,messages:[{role:'user',content:prompt}]});
+    const txt=(data.content||[]).map(c=>c.type==='text'?c.text:'').join('').replace(/```json|```/g,'').trim();
+    const arr=JSON.parse(txt);
+    arr.forEach(r=>{if(r&&r.id)trCache[l][r.id]=[String(r.t||'').trim(),String(r.x||'').trim()];});
+    saveTrCache(l);
+    trBusy=false;
+    return true;
+  }catch(e){
+    trBusy=false;
+    if(!trWarned){trWarned=true;toast('Übersetzung nicht verfügbar — zeige Englisch (KI-Server nötig)');}
+    return false;
+  }
+}
+function kickTranslate(){
+  if(curLang()==='en')return;
+  translateWords(queue.slice(qi,qi+30)).then(ok=>{
+    if(ok&&currentView==='study'&&!flipped)renderStudy();
+  });
+}
+function renderLangSel(){
+  const s=$('lang-sel');
+  if(!s)return;
+  s.innerHTML=Object.keys(LANGS).map(k=>'<option value="'+k+'"'+(curLang()===k?' selected':'')+'>'+LANGS[k]+'</option>').join('');
+}
+function setLang(l){
+  deck.lang=l;
+  saveDeck();
+  renderLangSel();
+  if(currentView==='study')renderStudy();
+  if(currentView==='list')renderList();
+  kickTranslate();
+  toast(l==='en'?'Übersetzung: English':'Übersetzung: '+LANGS[l]);
+}
+
 // ---------- Konto & Sync ----------
 const SYNC_KEY='wortschatz-sync-v1';
 const CLOUD='<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.5 19a4.5 4.5 0 100-9 6 6 0 00-11.6 1.6A3.8 3.8 0 006.8 19z"/></svg>';
@@ -2620,6 +2700,7 @@ document.addEventListener('visibilitychange',()=>{if(document.visibilityState===
   show('study');
   loadSyncMeta();
   renderSyncChip();
+  renderLangSel();
   if(syncMeta)initialSync();
   else if(location.protocol!=='file:')restoreSession();
   maybeCookieNote();
