@@ -1238,30 +1238,9 @@ function grundPack(){
     mk('','dritte','third','',329),
     mk('','einmal','once','zweimal: twice',330),
     mk('die','Zahl','number','die Nummer',331),
-    // Kapitel 19 — Körper & Gesundheit
-    mk('der','Körper','body','',332),
-    mk('der','Kopf','head','',333),
-    mk('das','Gesicht','face','',334),
-    mk('das','Auge','eye','',335),
-    mk('das','Ohr','ear','',336),
-    mk('die','Nase','nose','',337),
-    mk('der','Mund','mouth','',338),
-    mk('der','Zahn','tooth','',339),
-    mk('das','Haar','hair','',340),
-    mk('der','Hals','neck, throat','',341),
-    mk('der','Arm','arm','',342),
-    mk('die','Hand','hand','',343),
-    mk('der','Finger','finger','',344),
-    mk('das','Bein','leg','',345),
-    mk('der','Fuß','foot','',346),
-    mk('der','Rücken','back','',347),
-    mk('der','Bauch','belly, stomach','',348),
-    mk('das','Herz','heart','',349),
-    mk('die','Haut','skin','',350),
-    mk('das','Knie','knee','',351),
+    // Kapitel 19 — Körper & Gesundheit (Körperteile → eigene Kategorie, koerperPack)
     mk('','krank','sick, ill','',352),
     mk('','gesund','healthy','',353),
-    mk('die','Schulter','shoulder','',354),
     mk('der','Arzt','doctor','f.: die Ärztin',355),
     mk('die','Apotheke','pharmacy','',356),
     mk('die','Schmerzen','pain (plural)','',357),
@@ -1626,6 +1605,34 @@ function trennbarPack(){
   ];
 }
 
+function koerperPack(){
+  const now=Date.now();
+  const mk=(art,de,en,ex,ext,note,i)=>({id:'kp'+i,art,de,en,ex,ext,note,topic:'Körperteile',box:1,due:0,created:now});
+  return[
+    mk('der','Körper','body','Der ganze Körper tut mir weh.','My whole body hurts.','Plural: die Körper',1),
+    mk('der','Kopf','head','Mein Kopf tut weh.','My head hurts.','Plural: die Köpfe',2),
+    mk('das','Gesicht','face','Sie wäscht sich das Gesicht.','She washes her face.','Plural: die Gesichter',3),
+    mk('das','Auge','eye','Er hat blaue Augen.','He has blue eyes.','Plural: die Augen',4),
+    mk('das','Ohr','ear','Der Hund hat lange Ohren.','The dog has long ears.','Plural: die Ohren',5),
+    mk('die','Nase','nose','Meine Nase läuft.','My nose is running.','Plural: die Nasen',6),
+    mk('der','Mund','mouth','Mach bitte den Mund auf!','Please open your mouth!','Plural: die Münder',7),
+    mk('der','Zahn','tooth','Mir tut ein Zahn weh.','One of my teeth hurts.','Plural: die Zähne',8),
+    mk('das','Haar','hair','Sie hat lange Haare.','She has long hair.','meist Plural: die Haare',9),
+    mk('der','Hals','neck, throat','Mein Hals tut weh.','My throat hurts.','Plural: die Hälse · Halsschmerzen = sore throat',10),
+    mk('der','Arm','arm','Er trägt das Kind auf dem Arm.','He carries the child in his arms.','Plural: die Arme',11),
+    mk('die','Hand','hand','Wasch dir bitte die Hände!','Please wash your hands!','Plural: die Hände',12),
+    mk('der','Finger','finger','Ich habe mir in den Finger geschnitten.','I cut my finger.','Plural: die Finger',13),
+    mk('das','Bein','leg','Ich habe mir das Bein gebrochen.','I broke my leg.','Plural: die Beine',14),
+    mk('der','Fuß','foot','Ich gehe zu Fuß zur Arbeit.','I walk to work.','Plural: die Füße · zu Fuß = on foot',15),
+    mk('der','Rücken','back','Mein Rücken tut vom Sitzen weh.','My back hurts from sitting.','Plural: die Rücken',16),
+    mk('der','Bauch','belly, stomach','Mir tut der Bauch weh.','My stomach hurts.','Plural: die Bäuche',17),
+    mk('das','Herz','heart','Mein Herz schlägt schnell.','My heart is beating fast.','Plural: die Herzen',18),
+    mk('die','Haut','skin','Die Sonne ist schlecht für die Haut.','The sun is bad for your skin.','meist Singular',19),
+    mk('das','Knie','knee','Mir tut das Knie beim Laufen weh.','My knee hurts when I run.','Plural: die Knie',20),
+    mk('die','Schulter','shoulder','Meine Schultern sind verspannt.','My shoulders are tense.','Plural: die Schultern',21)
+  ];
+}
+
 function migrate(){
   let changed=false;
   deck.words.forEach(w=>{if(!w.topic){w.topic='Meine Wörter';changed=true;}});
@@ -1640,6 +1647,11 @@ function migrate(){
     const rm=['gw46','gw47','gw48','gw49','gw50','gw51','gw52','gw53','gw54','gw55'];
     deck.words=deck.words.filter(w=>rm.indexOf(w.id)<0);
     deck.words=deck.words.concat(wwoerterPack());deck.packs.push('wwoerter');changed=true;
+  }
+  if(deck.packs.indexOf('koerper')<0){
+    const rm3=['gw332','gw333','gw334','gw335','gw336','gw337','gw338','gw339','gw340','gw341','gw342','gw343','gw344','gw345','gw346','gw347','gw348','gw349','gw350','gw351','gw354'];
+    deck.words=deck.words.filter(w=>rm3.indexOf(w.id)<0);
+    deck.words=deck.words.concat(koerperPack());deck.packs.push('koerper');changed=true;
   }
   if(deck.packs.indexOf('trennbare')<0){
     const rm2=['gw144','gw440'];
@@ -1663,7 +1675,8 @@ const TOPIC_EN={
   'Sätze & Floskeln':'everyday phrases',
   'Grundwortschatz':'core vocabulary',
   'W-Wörter':'question words',
-  'Trennbare Verben':'separable verbs'
+  'Trennbare Verben':'separable verbs',
+  'Körperteile':'body parts'
 };
 let TOPICS=[];
 function allTopics(){
