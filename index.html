@@ -1695,6 +1695,14 @@ function migrate(){
     deck.words=deck.words.concat(trennbarPack());deck.packs.push('trennbare');changed=true;
   }
   deck.words.forEach(w=>{if(w.ease==null){nrm(w);changed=true;}});
+  if(!deck.split50){
+    deck.words.forEach(w=>{const nt=splitTopicOf(w.id);if(nt&&w.topic!==nt){w.topic=nt;}});
+    const ia=deck.inactive||[];
+    if(ia.indexOf('Grundwortschatz')>=0)GRUND_NAMES.forEach(n=>{if(ia.indexOf(n)<0)ia.push(n);});
+    if(ia.indexOf('Sätze & Floskeln')>=0)FLOSK_NAMES.forEach(n=>{if(ia.indexOf(n)<0)ia.push(n);});
+    deck.inactive=ia.filter(x=>x!=='Grundwortschatz'&&x!=='Sätze & Floskeln');
+    deck.split50=true;changed=true;
+  }
   if(!deck.extFilled){
     const m={};
     seedWords().concat(adjPack(),prepPack(),wwoerterPack()).forEach(w=>{if(w.ext)m[w.de]=w.ext;});
@@ -1705,7 +1713,26 @@ function migrate(){
 }
 
 const TOPIC_KEYS={'Meine Wörter':'dk.meine','Adjektive':'dk.adjektive','Präpositionen':'dk.praep','Sätze & Floskeln':'dk.floskeln','Grundwortschatz':'dk.grund','W-Wörter':'dk.wwoerter','Trennbare Verben':'dk.trennbar','Körperteile':'dk.koerper'};
-function topicSub(name){const kk=TOPIC_KEYS[name];return kk?t(kk):'';}
+const SPLIT_RULES={gw:[[1, 45, "Erste Wörter"], [56, 95, "Kleine Wörter"], [96, 108, "Zahlen"], [109, 143, "Alltagsverben"], [145, 148, "Alltagsverben"], [149, 177, "Menschen & Arbeit"], [178, 220, "Zeit & Tage"], [221, 260, "Essen & Trinken"], [261, 292, "Haus & Kleidung"], [293, 309, "Eigenschaften & Farben"], [310, 331, "Zahlen"], [352, 353, "Eigenschaften & Farben"], [355, 359, "Eigenschaften & Farben"], [360, 400, "Stadt & Verkehr"], [401, 422, "Menschen & Arbeit"], [423, 439, "Haus & Kleidung"], [441, 441, "Haus & Kleidung"], [442, 455, "Eigenschaften & Farben"], [456, 492, "Natur & Tiere"], [493, 535, "Mehr Eigenschaften"], [536, 548, "Kleine Wörter"], [549, 557, "Erste Wörter"], [558, 589, "Nützliche Nomen"], [590, 624, "Mehr Verben"], [625, 633, "Nützliche Nomen"]],phr:[[1, 44, "Grüßen & Höflichkeit"], [45, 85, "Reaktionen & Meinung"], [86, 126, "Smalltalk & Sätze"], [127, 161, "Füllwörter & Ausrufe"], [162, 199, "Hilfe & Pläne"], [200, 235, "Bäcker & Kasse"], [236, 277, "Restaurant & Bahn"], [278, 307, "Wege & Zahlen"], [308, 349, "Arzt & Amt"], [350, 380, "Telefon & Arbeit"], [381, 421, "Wohnung & Feste"]]};
+const SPLIT_SUB={"Erste Wörter": ["dk.grund", 1, 14], "Kleine Wörter": ["dk.grund", 2, 14], "Zahlen": ["dk.grund", 3, 14], "Alltagsverben": ["dk.grund", 4, 14], "Mehr Verben": ["dk.grund", 5, 14], "Menschen & Arbeit": ["dk.grund", 6, 14], "Zeit & Tage": ["dk.grund", 7, 14], "Essen & Trinken": ["dk.grund", 8, 14], "Haus & Kleidung": ["dk.grund", 9, 14], "Eigenschaften & Farben": ["dk.grund", 10, 14], "Mehr Eigenschaften": ["dk.grund", 11, 14], "Stadt & Verkehr": ["dk.grund", 12, 14], "Natur & Tiere": ["dk.grund", 13, 14], "Nützliche Nomen": ["dk.grund", 14, 14], "Grüßen & Höflichkeit": ["dk.floskeln", 1, 11], "Reaktionen & Meinung": ["dk.floskeln", 2, 11], "Smalltalk & Sätze": ["dk.floskeln", 3, 11], "Füllwörter & Ausrufe": ["dk.floskeln", 4, 11], "Hilfe & Pläne": ["dk.floskeln", 5, 11], "Bäcker & Kasse": ["dk.floskeln", 6, 11], "Restaurant & Bahn": ["dk.floskeln", 7, 11], "Wege & Zahlen": ["dk.floskeln", 8, 11], "Arzt & Amt": ["dk.floskeln", 9, 11], "Telefon & Arbeit": ["dk.floskeln", 10, 11], "Wohnung & Feste": ["dk.floskeln", 11, 11]};
+const GRUND_NAMES=["Erste Wörter", "Kleine Wörter", "Zahlen", "Alltagsverben", "Mehr Verben", "Menschen & Arbeit", "Zeit & Tage", "Essen & Trinken", "Haus & Kleidung", "Eigenschaften & Farben", "Mehr Eigenschaften", "Stadt & Verkehr", "Natur & Tiere", "Nützliche Nomen"];
+const FLOSK_NAMES=["Grüßen & Höflichkeit", "Reaktionen & Meinung", "Smalltalk & Sätze", "Füllwörter & Ausrufe", "Hilfe & Pläne", "Bäcker & Kasse", "Restaurant & Bahn", "Wege & Zahlen", "Arzt & Amt", "Telefon & Arbeit", "Wohnung & Feste"];
+function splitTopicOf(id){
+  let p,n;
+  if(id.slice(0,3)==='phr'){p='phr';n=+id.slice(3);}
+  else if(id.slice(0,2)==='gw'){p='gw';n=+id.slice(2);}
+  else return null;
+  const R=SPLIT_RULES[p];
+  for(let i=0;i<R.length;i++)if(n>=R[i][0]&&n<=R[i][1])return R[i][2];
+  return null;
+}
+function topicSub(name){
+  const kk=TOPIC_KEYS[name];
+  if(kk)return t(kk);
+  const sp=SPLIT_SUB[name];
+  if(sp)return t(sp[0])+' · '+sp[1]+'/'+sp[2];
+  return'';
+}
 let TOPICS=[];
 function allTopics(){
   const s=[];
