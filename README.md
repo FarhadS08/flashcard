@@ -30,7 +30,7 @@ You stay logged in via a secure (`HttpOnly`) session cookie that renews itself f
 - **Unlimited words & own decks** — add your own words in the *+ Neu* tab, and create your own categories with the dashed *+ Thema* chip (empty decks persist, sync with your account, and can be removed again via their ×)
 - **AI assist** — type just the German word and the AI fills in the article, translation, example sentence (with English translation) and a grammar note
 - **Example translations** — cards with an example sentence show its English translation right below it
-- **Search & edit** — full word list with search, inline edit and delete
+- **Browse decks & word details** — the word list filters by deck (chip row on top) and combines with search; tapping a word unfolds its full record: learning status with next review, color-coded article, example sentence with translation, tip and deck — plus controls to reset it to new, mark it as learned, or edit it
 - **Streak & daily goal** — a slim strip above the deck shows your 🔥 day streak (any day with at least one graded card keeps it alive), a daily-goal ring (tap to cycle 10/20/30/50 cards) with a confetti moment when you reach it, and your 🏆 record streak; all of it syncs with your account
 
 ## Built-in categories

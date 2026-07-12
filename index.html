@@ -163,6 +163,25 @@ h1{font-size:26px;font-weight:700;letter-spacing:-.01em;line-height:1.1}
 .icon-btn:hover{background:#F2F4F3;color:#C43020}
 .icon-btn.armed{background:#F9E7E4;color:#C43020;font-size:12px;font-weight:600;padding:7px 10px}
 .empty-list{text-align:center;color:#9A9A9A;font-size:14px;padding:36px 0}
+.list-topics{display:flex;gap:7px;overflow-x:auto;margin-bottom:12px;padding-bottom:3px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.list-topics::-webkit-scrollbar{display:none}
+.ltchip{white-space:nowrap;flex:none}
+.row.open{border-radius:15px 15px 0 0;margin-bottom:0;border-bottom-color:#F0F2F1}
+.wdetail{background:#fff;border:1px solid #E4E7E5;border-top:0;border-radius:0 0 15px 15px;margin:0 0 9px;padding:13px 15px 15px}
+.wd-status{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.wd-pill{font-size:11px;font-weight:600;padding:3px 11px;border-radius:999px}
+.d-new{background:#EEF0EF;color:#777777}
+.d-lrn{background:#FBF0DC;color:#A66300}
+.d-rev{background:#E3F2EB;color:#0A7A52}
+.wd-due{font-size:12px;color:#9A9A9A}
+.wd-grid{display:grid;grid-template-columns:96px 1fr;gap:7px 10px;font-size:13.5px;line-height:1.45}
+.wd-k{color:#9A9A9A;font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;font-weight:600;padding-top:2px}
+.wd-v{color:#333333;min-width:0;word-break:break-word}
+.wd-v b{font-weight:600}
+.wd-ext{color:#9A9A9A;font-size:12.5px}
+.wd-note{display:inline-block;font-size:12px;color:#0A7A52;background:#E3F2EB;padding:3px 11px;border-radius:999px}
+.wd-actions{display:flex;gap:8px;margin-top:13px;flex-wrap:wrap}
+.wd-btn{height:40px;font-size:13px;padding:0 12px;flex:1;min-width:118px;width:auto}
 
 .form{background:#fff;border:1px solid #E4E7E5;border-radius:22px;padding:26px 24px}
 .form h2{font-size:18px;font-weight:600;margin-bottom:20px}
@@ -271,6 +290,7 @@ label{display:block;font-size:11.5px;font-weight:600;letter-spacing:.08em;text-t
   </section>
 
   <section id="view-list" class="hidden">
+    <div class="list-topics" id="list-topics"></div>
     <div class="list-head">
       <input id="search" placeholder="Suchen …" oninput="renderList()">
       <span id="count-label"></span>
@@ -340,6 +360,7 @@ let queue=[],qi=0,flipped=false,sessionKnew=0,sessionAgain=0;
 let practice=false,roundIds=[],toPresent=new Set();
 let sessionSeen=new Set(),roundInfo='';
 let selectMode=false,selIds=new Set();
+let listTopic='',expandedId=null,lastLT='';
 let editingId=null,armedDelete=null,armTimer=null,selArt='',currentView='study';
 let artTouched=false,saving=false;
 let storageOK=true;
@@ -2147,9 +2168,70 @@ function gradeCard(q){
   renderStudy();
 }
 
+let LT=[];
+function renderListTopics(){
+  const el=$('list-topics');
+  if(!el)return;
+  LT=[''].concat(allTopics());
+  const h=LT.map((t,i)=>{
+    const n=t?deck.words.filter(w=>(w.topic||'Meine Wörter')===t).length:deck.words.length;
+    return '<button class="schip ltchip'+(listTopic===t?' on':'')+'" onclick="setListTopic('+i+')">'+(t?esc(t):'Alle')+' '+n+'</button>';
+  }).join('');
+  if(h!==lastLT){el.innerHTML=h;lastLT=h;}
+}
+function setListTopic(i){
+  listTopic=LT[i]||'';
+  expandedId=null;
+  renderList();
+}
+function toggleExpand(id){
+  expandedId=expandedId===id?null:id;
+  renderList();
+}
+function wordReset(id){
+  const w=deck.words.find(x=>x.id===id);
+  if(!w)return;
+  w.phase='new';w.ivl=0;w.ease=START_EASE;w.step=0;w.due=0;w.reps=0;w.lapses=0;
+  saveDeck();updateStats();renderList();
+  toast('Als neu zurückgesetzt');
+}
+function wordLearned(id){
+  const w=deck.words.find(x=>x.id===id);
+  if(!w)return;
+  nrm(w);
+  w.phase='review';w.ivl=EASY_IVL;w.ease=Math.max(w.ease||START_EASE,START_EASE);w.step=0;w.due=Date.now()+EASY_IVL*DAY;
+  saveDeck();updateStats();renderList();
+  toast('Als gelernt markiert — Wiederholung in '+EASY_IVL+' Tagen');
+}
+function detailHtml(w){
+  nrm(w);
+  const now=Date.now();
+  const st=w.phase==='new'?['Neu — noch nicht gelernt','d-new']:(w.phase==='review'?['Gelernt','d-rev']:['Am Lernen','d-lrn']);
+  let due='';
+  if(w.phase!=='new'){
+    due=(w.due||0)<=now?'jetzt fällig':'Wiederholung in '+fmtDue(w.due-now);
+    if(w.phase==='review')due+=' · Intervall '+w.ivl+' T';
+  }
+  return '<div class="wdetail">'+
+    '<div class="wd-status"><span class="wd-pill '+st[1]+'">'+st[0]+'</span>'+(due?'<span class="wd-due">'+due+'</span>':'')+'</div>'+
+    '<div class="wd-grid">'+
+      '<div class="wd-k">Artikel</div><div class="wd-v">'+(w.art?'<b class="art-'+w.art+'-t">'+w.art+'</b>':'—')+'</div>'+
+      '<div class="wd-k">Übersetzung</div><div class="wd-v">'+esc(w.en)+'</div>'+
+      (w.ex?'<div class="wd-k">Beispiel</div><div class="wd-v">„'+esc(w.ex)+'“'+(w.ext?'<br><span class="wd-ext">'+esc(w.ext)+'</span>':'')+'</div>':'')+
+      (w.note?'<div class="wd-k">Tipp</div><div class="wd-v"><span class="wd-note">'+esc(w.note)+'</span></div>':'')+
+      '<div class="wd-k">Thema</div><div class="wd-v">'+esc(w.topic||'Meine Wörter')+'</div>'+
+    '</div>'+
+    '<div class="wd-actions">'+
+      (w.phase!=='new'?'<button class="btn ghost wd-btn" onclick="wordReset(\''+w.id+'\')">Als neu zurücksetzen</button>':'')+
+      (w.phase!=='review'?'<button class="btn easy wd-btn" onclick="wordLearned(\''+w.id+'\')">Als gelernt markieren</button>':'')+
+      '<button class="btn knew wd-btn" onclick="openEdit(\''+w.id+'\')">Bearbeiten</button>'+
+    '</div>'+
+  '</div>';
+}
 function renderList(){
+  renderListTopics();
   const q=($('search').value||'').toLowerCase();
-  const rows=deck.words.filter(w=>((w.art||'')+' '+w.de+' '+w.en+' '+(w.topic||'')).toLowerCase().includes(q));
+  const rows=deck.words.filter(w=>(!listTopic||(w.topic||'Meine Wörter')===listTopic)&&((w.art||'')+' '+w.de+' '+w.en+' '+(w.topic||'')).toLowerCase().includes(q));
   $('count-label').textContent=rows.length+(rows.length===1?' Wort':' Wörter');
   const TICK='<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 13l5 5L20 7"/></svg>';
   $('word-list').innerHTML=rows.map(w=>{
@@ -2165,15 +2247,16 @@ function renderList(){
         '<div class="dots small">'+boxDots(lvl(w))+'</div>'+
       '</div>';
     }
-    return '<div class="row">'+
+    const open=expandedId===w.id;
+    return '<div class="row'+(open?' open':'')+'">'+
       '<span class="gdot g-'+g+'"></span>'+
-      '<div class="row-main" onclick="openEdit(\''+w.id+'\')">'+
+      '<div class="row-main" onclick="toggleExpand(\''+w.id+'\')">'+
         '<div class="row-de">'+(w.art?w.art+' ':'')+esc(w.de)+'</div>'+
         '<div class="row-en">'+esc(w.en)+'<span class="row-topic"> · '+esc(w.topic||'Meine Wörter')+'</span></div>'+
       '</div>'+
       '<div class="dots small">'+boxDots(lvl(w))+'</div>'+
       '<button class="icon-btn'+(armedDelete===w.id?' armed':'')+'" onclick="delWord(\''+w.id+'\')" title="Löschen">'+(armedDelete===w.id?'Sicher?':TRASH)+'</button>'+
-    '</div>';
+    '</div>'+(open?detailHtml(w):'');
   }).join('')||'<div class="empty-list">Nichts gefunden.</div>';
   renderSelBar();
 }
@@ -2188,6 +2271,7 @@ function delWord(id){
   deck.words=deck.words.filter(w=>w.id!==id);
   queue=queue.filter(x=>x!==id);
   selIds.delete(id);toPresent.delete(id);
+  if(expandedId===id)expandedId=null;
   if(qi>queue.length)qi=queue.length;
   armedDelete=null;
   saveDeck();updateStats();renderList();renderTopics();
