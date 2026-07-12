@@ -9,7 +9,7 @@ A German flashcard app: single page, no build step, installable on your phone, w
 - **Install as an app**: the site is a PWA — on Android/Chrome use *Add to Home Screen / Install*,
   on iOS Safari use *Share → Add to Home Screen*. It launches standalone with its own icon.
 - **Offline**: a service worker caches the app; your words are stored in `localStorage` on the device.
-- **Responsive**: layouts for small phones (320 px+), notched screens (safe areas), landscape, tablet and desktop.
+- **Responsive**: layouts for small phones (320 px+), notched screens (safe areas), landscape, tablet and desktop — on screens ≥ 1000 px the study view becomes a two-pane layout: streak + deck panel as a fixed sidebar on the left (always open, groups still fold), a bigger flashcard on the right, and centered tabs, so wide monitors aren't just empty margins.
 
 > Words are stored in the browser (localStorage) and can additionally sync between devices with an account — see below.
 
