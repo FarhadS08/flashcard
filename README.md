@@ -2,20 +2,7 @@
 
 A German flashcard app: single page, no build step, installable on your phone, works offline.
 
-## Run it
 
-- **Locally**: open `index.html` in any browser, or serve the folder (`python3 -m http.server`).
-- **Deployed**: any static host works. Vercel setup below.
-
-## Deploy to Vercel
-
-1. Go to [vercel.com/new](https://vercel.com/new) and import this repository.
-2. Framework preset: **Other** — no build command, no output directory. Deploy.
-3. *(Optional, enables the AI features)* In the project settings add an environment variable
-   `ANTHROPIC_API_KEY` with your [Anthropic API key](https://console.anthropic.com/), then redeploy.
-   The bundled serverless function `api/ai.js` proxies the AI requests so the key never reaches the browser.
-
-Without the key everything still works — the AI buttons fall back to built-in article suffix rules.
 
 ## Use it everywhere
 
@@ -30,13 +17,7 @@ Without the key everything still works — the AI buttons fall back to built-in 
 
 The app has built-in accounts ("Konto & Sync" via the cloud button in the header): register once, log in on each device, and your words plus the full learning progress sync automatically — the deck is pulled when the app opens and pushed ~1.5 s after every change; the newest state wins.
 
-Server setup (once, ~2 minutes):
-
-1. In your Vercel project open the **Storage** tab and create/connect an **Upstash for Redis** database (free tier is plenty). Vercel injects the connection env vars (`KV_REST_API_URL`/`KV_REST_API_TOKEN` or `UPSTASH_REDIS_REST_URL`/`UPSTASH_REDIS_REST_TOKEN`) automatically — `api/sync.js` accepts either pair.
-2. Redeploy the project.
-3. Open the app → cloud button → **Registrieren**.
-
-Notes: passwords are stored scrypt-hashed, decks are private per account. Sessions live in an `HttpOnly`/`SameSite=Lax` cookie (not readable by JavaScript) that slides forward 90 days on every visit — you stay logged in even if the browser evicts localStorage, and the deck is restored from the server automatically. There is no password reset (no e-mail service) — if you lose the password, register a new account; the words on your device stay untouched. Without the Redis integration the sync endpoint answers 501 and the app simply keeps working locally.
+You stay logged in via a secure (`HttpOnly`) session cookie that renews itself for 90 days on every visit — even if the browser clears local storage, the app logs itself back in and restores the deck from the server.
 
 ## Features
 
