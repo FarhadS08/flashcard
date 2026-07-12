@@ -260,32 +260,32 @@ label{display:block;font-size:11.5px;font-weight:600;letter-spacing:.08em;text-t
       <div class="eyebrow">Moin, Deutsch!</div>
       <h1>Wortschatz</h1>
     </div>
-    <div class="stats"><b id="stat-total">0</b> Wörter · <b id="stat-due">0</b> fällig<br><button class="sync-chip" id="sync-chip" onclick="show('account')"></button><br><span class="lang-row">🌐<select id="lang-sel" class="lang-sel" onchange="setLang(this.value)" title="Übersetzungssprache"></select></span></div>
+    <div class="stats"><b id="stat-total">0</b> <span data-i18n="stats.words">Wörter</span> · <b id="stat-due">0</b> <span data-i18n="stats.due">fällig</span><br><button class="sync-chip" id="sync-chip" onclick="show('account')"></button><br><span class="lang-row">🌐<select id="lang-sel" class="lang-sel" onchange="setLang(this.value)" title="Übersetzungssprache"></select></span></div>
   </div>
 
   <div class="tabs">
-    <button class="tab active" id="tab-study" onclick="show('study')">Lernen</button>
-    <button class="tab" id="tab-list" onclick="show('list')">Wörter</button>
-    <button class="tab" id="tab-add" onclick="goAdd()">+ Neu</button>
+    <button class="tab active" id="tab-study" onclick="show('study')" data-i18n="tab.learn">Lernen</button>
+    <button class="tab" id="tab-list" onclick="show('list')" data-i18n="tab.words">Wörter</button>
+    <button class="tab" id="tab-add" onclick="goAdd()" data-i18n="tab.new">+ Neu</button>
   </div>
 
   <section id="view-study">
     <div class="gami" id="gami"></div>
     <div class="topics" id="topic-chips"></div>
-    <div class="topic-legend"><span><span class="lg-dot lg-rev"></span>gelernt</span><span><span class="lg-dot lg-lrn"></span>am Lernen</span><span><span class="lg-dot lg-new"></span>neu</span></div>
+    <div class="topic-legend"><span><span class="lg-dot lg-rev"></span><span data-i18n="lg.rev">gelernt</span></span><span><span class="lg-dot lg-lrn"></span><span data-i18n="lg.lrn">am Lernen</span></span><span><span class="lg-dot lg-new"></span><span data-i18n="lg.new">neu</span></span></div>
     <div class="size-row" id="size-row">
-      <span class="size-label">Pro Runde</span>
-      <button class="schip" data-n="0" onclick="setSize(0)">Alle</button>
+      <span class="size-label" data-i18n="row.perround">Pro Runde</span>
+      <button class="schip" data-n="0" onclick="setSize(0)" data-i18n="row.all">Alle</button>
       <button class="schip" data-n="5" onclick="setSize(5)">5</button>
       <button class="schip" data-n="10" onclick="setSize(10)">10</button>
       <button class="schip" data-n="15" onclick="setSize(15)">15</button>
       <button class="schip" data-n="25" onclick="setSize(25)">25</button>
     </div>
     <div class="size-row" id="mode-row">
-      <span class="size-label">Modus</span>
-      <button class="schip mchip" data-m="mix" onclick="setMode('mix')">Mix</button>
-      <button class="schip mchip" data-m="new" onclick="setMode('new')">Neue</button>
-      <button class="schip mchip" data-m="due" onclick="setMode('due')">Fällige</button>
+      <span class="size-label" data-i18n="row.mode">Modus</span>
+      <button class="schip mchip" data-m="mix" onclick="setMode('mix')" data-i18n="mode.mix">Mix</button>
+      <button class="schip mchip" data-m="new" onclick="setMode('new')" data-i18n="mode.new">Neue</button>
+      <button class="schip mchip" data-m="due" onclick="setMode('due')" data-i18n="mode.due">Fällige</button>
     </div>
     <div class="progress" id="study-progress"><div id="study-bar"></div></div>
     <div id="stage"></div>
@@ -295,18 +295,18 @@ label{display:block;font-size:11.5px;font-weight:600;letter-spacing:.08em;text-t
   <section id="view-list" class="hidden">
     <div class="list-topics" id="list-topics"></div>
     <div class="list-head">
-      <input id="search" placeholder="Suchen …" oninput="renderList()">
+      <input id="search" placeholder="Suchen …" data-i18n-ph="ls.search" oninput="renderList()">
       <span id="count-label"></span>
-      <button class="btn-select" id="btn-select" onclick="toggleSelect()">Auswählen</button>
+      <button class="btn-select" id="btn-select" onclick="toggleSelect()" data-i18n="ls.select">Auswählen</button>
     </div>
     <div id="word-list"></div>
   </section>
 
   <section id="view-add" class="hidden">
     <div class="form">
-      <h2 id="form-title">Neues Wort</h2>
+      <h2 id="form-title" data-i18n="f.new">Neues Wort</h2>
       <div class="field">
-        <label>Artikel</label>
+        <label data-i18n="wd.article">Artikel</label>
         <div class="art-row">
           <button class="art-opt sel" data-a="" onclick="setArt('',true)">–</button>
           <button class="art-opt" data-a="der" onclick="setArt('der',true)">der</button>
@@ -315,24 +315,24 @@ label{display:block;font-size:11.5px;font-weight:600;letter-spacing:.08em;text-t
           <button class="art-opt auto" id="btn-auto" title="Artikel automatisch bestimmen" onclick="autoArticle(false)"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8zM19 14.5l.9 2.6 2.6.9-2.6.9-.9 2.6-.9-2.6-2.6-.9 2.6-.9z"/></svg>Auto</button>
         </div>
       </div>
-      <div class="field"><label>Wort *</label><input id="f-word" class="input" placeholder="Erfindung" onkeydown="enterSave(event)"></div>
-      <div class="field"><label>Übersetzung *</label><input id="f-trans" class="input" placeholder="invention" onkeydown="enterSave(event)"></div>
-      <div class="field"><label>Beispielsatz</label><input id="f-ex" class="input" placeholder="Die Pizza war eine geniale Erfindung." onkeydown="enterSave(event)"></div>
-      <div class="field"><label>Beispiel-Übersetzung</label><input id="f-ext" class="input" placeholder="Pizza was a brilliant invention." onkeydown="enterSave(event)"></div>
-      <div class="field"><label>Notiz</label><input id="f-note" class="input" placeholder="von: erfinden" onkeydown="enterSave(event)"></div>
-      <div class="field"><label>Thema</label><input id="f-topic" class="input" list="topics-dl" placeholder="Meine Wörter" onkeydown="enterSave(event)"><datalist id="topics-dl"></datalist></div>
-      <button class="btn ai-fill" id="btn-fill" onclick="aiFill(false)"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8zM19 14.5l.9 2.6 2.6.9-2.6.9-.9 2.6-.9-2.6-2.6-.9 2.6-.9z"/></svg>Mit KI ausfüllen</button>
+      <div class="field"><label data-i18n="f.word">Wort *</label><input id="f-word" class="input" placeholder="Erfindung" onkeydown="enterSave(event)"></div>
+      <div class="field"><label data-i18n="f.trans">Übersetzung *</label><input id="f-trans" class="input" placeholder="invention" onkeydown="enterSave(event)"></div>
+      <div class="field"><label data-i18n="f.ex">Beispielsatz</label><input id="f-ex" class="input" placeholder="Die Pizza war eine geniale Erfindung." onkeydown="enterSave(event)"></div>
+      <div class="field"><label data-i18n="f.ext">Beispiel-Übersetzung</label><input id="f-ext" class="input" placeholder="Pizza was a brilliant invention." onkeydown="enterSave(event)"></div>
+      <div class="field"><label data-i18n="f.note">Notiz</label><input id="f-note" class="input" placeholder="von: erfinden" onkeydown="enterSave(event)"></div>
+      <div class="field"><label data-i18n="f.topic">Thema</label><input id="f-topic" class="input" list="topics-dl" placeholder="Meine Wörter" onkeydown="enterSave(event)"><datalist id="topics-dl"></datalist></div>
+      <button class="btn ai-fill" id="btn-fill" onclick="aiFill(false)"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8zM19 14.5l.9 2.6 2.6.9-2.6.9-.9 2.6-.9-2.6-2.6-.9 2.6-.9z"/></svg><span data-i18n="f.ai">Mit KI ausfüllen</span></button>
       <div class="form-actions">
-        <button class="btn knew" id="btn-save" onclick="saveWord()">Speichern</button>
-        <button class="btn hidden" id="btn-cancel" onclick="resetForm();show('list')">Abbrechen</button>
+        <button class="btn knew" id="btn-save" onclick="saveWord()" data-i18n="f.save">Speichern</button>
+        <button class="btn hidden" id="btn-cancel" onclick="resetForm();show('list')" data-i18n="f.cancel">Abbrechen</button>
       </div>
-      <div class="hint">Nur das Wort eingeben + Enter → KI füllt Artikel, Übersetzung &amp; Beispiel aus</div>
+      <div class="hint" data-i18n="f.hint">Nur das Wort eingeben + Enter → KI füllt Artikel, Übersetzung &amp; Beispiel aus</div>
     </div>
   </section>
 
   <section id="view-account" class="hidden">
     <div class="form">
-      <h2>Konto &amp; Sync</h2>
+      <h2 data-i18n="ac.h">Konto &amp; Sync</h2>
       <div id="acct-box"></div>
     </div>
   </section>
@@ -340,11 +340,11 @@ label{display:block;font-size:11.5px;font-weight:600;letter-spacing:.08em;text-t
   <div class="foot" id="foot"></div>
 </div>
 
-<div id="sel-bar" class="hidden"><span id="sel-count"></span><span class="spacer"></span><button class="btn ghost" onclick="startSelected(true)">Üben</button><button class="btn knew" onclick="startSelected(false)">Lernen</button></div>
+<div id="sel-bar" class="hidden"><span id="sel-count"></span><span class="spacer"></span><button class="btn ghost" onclick="startSelected(true)" data-i18n="ls.practice">Üben</button><button class="btn knew" onclick="startSelected(false)" data-i18n="ls.learn">Lernen</button></div>
 
 <div id="cookie-note" class="hidden" role="region" aria-label="Cookie-Hinweis">
-  <div class="cn-text"><b>🍪 Nur notwendige Cookies.</b> Fürs Angemeldet-Bleiben setzt die App ein einziges Login-Cookie — kein Tracking, keine Werbung. Deine Wörter bleiben auf dem Gerät bzw. in deinem Konto.</div>
-  <button class="btn knew" onclick="cookieOk()">Alles klar!</button>
+  <div class="cn-text" data-i18n-html="ck.text"><b>🍪 Nur notwendige Cookies.</b> Fürs Angemeldet-Bleiben setzt die App ein einziges Login-Cookie — kein Tracking, keine Werbung. Deine Wörter bleiben auf dem Gerät bzw. in deinem Konto.</div>
+  <button class="btn knew" onclick="cookieOk()" data-i18n="ck.ok">Alles klar!</button>
 </div>
 
 <div id="toast"></div>
@@ -361,7 +361,7 @@ const AUTO_LABEL='<svg width="13" height="13" viewBox="0 0 24 24" fill="currentC
 let deck={words:[]};
 let queue=[],qi=0,flipped=false,sessionKnew=0,sessionAgain=0;
 let practice=false,roundIds=[],toPresent=new Set();
-let sessionSeen=new Set(),roundInfo='';
+let sessionSeen=new Set(),roundInfo=null;
 let selectMode=false,selIds=new Set();
 let listTopic='',expandedId=null,lastLT='';
 let editingId=null,armedDelete=null,armTimer=null,selArt='',currentView='study';
@@ -370,6 +370,19 @@ let storageOK=true;
 
 const $=id=>document.getElementById(id);
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const I18N={"de":{"tab.learn":"Lernen","tab.words":"Wörter","tab.new":"+ Neu","stats.words":"Wörter","stats.due":"fällig","sync.chip":"Konto & Sync","lg.rev":"gelernt","lg.lrn":"am Lernen","lg.new":"neu","row.perround":"Pro Runde","row.all":"Alle","row.mode":"Modus","mode.mix":"Mix","mode.new":"Neue","mode.due":"Fällige","g.streak":"Tage-Serie","g.oftoday":"von {0} heute","g.record":"Rekord","g.goal.toast":"Tagesziel: {0} Karten","g.goal.hit":"Tagesziel erreicht! 🔥 {0}-Tage-Serie","g.today.line":"Heute: <b>{0}</b> von {1} Karten.","st.show":"Antwort zeigen","gr.again":"Nochmal","gr.hard":"Schwer","gr.good":"Gut","gr.easy":"Leicht","gr.knew":"Gewusst","pres.new":"Neues Wort — erst mal ansehen","pres.know":"Kenn ich schon","pres.next":"Weiter","cnt.practice":"Übung","cnt.card":"Karte {0} von {1}","cnt.due":"{0} fällig","cnt.new":"{0} neu","u.min":"Min","u.day":"T","u.mon":"Mo","stx.empty.h":"Noch keine Wörter","stx.empty.p":"Füg dein erstes Wort hinzu und leg los.","stx.empty.b":"+ Neues Wort","stx.notopic.h":"Kein Thema aktiv","stx.notopic.p":"Tippe oben ein Thema an, um zu lernen.","stx.nonew.h":"Keine neuen Wörter mehr","stx.nonew.p":"Alle Wörter der aktiven Themen sind schon im Lernplan.","stx.nodue.h":"Nichts fällig","stx.nodue.p":"Alle Karten sind für heute gelernt.","stx.nodue.b":"Trotzdem alle üben","nd.min":"Nächste Wiederholung: in ein paar Minuten.","nd.today":"Nächste Wiederholung: später heute.","nd.tomorrow":"Nächste Wiederholung: morgen.","nd.days":"Nächste Wiederholung: in {0} Tagen.","done.h":"Runde geschafft","done.hp":"Übungsrunde geschafft","done.stats":"<b>{0}</b> gewusst · <b>{1}</b> wiederholt","done.left":"Noch <b>{0}</b> Karten fällig.","done.pnote":"Ohne Wertung — dein Lernplan bleibt unverändert.","done.next":"Nächste Runde","done.more":"Weiter üben","done.repeat":"Diese Runde wiederholen","done.repeat2":"Nochmal wiederholen","done.back":"Zurück zum Lernen","ls.search":"Suchen …","ls.words1":"Wort","ls.wordsN":"Wörter","ls.select":"Auswählen","ls.done":"Fertig","ls.selected":"<b>{0}</b> ausgewählt","ls.practice":"Üben","ls.learn":"Lernen","ls.none":"Nichts gefunden.","ls.del":"Löschen","ls.sure":"Sicher?","wd.new":"Neu — noch nicht gelernt","wd.learning":"Am Lernen","wd.learned":"Gelernt","wd.duenow":"jetzt fällig","wd.duein":"Wiederholung in {0}","wd.ivl":"Intervall {0} T","wd.article":"Artikel","wd.trans":"Übersetzung","wd.example":"Beispiel","wd.tip":"Tipp","wd.topic":"Thema","wd.reset":"Als neu zurücksetzen","wd.mark":"Als gelernt markieren","wd.edit":"Bearbeiten","wd.reset.t":"Als neu zurückgesetzt","wd.mark.t":"Als gelernt markiert — Wiederholung in {0} Tagen","f.new":"Neues Wort","f.edit":"Wort bearbeiten","f.word":"Wort *","f.trans":"Übersetzung *","f.ex":"Beispielsatz","f.ext":"Beispiel-Übersetzung","f.note":"Notiz","f.topic":"Thema","f.ai":"Mit KI ausfüllen","f.save":"Speichern","f.update":"Aktualisieren","f.cancel":"Abbrechen","f.hint":"Nur das Wort eingeben + Enter → KI füllt Artikel, Übersetzung & Beispiel aus","t.wordfirst":"Erst ein Wort eingeben","t.transmissing":"Übersetzung fehlt – bitte ergänzen","t.saved":"Gespeichert – nächstes Wort?","t.savedart":"Gespeichert: {0} {1}","t.updated":"Aktualisiert","t.deleted":"Gelöscht","t.aidone":"Ausgefüllt – prüfen und speichern","t.aifail":"KI nicht erreichbar","t.art":"Artikel: {0}","t.artg":" (geraten, Endung -{0})","t.noart":"Kein Artikel – kein Nomen","t.artfail":"Artikel nicht erkannt – bitte selbst wählen","t.ki":"KI denkt …","t.kifill":"KI füllt aus …","tp.add":"+ Thema","tp.ph":"Neues Thema …","tp.name":"Erst einen Namen eingeben","tp.exists":"Dieses Thema gibt es schon","tp.created":"Thema „{0}“ angelegt — jetzt Wörter hinzufügen","tp.removed":"Thema entfernt","tp.removetitle":"Leeres Thema entfernen","ac.h":"Konto & Sync","ac.intro":"Mit einem Konto werden deine Wörter und dein Lernfortschritt zwischen allen Geräten synchronisiert.","ac.user":"Benutzername / E-Mail","ac.pass":"Passwort","ac.passph":"mindestens 6 Zeichen","ac.login":"Anmelden","ac.register":"Registrieren","ac.cookiehint":"Beim Anmelden wird ein notwendiges Cookie gesetzt, damit du angemeldet bleibst — keine Tracking-Cookies.","ac.loggedin":"Angemeldet als","ac.lastsync":"Zuletzt synchronisiert:","ac.syncnow":"Jetzt synchronisieren","ac.logout":"Abmelden","ac.auto":"Automatisch: beim Öffnen wird geladen, nach Änderungen gespeichert. Der neueste Stand gewinnt.","ac.serverhint":"Funktioniert auf der eigenen Website (Vercel) mit eingerichtetem Sync-Server.","ac.bye":"Abgemeldet – Wörter bleiben auf diesem Gerät","ac.synced":"Synchronisiert","ac.created":"Konto erstellt","ac.welcome":"Angemeldet","ac.pulled":"Neuester Stand vom Server geladen","e.userexists":"Benutzername schon vergeben","e.badcred":"Falscher Name oder falsches Passwort","e.baduser":"Benutzername: 3–64 Zeichen","e.badpass":"Passwort: mindestens 6 Zeichen","e.noserver":"Sync-Server nicht eingerichtet (siehe README)","e.toolarge":"Deck zu groß für Sync","e.expired":"Sitzung abgelaufen – bitte neu anmelden","e.offline":"Server nicht erreichbar","e.sync":"Sync-Fehler ({0})","t.userfirst":"Benutzername fehlt","t.savefail":"Speichern fehlgeschlagen","t.trfail":"Übersetzung nicht verfügbar — zeige Englisch (KI-Server nötig)","t.lang":"Sprache:","ck.text":"<b>🍪 Nur notwendige Cookies.</b> Fürs Angemeldet-Bleiben setzt die App ein einziges Login-Cookie — kein Tracking, keine Werbung. Deine Wörter bleiben auf dem Gerät bzw. in deinem Konto.","ck.ok":"Alles klar!","ft.nostorage":"Hinweis: Kein dauerhafter Speicher verfügbar – Änderungen gelten nur für diese Sitzung."},"en":{"tab.learn":"Learn","tab.words":"Words","tab.new":"+ New","stats.words":"words","stats.due":"due","sync.chip":"Account & sync","lg.rev":"learned","lg.lrn":"learning","lg.new":"new","row.perround":"Per round","row.all":"All","row.mode":"Mode","mode.mix":"Mix","mode.new":"New","mode.due":"Due","g.streak":"day streak","g.oftoday":"of {0} today","g.record":"Record","g.goal.toast":"Daily goal: {0} cards","g.goal.hit":"Daily goal reached! 🔥 {0}-day streak","g.today.line":"Today: <b>{0}</b> of {1} cards.","st.show":"Show answer","gr.again":"Again","gr.hard":"Hard","gr.good":"Good","gr.easy":"Easy","gr.knew":"Knew it","pres.new":"New word — take a look first","pres.know":"I know this","pres.next":"Next","cnt.practice":"Practice","cnt.card":"Card {0} of {1}","cnt.due":"{0} due","cnt.new":"{0} new","u.min":"min","u.day":"d","u.mon":"mo","stx.empty.h":"No words yet","stx.empty.p":"Add your first word and get going.","stx.empty.b":"+ New word","stx.notopic.h":"No deck active","stx.notopic.p":"Tap a deck above to start learning.","stx.nonew.h":"No new words left","stx.nonew.p":"All words in the active decks are already scheduled.","stx.nodue.h":"Nothing due","stx.nodue.p":"All cards are done for today.","stx.nodue.b":"Practice all anyway","nd.min":"Next review: in a few minutes.","nd.today":"Next review: later today.","nd.tomorrow":"Next review: tomorrow.","nd.days":"Next review: in {0} days.","done.h":"Round complete","done.hp":"Practice round complete","done.stats":"<b>{0}</b> known · <b>{1}</b> repeated","done.left":"<b>{0}</b> cards still due.","done.pnote":"Ungraded — your schedule stays untouched.","done.next":"Next round","done.more":"Keep practicing","done.repeat":"Repeat this round","done.repeat2":"Repeat again","done.back":"Back to learning","ls.search":"Search …","ls.words1":"word","ls.wordsN":"words","ls.select":"Select","ls.done":"Done","ls.selected":"<b>{0}</b> selected","ls.practice":"Practice","ls.learn":"Learn","ls.none":"Nothing found.","ls.del":"Delete","ls.sure":"Sure?","wd.new":"New — not studied yet","wd.learning":"Learning","wd.learned":"Learned","wd.duenow":"due now","wd.duein":"review in {0}","wd.ivl":"interval {0} d","wd.article":"Article","wd.trans":"Translation","wd.example":"Example","wd.tip":"Tip","wd.topic":"Deck","wd.reset":"Reset to new","wd.mark":"Mark as learned","wd.edit":"Edit","wd.reset.t":"Reset to new","wd.mark.t":"Marked as learned — review in {0} days","f.new":"New word","f.edit":"Edit word","f.word":"Word *","f.trans":"Translation *","f.ex":"Example sentence","f.ext":"Example translation","f.note":"Note","f.topic":"Deck","f.ai":"Fill with AI","f.save":"Save","f.update":"Update","f.cancel":"Cancel","f.hint":"Just type the word + Enter → AI fills article, translation & example","t.wordfirst":"Enter a word first","t.transmissing":"Translation missing – please add it","t.saved":"Saved – next word?","t.savedart":"Saved: {0} {1}","t.updated":"Updated","t.deleted":"Deleted","t.aidone":"Filled in – check and save","t.aifail":"AI not reachable","t.art":"Article: {0}","t.artg":" (guessed from ending -{0})","t.noart":"No article – not a noun","t.artfail":"Article not detected – pick it yourself","t.ki":"AI thinking …","t.kifill":"AI filling in …","tp.add":"+ Deck","tp.ph":"New deck …","tp.name":"Enter a name first","tp.exists":"This deck already exists","tp.created":"Deck “{0}” created — now add words","tp.removed":"Deck removed","tp.removetitle":"Remove empty deck","ac.h":"Account & Sync","ac.intro":"With an account, your words and progress sync across all your devices.","ac.user":"Username / email","ac.pass":"Password","ac.passph":"at least 6 characters","ac.login":"Log in","ac.register":"Register","ac.cookiehint":"Logging in sets one strictly necessary cookie to keep you signed in — no tracking cookies.","ac.loggedin":"Signed in as","ac.lastsync":"Last synced:","ac.syncnow":"Sync now","ac.logout":"Log out","ac.auto":"Automatic: loads on open, saves after changes. Newest state wins.","ac.serverhint":"Works on your own site (Vercel) with the sync server configured.","ac.bye":"Logged out – words stay on this device","ac.synced":"Synced","ac.created":"Account created","ac.welcome":"Signed in","ac.pulled":"Loaded newest state from server","e.userexists":"Username already taken","e.badcred":"Wrong username or password","e.baduser":"Username: 3–64 characters","e.badpass":"Password: at least 6 characters","e.noserver":"Sync server not set up (see README)","e.toolarge":"Deck too large for sync","e.expired":"Session expired – please log in again","e.offline":"Server not reachable","e.sync":"Sync error ({0})","t.userfirst":"Username missing","t.savefail":"Saving failed","t.trfail":"Translation unavailable — showing English (AI server needed)","t.lang":"Language:","ck.text":"<b>🍪 Essential cookies only.</b> The app sets a single login cookie to keep you signed in — no tracking, no ads. Your words stay on your device or in your account.","ck.ok":"Got it!","ft.nostorage":"Note: no persistent storage available – changes last only for this session."},"tr":{"tab.learn":"Öğren","tab.words":"Kelimeler","tab.new":"+ Yeni","stats.words":"kelime","stats.due":"tekrar","sync.chip":"Hesap & Sync","lg.rev":"öğrenildi","lg.lrn":"öğreniliyor","lg.new":"yeni","row.perround":"Tur başına","row.all":"Tümü","row.mode":"Mod","mode.mix":"Karışık","mode.new":"Yeniler","mode.due":"Tekrarlar","g.streak":"günlük seri","g.oftoday":"/ {0} bugün","g.record":"Rekor","g.goal.toast":"Günlük hedef: {0} kart","g.goal.hit":"Günlük hedef tamam! 🔥 {0} günlük seri","g.today.line":"Bugün: <b>{0}</b> / {1} kart.","st.show":"Cevabı göster","gr.again":"Tekrar","gr.hard":"Zor","gr.good":"İyi","gr.easy":"Kolay","gr.knew":"Bildim","pres.new":"Yeni kelime — önce bir bak","pres.know":"Bunu biliyorum","pres.next":"Devam","cnt.practice":"Alıştırma","cnt.card":"Kart {0}/{1}","cnt.due":"{0} tekrar","cnt.new":"{0} yeni","u.min":"dk","u.day":"g","u.mon":"ay","stx.empty.h":"Henüz kelime yok","stx.empty.p":"İlk kelimeni ekle ve başla.","stx.empty.b":"+ Yeni kelime","stx.notopic.h":"Aktif deste yok","stx.notopic.p":"Öğrenmek için yukarıdan bir deste seç.","stx.nonew.h":"Yeni kelime kalmadı","stx.nonew.p":"Aktif destelerdeki tüm kelimeler zaten planda.","stx.nodue.h":"Tekrar yok","stx.nodue.p":"Bugünlük tüm kartlar tamam.","stx.nodue.b":"Yine de hepsini çalış","nd.min":"Sonraki tekrar: birkaç dakika içinde.","nd.today":"Sonraki tekrar: bugün daha sonra.","nd.tomorrow":"Sonraki tekrar: yarın.","nd.days":"Sonraki tekrar: {0} gün içinde.","done.h":"Tur tamam","done.hp":"Alıştırma turu tamam","done.stats":"<b>{0}</b> bilinen · <b>{1}</b> tekrar","done.left":"<b>{0}</b> kart daha var.","done.pnote":"Puansız — planın değişmez.","done.next":"Sonraki tur","done.more":"Çalışmaya devam","done.repeat":"Bu turu tekrarla","done.repeat2":"Tekrar tekrarla","done.back":"Öğrenmeye dön","ls.search":"Ara …","ls.words1":"kelime","ls.wordsN":"kelime","ls.select":"Seç","ls.done":"Bitti","ls.selected":"<b>{0}</b> seçildi","ls.practice":"Alıştır","ls.learn":"Öğren","ls.none":"Bir şey bulunamadı.","ls.del":"Sil","ls.sure":"Emin misin?","wd.new":"Yeni — henüz öğrenilmedi","wd.learning":"Öğreniliyor","wd.learned":"Öğrenildi","wd.duenow":"şimdi tekrar","wd.duein":"tekrar: {0} sonra","wd.ivl":"aralık {0} g","wd.article":"Artikel","wd.trans":"Çeviri","wd.example":"Örnek","wd.tip":"İpucu","wd.topic":"Deste","wd.reset":"Yeni olarak sıfırla","wd.mark":"Öğrenildi işaretle","wd.edit":"Düzenle","wd.reset.t":"Yeni olarak sıfırlandı","wd.mark.t":"Öğrenildi — tekrar {0} gün sonra","f.new":"Yeni kelime","f.edit":"Kelimeyi düzenle","f.word":"Kelime *","f.trans":"Çeviri *","f.ex":"Örnek cümle","f.ext":"Örnek çevirisi","f.note":"Not","f.topic":"Deste","f.ai":"YZ ile doldur","f.save":"Kaydet","f.update":"Güncelle","f.cancel":"İptal","f.hint":"Sadece kelimeyi yaz + Enter → YZ artikeli, çeviriyi ve örneği doldurur","t.wordfirst":"Önce bir kelime yaz","t.transmissing":"Çeviri eksik – lütfen ekle","t.saved":"Kaydedildi – sıradaki?","t.savedart":"Kaydedildi: {0} {1}","t.updated":"Güncellendi","t.deleted":"Silindi","t.aidone":"Dolduruldu – kontrol et, kaydet","t.aifail":"YZ erişilemiyor","t.art":"Artikel: {0}","t.artg":" (-{0} ekinden tahmin)","t.noart":"Artikel yok – isim değil","t.artfail":"Artikel bulunamadı – kendin seç","t.ki":"YZ düşünüyor …","t.kifill":"YZ dolduruyor …","tp.add":"+ Deste","tp.ph":"Yeni deste …","tp.name":"Önce bir ad gir","tp.exists":"Bu deste zaten var","tp.created":"“{0}” destesi oluşturuldu — kelime ekle","tp.removed":"Deste kaldırıldı","tp.removetitle":"Boş desteyi kaldır","ac.h":"Hesap & Sync","ac.intro":"Hesapla kelimelerin ve ilerlemen tüm cihazlarında eşitlenir.","ac.user":"Kullanıcı adı / e-posta","ac.pass":"Şifre","ac.passph":"en az 6 karakter","ac.login":"Giriş yap","ac.register":"Kayıt ol","ac.cookiehint":"Girişte oturumun için gerekli tek bir çerez kullanılır — takip çerezi yok.","ac.loggedin":"Giriş yapıldı:","ac.lastsync":"Son eşitleme:","ac.syncnow":"Şimdi eşitle","ac.logout":"Çıkış yap","ac.auto":"Otomatik: açılışta yükler, değişince kaydeder. En yeni kazanır.","ac.serverhint":"Kendi sitende (Vercel) sync sunucusu kuruluysa çalışır.","ac.bye":"Çıkış yapıldı – kelimeler bu cihazda kalır","ac.synced":"Eşitlendi","ac.created":"Hesap oluşturuldu","ac.welcome":"Giriş yapıldı","ac.pulled":"Sunucudan en yeni hâl yüklendi","e.userexists":"Kullanıcı adı alınmış","e.badcred":"Kullanıcı adı veya şifre yanlış","e.baduser":"Kullanıcı adı: 3–64 karakter","e.badpass":"Şifre: en az 6 karakter","e.noserver":"Sync sunucusu kurulmamış (README)","e.toolarge":"Deste sync için çok büyük","e.expired":"Oturum bitti – tekrar giriş yap","e.offline":"Sunucuya ulaşılamıyor","e.sync":"Sync hatası ({0})","t.userfirst":"Kullanıcı adı eksik","t.savefail":"Kaydetme başarısız","t.trfail":"Çeviri yok — İngilizce gösteriliyor (YZ sunucusu gerekli)","t.lang":"Dil:","ck.text":"<b>🍪 Sadece gerekli çerezler.</b> Uygulama oturum için tek bir çerez kullanır — takip ve reklam yok. Kelimelerin cihazında veya hesabında kalır.","ck.ok":"Anlaşıldı!","ft.nostorage":"Not: kalıcı depolama yok – değişiklikler bu oturumla sınırlı."},"az":{"tab.learn":"Öyrən","tab.words":"Sözlər","tab.new":"+ Yeni","stats.words":"söz","stats.due":"təkrar","sync.chip":"Hesab & Sync","lg.rev":"öyrənilib","lg.lrn":"öyrənilir","lg.new":"yeni","row.perround":"Tur üçün","row.all":"Hamısı","row.mode":"Rejim","mode.mix":"Qarışıq","mode.new":"Yenilər","mode.due":"Təkrarlar","g.streak":"günlük seriya","g.oftoday":"/ {0} bu gün","g.record":"Rekord","g.goal.toast":"Günlük hədəf: {0} kart","g.goal.hit":"Günlük hədəf tamam! 🔥 {0} günlük seriya","g.today.line":"Bu gün: <b>{0}</b> / {1} kart.","st.show":"Cavabı göstər","gr.again":"Yenidən","gr.hard":"Çətin","gr.good":"Yaxşı","gr.easy":"Asan","gr.knew":"Bildim","pres.new":"Yeni söz — əvvəlcə bax","pres.know":"Bunu bilirəm","pres.next":"Davam","cnt.practice":"Məşq","cnt.card":"Kart {0}/{1}","cnt.due":"{0} təkrar","cnt.new":"{0} yeni","u.min":"dəq","u.day":"g","u.mon":"ay","stx.empty.h":"Hələ söz yoxdur","stx.empty.p":"İlk sözünü əlavə et və başla.","stx.empty.b":"+ Yeni söz","stx.notopic.h":"Aktiv dəst yoxdur","stx.notopic.p":"Öyrənmək üçün yuxarıdan dəst seç.","stx.nonew.h":"Yeni söz qalmadı","stx.nonew.p":"Aktiv dəstlərdəki bütün sözlər artıq plandadır.","stx.nodue.h":"Təkrar yoxdur","stx.nodue.p":"Bu günlük bütün kartlar tamamdır.","stx.nodue.b":"Yenə də hamısını məşq et","nd.min":"Növbəti təkrar: bir neçə dəqiqəyə.","nd.today":"Növbəti təkrar: bu gün daha sonra.","nd.tomorrow":"Növbəti təkrar: sabah.","nd.days":"Növbəti təkrar: {0} günə.","done.h":"Tur tamamlandı","done.hp":"Məşq turu tamamlandı","done.stats":"<b>{0}</b> bilinən · <b>{1}</b> təkrar","done.left":"Daha <b>{0}</b> kart var.","done.pnote":"Qiymətsiz — planın dəyişməz.","done.next":"Növbəti tur","done.more":"Məşqə davam","done.repeat":"Bu turu təkrarla","done.repeat2":"Yenidən təkrarla","done.back":"Öyrənməyə qayıt","ls.search":"Axtar …","ls.words1":"söz","ls.wordsN":"söz","ls.select":"Seç","ls.done":"Hazır","ls.selected":"<b>{0}</b> seçilib","ls.practice":"Məşq et","ls.learn":"Öyrən","ls.none":"Heç nə tapılmadı.","ls.del":"Sil","ls.sure":"Əminsən?","wd.new":"Yeni — hələ öyrənilməyib","wd.learning":"Öyrənilir","wd.learned":"Öyrənilib","wd.duenow":"indi təkrar","wd.duein":"təkrar: {0} sonra","wd.ivl":"interval {0} g","wd.article":"Artikl","wd.trans":"Tərcümə","wd.example":"Nümunə","wd.tip":"İpucu","wd.topic":"Dəst","wd.reset":"Yeni kimi sıfırla","wd.mark":"Öyrənilib kimi qeyd et","wd.edit":"Redaktə et","wd.reset.t":"Yeni kimi sıfırlandı","wd.mark.t":"Öyrənilib — təkrar {0} günə","f.new":"Yeni söz","f.edit":"Sözü redaktə et","f.word":"Söz *","f.trans":"Tərcümə *","f.ex":"Nümunə cümlə","f.ext":"Nümunənin tərcüməsi","f.note":"Qeyd","f.topic":"Dəst","f.ai":"Sİ ilə doldur","f.save":"Yadda saxla","f.update":"Yenilə","f.cancel":"Ləğv et","f.hint":"Sadəcə sözü yaz + Enter → Sİ artikli, tərcüməni və nümunəni doldurur","t.wordfirst":"Əvvəlcə söz yaz","t.transmissing":"Tərcümə yoxdur – əlavə et","t.saved":"Yadda saxlandı – növbəti?","t.savedart":"Yadda saxlandı: {0} {1}","t.updated":"Yeniləndi","t.deleted":"Silindi","t.aidone":"Dolduruldu – yoxla və saxla","t.aifail":"Sİ əlçatan deyil","t.art":"Artikl: {0}","t.artg":" (-{0} sonluğundan təxmin)","t.noart":"Artikl yoxdur – isim deyil","t.artfail":"Artikl tapılmadı – özün seç","t.ki":"Sİ düşünür …","t.kifill":"Sİ doldurur …","tp.add":"+ Dəst","tp.ph":"Yeni dəst …","tp.name":"Əvvəlcə ad yaz","tp.exists":"Bu dəst artıq var","tp.created":"“{0}” dəsti yaradıldı — söz əlavə et","tp.removed":"Dəst silindi","tp.removetitle":"Boş dəsti sil","ac.h":"Hesab & Sync","ac.intro":"Hesabla sözlərin və irəliləyişin bütün cihazlarında sinxronlaşır.","ac.user":"İstifadəçi adı / e-poçt","ac.pass":"Şifrə","ac.passph":"ən az 6 simvol","ac.login":"Daxil ol","ac.register":"Qeydiyyat","ac.cookiehint":"Girişdə sessiya üçün lazım olan bir kuki qoyulur — izləmə kukiləri yoxdur.","ac.loggedin":"Daxil olub:","ac.lastsync":"Son sinxron:","ac.syncnow":"İndi sinxronlaşdır","ac.logout":"Çıxış","ac.auto":"Avtomatik: açılışda yüklənir, dəyişikliklərdən sonra saxlanır. Ən yenisi qalib gəlir.","ac.serverhint":"Öz saytında (Vercel) sync serveri qurulubsa işləyir.","ac.bye":"Çıxış edildi – sözlər bu cihazda qalır","ac.synced":"Sinxronlaşdı","ac.created":"Hesab yaradıldı","ac.welcome":"Daxil oldun","ac.pulled":"Serverdən ən yeni versiya yükləndi","e.userexists":"İstifadəçi adı məşğuldur","e.badcred":"Ad və ya şifrə yanlışdır","e.baduser":"Ad: 3–64 simvol","e.badpass":"Şifrə: ən az 6 simvol","e.noserver":"Sync serveri qurulmayıb (README)","e.toolarge":"Dəst sync üçün çox böyükdür","e.expired":"Sessiya bitdi – yenidən daxil ol","e.offline":"Serverə çatmaq olmur","e.sync":"Sync xətası ({0})","t.userfirst":"İstifadəçi adı yoxdur","t.savefail":"Saxlama alınmadı","t.trfail":"Tərcümə yoxdur — ingiliscə göstərilir (Sİ serveri lazımdır)","t.lang":"Dil:","ck.text":"<b>🍪 Yalnız lazımlı kukilər.</b> Tətbiq sessiya üçün bir kuki qoyur — izləmə və reklam yoxdur. Sözlərin cihazında və ya hesabında qalır.","ck.ok":"Aydındır!","ft.nostorage":"Qeyd: daimi yaddaş yoxdur – dəyişikliklər yalnız bu sessiya üçündür."},"ru":{"tab.learn":"Учить","tab.words":"Слова","tab.new":"+ Новое","stats.words":"слов","stats.due":"к повтору","sync.chip":"Аккаунт и синхр.","lg.rev":"выучено","lg.lrn":"изучается","lg.new":"новое","row.perround":"За раунд","row.all":"Все","row.mode":"Режим","mode.mix":"Микс","mode.new":"Новые","mode.due":"Повторы","g.streak":"дней подряд","g.oftoday":"из {0} сегодня","g.record":"Рекорд","g.goal.toast":"Цель дня: {0} карточек","g.goal.hit":"Цель дня достигнута! 🔥 Серия: {0} дн.","g.today.line":"Сегодня: <b>{0}</b> из {1} карточек.","st.show":"Показать ответ","gr.again":"Ещё раз","gr.hard":"Трудно","gr.good":"Хорошо","gr.easy":"Легко","gr.knew":"Знаю","pres.new":"Новое слово — сначала посмотри","pres.know":"Уже знаю","pres.next":"Дальше","cnt.practice":"Тренировка","cnt.card":"Карточка {0} из {1}","cnt.due":"{0} к повтору","cnt.new":"{0} новых","u.min":"мин","u.day":"дн","u.mon":"мес","stx.empty.h":"Пока нет слов","stx.empty.p":"Добавь первое слово и начинай.","stx.empty.b":"+ Новое слово","stx.notopic.h":"Нет активных колод","stx.notopic.p":"Выбери колоду сверху, чтобы учить.","stx.nonew.h":"Новых слов больше нет","stx.nonew.p":"Все слова активных колод уже в расписании.","stx.nodue.h":"Повторов нет","stx.nodue.p":"Все карточки на сегодня выучены.","stx.nodue.b":"Всё равно повторить все","nd.min":"Следующий повтор: через пару минут.","nd.today":"Следующий повтор: сегодня позже.","nd.tomorrow":"Следующий повтор: завтра.","nd.days":"Следующий повтор: через {0} дн.","done.h":"Раунд пройден","done.hp":"Тренировка пройдена","done.stats":"<b>{0}</b> знал · <b>{1}</b> повторил","done.left":"Ещё <b>{0}</b> карточек к повтору.","done.pnote":"Без оценок — расписание не меняется.","done.next":"Следующий раунд","done.more":"Продолжить","done.repeat":"Повторить этот раунд","done.repeat2":"Повторить ещё раз","done.back":"Назад к учёбе","ls.search":"Поиск …","ls.words1":"слово","ls.wordsN":"слов","ls.select":"Выбрать","ls.done":"Готово","ls.selected":"Выбрано: <b>{0}</b>","ls.practice":"Тренировка","ls.learn":"Учить","ls.none":"Ничего не найдено.","ls.del":"Удалить","ls.sure":"Точно?","wd.new":"Новое — ещё не изучалось","wd.learning":"Изучается","wd.learned":"Выучено","wd.duenow":"пора повторить","wd.duein":"повтор через {0}","wd.ivl":"интервал {0} дн","wd.article":"Артикль","wd.trans":"Перевод","wd.example":"Пример","wd.tip":"Подсказка","wd.topic":"Колода","wd.reset":"Сбросить в новое","wd.mark":"Отметить выученным","wd.edit":"Изменить","wd.reset.t":"Сброшено в новое","wd.mark.t":"Выучено — повтор через {0} дн.","f.new":"Новое слово","f.edit":"Изменить слово","f.word":"Слово *","f.trans":"Перевод *","f.ex":"Пример предложения","f.ext":"Перевод примера","f.note":"Заметка","f.topic":"Колода","f.ai":"Заполнить ИИ","f.save":"Сохранить","f.update":"Обновить","f.cancel":"Отмена","f.hint":"Введи слово + Enter → ИИ заполнит артикль, перевод и пример","t.wordfirst":"Сначала введи слово","t.transmissing":"Нет перевода – добавь его","t.saved":"Сохранено – следующее слово?","t.savedart":"Сохранено: {0} {1}","t.updated":"Обновлено","t.deleted":"Удалено","t.aidone":"Заполнено – проверь и сохрани","t.aifail":"ИИ недоступен","t.art":"Артикль: {0}","t.artg":" (угадано по -{0})","t.noart":"Без артикля – не существительное","t.artfail":"Артикль не определён – выбери сам","t.ki":"ИИ думает …","t.kifill":"ИИ заполняет …","tp.add":"+ Колода","tp.ph":"Новая колода …","tp.name":"Сначала введи название","tp.exists":"Такая колода уже есть","tp.created":"Колода «{0}» создана — добавь слова","tp.removed":"Колода удалена","tp.removetitle":"Удалить пустую колоду","ac.h":"Аккаунт и синхронизация","ac.intro":"С аккаунтом слова и прогресс синхронизируются между устройствами.","ac.user":"Имя пользователя / почта","ac.pass":"Пароль","ac.passph":"минимум 6 символов","ac.login":"Войти","ac.register":"Регистрация","ac.cookiehint":"При входе ставится один нужный cookie для сессии — без трекинга.","ac.loggedin":"Вы вошли как","ac.lastsync":"Последняя синхр.:","ac.syncnow":"Синхронизировать","ac.logout":"Выйти","ac.auto":"Автоматически: загрузка при открытии, сохранение после изменений. Новое побеждает.","ac.serverhint":"Работает на своём сайте (Vercel) с настроенным сервером.","ac.bye":"Вы вышли – слова остаются на устройстве","ac.synced":"Синхронизировано","ac.created":"Аккаунт создан","ac.welcome":"Вы вошли","ac.pulled":"Загружена свежая версия с сервера","e.userexists":"Имя уже занято","e.badcred":"Неверное имя или пароль","e.baduser":"Имя: 3–64 символа","e.badpass":"Пароль: минимум 6 символов","e.noserver":"Сервер не настроен (см. README)","e.toolarge":"Колода слишком большая","e.expired":"Сессия истекла – войди снова","e.offline":"Сервер недоступен","e.sync":"Ошибка синхр. ({0})","t.userfirst":"Введи имя пользователя","t.savefail":"Не удалось сохранить","t.trfail":"Перевод недоступен — показываю английский (нужен ИИ-сервер)","t.lang":"Язык:","ck.text":"<b>🍪 Только необходимые cookie.</b> Приложение ставит один cookie для входа — без трекинга и рекламы. Слова остаются на устройстве или в аккаунте.","ck.ok":"Понятно!","ft.nostorage":"Внимание: нет постоянного хранилища – изменения только на эту сессию."},"es":{"tab.learn":"Aprender","tab.words":"Palabras","tab.new":"+ Nuevo","stats.words":"palabras","stats.due":"pendientes","sync.chip":"Cuenta y sync","lg.rev":"aprendido","lg.lrn":"aprendiendo","lg.new":"nuevo","row.perround":"Por ronda","row.all":"Todas","row.mode":"Modo","mode.mix":"Mixto","mode.new":"Nuevas","mode.due":"Pendientes","g.streak":"días seguidos","g.oftoday":"de {0} hoy","g.record":"Récord","g.goal.toast":"Meta diaria: {0} tarjetas","g.goal.hit":"¡Meta diaria lograda! 🔥 Racha de {0} días","g.today.line":"Hoy: <b>{0}</b> de {1} tarjetas.","st.show":"Mostrar respuesta","gr.again":"Otra vez","gr.hard":"Difícil","gr.good":"Bien","gr.easy":"Fácil","gr.knew":"Lo sabía","pres.new":"Palabra nueva — mírala primero","pres.know":"Ya la sé","pres.next":"Seguir","cnt.practice":"Práctica","cnt.card":"Tarjeta {0} de {1}","cnt.due":"{0} pendientes","cnt.new":"{0} nuevas","u.min":"min","u.day":"d","u.mon":"me","stx.empty.h":"Aún no hay palabras","stx.empty.p":"Añade tu primera palabra y empieza.","stx.empty.b":"+ Nueva palabra","stx.notopic.h":"Ningún mazo activo","stx.notopic.p":"Toca un mazo arriba para aprender.","stx.nonew.h":"No quedan palabras nuevas","stx.nonew.p":"Todas las palabras de los mazos activos ya están programadas.","stx.nodue.h":"Nada pendiente","stx.nodue.p":"Todas las tarjetas de hoy están hechas.","stx.nodue.b":"Practicar todas igual","nd.min":"Próximo repaso: en unos minutos.","nd.today":"Próximo repaso: hoy más tarde.","nd.tomorrow":"Próximo repaso: mañana.","nd.days":"Próximo repaso: en {0} días.","done.h":"Ronda completada","done.hp":"Ronda de práctica completada","done.stats":"<b>{0}</b> sabidas · <b>{1}</b> repetidas","done.left":"Quedan <b>{0}</b> tarjetas.","done.pnote":"Sin calificar — tu plan no cambia.","done.next":"Siguiente ronda","done.more":"Seguir practicando","done.repeat":"Repetir esta ronda","done.repeat2":"Repetir otra vez","done.back":"Volver a aprender","ls.search":"Buscar …","ls.words1":"palabra","ls.wordsN":"palabras","ls.select":"Elegir","ls.done":"Listo","ls.selected":"<b>{0}</b> elegidas","ls.practice":"Practicar","ls.learn":"Aprender","ls.none":"Nada encontrado.","ls.del":"Borrar","ls.sure":"¿Seguro?","wd.new":"Nueva — sin estudiar","wd.learning":"Aprendiendo","wd.learned":"Aprendida","wd.duenow":"pendiente ya","wd.duein":"repaso en {0}","wd.ivl":"intervalo {0} d","wd.article":"Artículo","wd.trans":"Traducción","wd.example":"Ejemplo","wd.tip":"Consejo","wd.topic":"Mazo","wd.reset":"Restablecer a nueva","wd.mark":"Marcar como aprendida","wd.edit":"Editar","wd.reset.t":"Restablecida como nueva","wd.mark.t":"Aprendida — repaso en {0} días","f.new":"Nueva palabra","f.edit":"Editar palabra","f.word":"Palabra *","f.trans":"Traducción *","f.ex":"Frase de ejemplo","f.ext":"Traducción del ejemplo","f.note":"Nota","f.topic":"Mazo","f.ai":"Rellenar con IA","f.save":"Guardar","f.update":"Actualizar","f.cancel":"Cancelar","f.hint":"Escribe la palabra + Enter → la IA completa artículo, traducción y ejemplo","t.wordfirst":"Primero escribe una palabra","t.transmissing":"Falta la traducción – añádela","t.saved":"Guardada – ¿siguiente?","t.savedart":"Guardada: {0} {1}","t.updated":"Actualizada","t.deleted":"Borrada","t.aidone":"Rellenado – revisa y guarda","t.aifail":"IA no disponible","t.art":"Artículo: {0}","t.artg":" (deducido por -{0})","t.noart":"Sin artículo – no es sustantivo","t.artfail":"Artículo no detectado – elígelo","t.ki":"IA pensando …","t.kifill":"IA rellenando …","tp.add":"+ Mazo","tp.ph":"Nuevo mazo …","tp.name":"Primero escribe un nombre","tp.exists":"Este mazo ya existe","tp.created":"Mazo «{0}» creado — añade palabras","tp.removed":"Mazo eliminado","tp.removetitle":"Eliminar mazo vacío","ac.h":"Cuenta y sincronización","ac.intro":"Con una cuenta, tus palabras y progreso se sincronizan entre dispositivos.","ac.user":"Usuario / correo","ac.pass":"Contraseña","ac.passph":"mínimo 6 caracteres","ac.login":"Iniciar sesión","ac.register":"Registrarse","ac.cookiehint":"Al iniciar sesión se usa una cookie necesaria — sin cookies de rastreo.","ac.loggedin":"Sesión iniciada como","ac.lastsync":"Última sync:","ac.syncnow":"Sincronizar ahora","ac.logout":"Cerrar sesión","ac.auto":"Automático: carga al abrir, guarda tras cambios. Gana lo más reciente.","ac.serverhint":"Funciona en tu propio sitio (Vercel) con el servidor configurado.","ac.bye":"Sesión cerrada – las palabras quedan aquí","ac.synced":"Sincronizado","ac.created":"Cuenta creada","ac.welcome":"Sesión iniciada","ac.pulled":"Cargado lo más reciente del servidor","e.userexists":"Usuario ya en uso","e.badcred":"Usuario o contraseña incorrectos","e.baduser":"Usuario: 3–64 caracteres","e.badpass":"Contraseña: mínimo 6","e.noserver":"Servidor no configurado (ver README)","e.toolarge":"Mazo demasiado grande","e.expired":"Sesión caducada – entra de nuevo","e.offline":"Servidor no disponible","e.sync":"Error de sync ({0})","t.userfirst":"Falta el usuario","t.savefail":"Error al guardar","t.trfail":"Traducción no disponible — mostrando inglés (requiere servidor IA)","t.lang":"Idioma:","ck.text":"<b>🍪 Solo cookies necesarias.</b> La app usa una única cookie de sesión — sin rastreo ni anuncios. Tus palabras quedan en tu dispositivo o cuenta.","ck.ok":"¡Entendido!","ft.nostorage":"Nota: sin almacenamiento persistente – los cambios duran esta sesión."},"fr":{"tab.learn":"Apprendre","tab.words":"Mots","tab.new":"+ Nouveau","stats.words":"mots","stats.due":"à revoir","sync.chip":"Compte & sync","lg.rev":"appris","lg.lrn":"en cours","lg.new":"nouveau","row.perround":"Par tour","row.all":"Toutes","row.mode":"Mode","mode.mix":"Mixte","mode.new":"Nouveaux","mode.due":"À revoir","g.streak":"jours de suite","g.oftoday":"sur {0} auj.","g.record":"Record","g.goal.toast":"Objectif: {0} cartes","g.goal.hit":"Objectif atteint ! 🔥 Série de {0} jours","g.today.line":"Aujourd’hui : <b>{0}</b> sur {1} cartes.","st.show":"Voir la réponse","gr.again":"Encore","gr.hard":"Difficile","gr.good":"Bien","gr.easy":"Facile","gr.knew":"Je savais","pres.new":"Nouveau mot — regarde d’abord","pres.know":"Je le connais","pres.next":"Suivant","cnt.practice":"Entraînement","cnt.card":"Carte {0} sur {1}","cnt.due":"{0} à revoir","cnt.new":"{0} nouveaux","u.min":"min","u.day":"j","u.mon":"mois","stx.empty.h":"Pas encore de mots","stx.empty.p":"Ajoute ton premier mot et lance-toi.","stx.empty.b":"+ Nouveau mot","stx.notopic.h":"Aucun paquet actif","stx.notopic.p":"Touche un paquet en haut pour apprendre.","stx.nonew.h":"Plus de nouveaux mots","stx.nonew.p":"Tous les mots des paquets actifs sont déjà planifiés.","stx.nodue.h":"Rien à revoir","stx.nodue.p":"Toutes les cartes du jour sont faites.","stx.nodue.b":"S’entraîner quand même","nd.min":"Prochaine révision : dans quelques minutes.","nd.today":"Prochaine révision : plus tard aujourd’hui.","nd.tomorrow":"Prochaine révision : demain.","nd.days":"Prochaine révision : dans {0} jours.","done.h":"Tour terminé","done.hp":"Tour d’entraînement terminé","done.stats":"<b>{0}</b> connus · <b>{1}</b> répétés","done.left":"Encore <b>{0}</b> cartes à revoir.","done.pnote":"Sans note — ton planning ne change pas.","done.next":"Tour suivant","done.more":"Continuer","done.repeat":"Répéter ce tour","done.repeat2":"Répéter encore","done.back":"Retour à l’apprentissage","ls.search":"Rechercher …","ls.words1":"mot","ls.wordsN":"mots","ls.select":"Choisir","ls.done":"Terminé","ls.selected":"<b>{0}</b> choisis","ls.practice":"S’entraîner","ls.learn":"Apprendre","ls.none":"Rien trouvé.","ls.del":"Supprimer","ls.sure":"Sûr ?","wd.new":"Nouveau — pas encore étudié","wd.learning":"En cours","wd.learned":"Appris","wd.duenow":"à revoir maintenant","wd.duein":"révision dans {0}","wd.ivl":"intervalle {0} j","wd.article":"Article","wd.trans":"Traduction","wd.example":"Exemple","wd.tip":"Astuce","wd.topic":"Paquet","wd.reset":"Réinitialiser","wd.mark":"Marquer comme appris","wd.edit":"Modifier","wd.reset.t":"Réinitialisé","wd.mark.t":"Appris — révision dans {0} jours","f.new":"Nouveau mot","f.edit":"Modifier le mot","f.word":"Mot *","f.trans":"Traduction *","f.ex":"Phrase d’exemple","f.ext":"Traduction de l’exemple","f.note":"Note","f.topic":"Paquet","f.ai":"Remplir avec l’IA","f.save":"Enregistrer","f.update":"Mettre à jour","f.cancel":"Annuler","f.hint":"Tape le mot + Entrée → l’IA remplit article, traduction et exemple","t.wordfirst":"Écris d’abord un mot","t.transmissing":"Traduction manquante – ajoute-la","t.saved":"Enregistré – mot suivant ?","t.savedart":"Enregistré : {0} {1}","t.updated":"Mis à jour","t.deleted":"Supprimé","t.aidone":"Rempli – vérifie et enregistre","t.aifail":"IA indisponible","t.art":"Article : {0}","t.artg":" (deviné via -{0})","t.noart":"Pas d’article – pas un nom","t.artfail":"Article non détecté – choisis-le","t.ki":"L’IA réfléchit …","t.kifill":"L’IA remplit …","tp.add":"+ Paquet","tp.ph":"Nouveau paquet …","tp.name":"Écris d’abord un nom","tp.exists":"Ce paquet existe déjà","tp.created":"Paquet « {0} » créé — ajoute des mots","tp.removed":"Paquet supprimé","tp.removetitle":"Supprimer le paquet vide","ac.h":"Compte & synchronisation","ac.intro":"Avec un compte, tes mots et ta progression se synchronisent entre appareils.","ac.user":"Identifiant / e-mail","ac.pass":"Mot de passe","ac.passph":"au moins 6 caractères","ac.login":"Connexion","ac.register":"S’inscrire","ac.cookiehint":"La connexion pose un cookie nécessaire — pas de cookies de suivi.","ac.loggedin":"Connecté en tant que","ac.lastsync":"Dernière sync :","ac.syncnow":"Synchroniser","ac.logout":"Déconnexion","ac.auto":"Automatique : charge à l’ouverture, sauvegarde après modification. Le plus récent gagne.","ac.serverhint":"Fonctionne sur ton site (Vercel) avec le serveur configuré.","ac.bye":"Déconnecté – les mots restent ici","ac.synced":"Synchronisé","ac.created":"Compte créé","ac.welcome":"Connecté","ac.pulled":"Dernière version chargée du serveur","e.userexists":"Identifiant déjà pris","e.badcred":"Identifiant ou mot de passe incorrect","e.baduser":"Identifiant : 3–64 caractères","e.badpass":"Mot de passe : 6 caractères min.","e.noserver":"Serveur non configuré (voir README)","e.toolarge":"Paquet trop volumineux","e.expired":"Session expirée – reconnecte-toi","e.offline":"Serveur injoignable","e.sync":"Erreur de sync ({0})","t.userfirst":"Identifiant manquant","t.savefail":"Échec de l’enregistrement","t.trfail":"Traduction indisponible — anglais affiché (serveur IA requis)","t.lang":"Langue :","ck.text":"<b>🍪 Cookies essentiels uniquement.</b> L’appli pose un seul cookie de connexion — pas de pistage, pas de pub. Tes mots restent sur ton appareil ou ton compte.","ck.ok":"Compris !","ft.nostorage":"Note : pas de stockage persistant – changements limités à cette session."},"it":{"tab.learn":"Impara","tab.words":"Parole","tab.new":"+ Nuovo","stats.words":"parole","stats.due":"da ripassare","sync.chip":"Account e sync","lg.rev":"imparato","lg.lrn":"in corso","lg.new":"nuovo","row.perround":"Per turno","row.all":"Tutte","row.mode":"Modo","mode.mix":"Mix","mode.new":"Nuove","mode.due":"Ripassi","g.streak":"giorni di fila","g.oftoday":"di {0} oggi","g.record":"Record","g.goal.toast":"Obiettivo: {0} carte","g.goal.hit":"Obiettivo raggiunto! 🔥 Serie di {0} giorni","g.today.line":"Oggi: <b>{0}</b> di {1} carte.","st.show":"Mostra risposta","gr.again":"Ancora","gr.hard":"Difficile","gr.good":"Bene","gr.easy":"Facile","gr.knew":"Lo sapevo","pres.new":"Parola nuova — prima guardala","pres.know":"La conosco già","pres.next":"Avanti","cnt.practice":"Esercizio","cnt.card":"Carta {0} di {1}","cnt.due":"{0} da ripassare","cnt.new":"{0} nuove","u.min":"min","u.day":"g","u.mon":"mesi","stx.empty.h":"Ancora nessuna parola","stx.empty.p":"Aggiungi la prima parola e inizia.","stx.empty.b":"+ Nuova parola","stx.notopic.h":"Nessun mazzo attivo","stx.notopic.p":"Tocca un mazzo sopra per imparare.","stx.nonew.h":"Niente più parole nuove","stx.nonew.p":"Tutte le parole dei mazzi attivi sono già pianificate.","stx.nodue.h":"Niente da ripassare","stx.nodue.p":"Tutte le carte di oggi sono fatte.","stx.nodue.b":"Esercitati comunque","nd.min":"Prossimo ripasso: tra pochi minuti.","nd.today":"Prossimo ripasso: più tardi oggi.","nd.tomorrow":"Prossimo ripasso: domani.","nd.days":"Prossimo ripasso: tra {0} giorni.","done.h":"Turno completato","done.hp":"Turno di esercizio completato","done.stats":"<b>{0}</b> sapute · <b>{1}</b> ripetute","done.left":"Ancora <b>{0}</b> carte da fare.","done.pnote":"Senza voto — il piano non cambia.","done.next":"Prossimo turno","done.more":"Continua","done.repeat":"Ripeti questo turno","done.repeat2":"Ripeti ancora","done.back":"Torna a imparare","ls.search":"Cerca …","ls.words1":"parola","ls.wordsN":"parole","ls.select":"Seleziona","ls.done":"Fatto","ls.selected":"<b>{0}</b> selezionate","ls.practice":"Esercita","ls.learn":"Impara","ls.none":"Niente trovato.","ls.del":"Elimina","ls.sure":"Sicuro?","wd.new":"Nuova — non ancora studiata","wd.learning":"In corso","wd.learned":"Imparata","wd.duenow":"da ripassare ora","wd.duein":"ripasso tra {0}","wd.ivl":"intervallo {0} g","wd.article":"Articolo","wd.trans":"Traduzione","wd.example":"Esempio","wd.tip":"Suggerimento","wd.topic":"Mazzo","wd.reset":"Riporta a nuova","wd.mark":"Segna come imparata","wd.edit":"Modifica","wd.reset.t":"Riportata a nuova","wd.mark.t":"Imparata — ripasso tra {0} giorni","f.new":"Nuova parola","f.edit":"Modifica parola","f.word":"Parola *","f.trans":"Traduzione *","f.ex":"Frase di esempio","f.ext":"Traduzione dell’esempio","f.note":"Nota","f.topic":"Mazzo","f.ai":"Compila con IA","f.save":"Salva","f.update":"Aggiorna","f.cancel":"Annulla","f.hint":"Scrivi la parola + Invio → l’IA compila articolo, traduzione ed esempio","t.wordfirst":"Prima scrivi una parola","t.transmissing":"Manca la traduzione – aggiungila","t.saved":"Salvata – prossima?","t.savedart":"Salvata: {0} {1}","t.updated":"Aggiornata","t.deleted":"Eliminata","t.aidone":"Compilato – controlla e salva","t.aifail":"IA non raggiungibile","t.art":"Articolo: {0}","t.artg":" (dedotto da -{0})","t.noart":"Niente articolo – non è un nome","t.artfail":"Articolo non rilevato – scegli tu","t.ki":"L’IA pensa …","t.kifill":"L’IA compila …","tp.add":"+ Mazzo","tp.ph":"Nuovo mazzo …","tp.name":"Prima scrivi un nome","tp.exists":"Questo mazzo esiste già","tp.created":"Mazzo “{0}” creato — aggiungi parole","tp.removed":"Mazzo rimosso","tp.removetitle":"Rimuovi mazzo vuoto","ac.h":"Account e sincronizzazione","ac.intro":"Con un account, parole e progressi si sincronizzano tra i dispositivi.","ac.user":"Utente / e-mail","ac.pass":"Password","ac.passph":"minimo 6 caratteri","ac.login":"Accedi","ac.register":"Registrati","ac.cookiehint":"L’accesso usa un cookie necessario — niente cookie di tracciamento.","ac.loggedin":"Accesso come","ac.lastsync":"Ultima sync:","ac.syncnow":"Sincronizza ora","ac.logout":"Esci","ac.auto":"Automatico: carica all’apertura, salva dopo le modifiche. Vince il più recente.","ac.serverhint":"Funziona sul tuo sito (Vercel) con il server configurato.","ac.bye":"Disconnesso – le parole restano qui","ac.synced":"Sincronizzato","ac.created":"Account creato","ac.welcome":"Accesso effettuato","ac.pulled":"Caricata l’ultima versione dal server","e.userexists":"Utente già in uso","e.badcred":"Utente o password errati","e.baduser":"Utente: 3–64 caratteri","e.badpass":"Password: minimo 6","e.noserver":"Server non configurato (vedi README)","e.toolarge":"Mazzo troppo grande","e.expired":"Sessione scaduta – riaccedi","e.offline":"Server non raggiungibile","e.sync":"Errore sync ({0})","t.userfirst":"Manca l’utente","t.savefail":"Salvataggio fallito","t.trfail":"Traduzione non disponibile — mostro l’inglese (serve il server IA)","t.lang":"Lingua:","ck.text":"<b>🍪 Solo cookie necessari.</b> L’app usa un solo cookie di accesso — niente tracciamento né pubblicità. Le tue parole restano sul dispositivo o nell’account.","ck.ok":"Capito!","ft.nostorage":"Nota: nessuna memoria persistente – le modifiche valgono solo per questa sessione."},"pt":{"tab.learn":"Aprender","tab.words":"Palavras","tab.new":"+ Novo","stats.words":"palavras","stats.due":"a rever","sync.chip":"Conta e sync","lg.rev":"aprendido","lg.lrn":"a aprender","lg.new":"novo","row.perround":"Por rodada","row.all":"Todas","row.mode":"Modo","mode.mix":"Misto","mode.new":"Novas","mode.due":"A rever","g.streak":"dias seguidos","g.oftoday":"de {0} hoje","g.record":"Recorde","g.goal.toast":"Meta diária: {0} cartões","g.goal.hit":"Meta atingida! 🔥 Sequência de {0} dias","g.today.line":"Hoje: <b>{0}</b> de {1} cartões.","st.show":"Mostrar resposta","gr.again":"De novo","gr.hard":"Difícil","gr.good":"Bem","gr.easy":"Fácil","gr.knew":"Sabia","pres.new":"Palavra nova — vê primeiro","pres.know":"Já sei","pres.next":"Seguinte","cnt.practice":"Prática","cnt.card":"Cartão {0} de {1}","cnt.due":"{0} a rever","cnt.new":"{0} novas","u.min":"min","u.day":"d","u.mon":"me","stx.empty.h":"Ainda sem palavras","stx.empty.p":"Adiciona a primeira palavra e começa.","stx.empty.b":"+ Nova palavra","stx.notopic.h":"Nenhum baralho ativo","stx.notopic.p":"Toca num baralho acima para aprender.","stx.nonew.h":"Sem palavras novas","stx.nonew.p":"Todas as palavras dos baralhos ativos já estão no plano.","stx.nodue.h":"Nada a rever","stx.nodue.p":"Todos os cartões de hoje estão feitos.","stx.nodue.b":"Praticar mesmo assim","nd.min":"Próxima revisão: em minutos.","nd.today":"Próxima revisão: ainda hoje.","nd.tomorrow":"Próxima revisão: amanhã.","nd.days":"Próxima revisão: em {0} dias.","done.h":"Rodada concluída","done.hp":"Rodada de prática concluída","done.stats":"<b>{0}</b> sabidas · <b>{1}</b> repetidas","done.left":"Faltam <b>{0}</b> cartões.","done.pnote":"Sem avaliação — o plano não muda.","done.next":"Próxima rodada","done.more":"Continuar","done.repeat":"Repetir esta rodada","done.repeat2":"Repetir de novo","done.back":"Voltar a aprender","ls.search":"Procurar …","ls.words1":"palavra","ls.wordsN":"palavras","ls.select":"Escolher","ls.done":"Feito","ls.selected":"<b>{0}</b> escolhidas","ls.practice":"Praticar","ls.learn":"Aprender","ls.none":"Nada encontrado.","ls.del":"Apagar","ls.sure":"De certeza?","wd.new":"Nova — ainda não estudada","wd.learning":"A aprender","wd.learned":"Aprendida","wd.duenow":"a rever agora","wd.duein":"revisão em {0}","wd.ivl":"intervalo {0} d","wd.article":"Artigo","wd.trans":"Tradução","wd.example":"Exemplo","wd.tip":"Dica","wd.topic":"Baralho","wd.reset":"Repor como nova","wd.mark":"Marcar como aprendida","wd.edit":"Editar","wd.reset.t":"Reposta como nova","wd.mark.t":"Aprendida — revisão em {0} dias","f.new":"Nova palavra","f.edit":"Editar palavra","f.word":"Palavra *","f.trans":"Tradução *","f.ex":"Frase de exemplo","f.ext":"Tradução do exemplo","f.note":"Nota","f.topic":"Baralho","f.ai":"Preencher com IA","f.save":"Guardar","f.update":"Atualizar","f.cancel":"Cancelar","f.hint":"Escreve a palavra + Enter → a IA preenche artigo, tradução e exemplo","t.wordfirst":"Primeiro escreve uma palavra","t.transmissing":"Falta a tradução – adiciona-a","t.saved":"Guardada – próxima?","t.savedart":"Guardada: {0} {1}","t.updated":"Atualizada","t.deleted":"Apagada","t.aidone":"Preenchido – verifica e guarda","t.aifail":"IA indisponível","t.art":"Artigo: {0}","t.artg":" (deduzido por -{0})","t.noart":"Sem artigo – não é substantivo","t.artfail":"Artigo não detetado – escolhe tu","t.ki":"IA a pensar …","t.kifill":"IA a preencher …","tp.add":"+ Baralho","tp.ph":"Novo baralho …","tp.name":"Primeiro escreve um nome","tp.exists":"Este baralho já existe","tp.created":"Baralho “{0}” criado — adiciona palavras","tp.removed":"Baralho removido","tp.removetitle":"Remover baralho vazio","ac.h":"Conta e sincronização","ac.intro":"Com uma conta, as palavras e o progresso sincronizam entre dispositivos.","ac.user":"Utilizador / e-mail","ac.pass":"Palavra-passe","ac.passph":"mínimo 6 caracteres","ac.login":"Entrar","ac.register":"Registar","ac.cookiehint":"O login usa um cookie necessário — sem cookies de rastreio.","ac.loggedin":"Sessão iniciada como","ac.lastsync":"Última sync:","ac.syncnow":"Sincronizar agora","ac.logout":"Sair","ac.auto":"Automático: carrega ao abrir, guarda após alterações. O mais recente ganha.","ac.serverhint":"Funciona no teu site (Vercel) com o servidor configurado.","ac.bye":"Sessão terminada – as palavras ficam aqui","ac.synced":"Sincronizado","ac.created":"Conta criada","ac.welcome":"Sessão iniciada","ac.pulled":"Carregado o mais recente do servidor","e.userexists":"Utilizador já existe","e.badcred":"Utilizador ou palavra-passe errados","e.baduser":"Utilizador: 3–64 caracteres","e.badpass":"Palavra-passe: mínimo 6","e.noserver":"Servidor não configurado (ver README)","e.toolarge":"Baralho demasiado grande","e.expired":"Sessão expirada – entra de novo","e.offline":"Servidor indisponível","e.sync":"Erro de sync ({0})","t.userfirst":"Falta o utilizador","t.savefail":"Falha ao guardar","t.trfail":"Tradução indisponível — a mostrar inglês (precisa do servidor IA)","t.lang":"Idioma:","ck.text":"<b>🍪 Apenas cookies necessários.</b> A app usa um único cookie de sessão — sem rastreio nem anúncios. As palavras ficam no dispositivo ou na conta.","ck.ok":"Entendido!","ft.nostorage":"Nota: sem armazenamento persistente – alterações só nesta sessão."},"pl":{"tab.learn":"Nauka","tab.words":"Słowa","tab.new":"+ Nowe","stats.words":"słów","stats.due":"do powtórki","sync.chip":"Konto i sync","lg.rev":"nauczone","lg.lrn":"w trakcie","lg.new":"nowe","row.perround":"Na rundę","row.all":"Wszystkie","row.mode":"Tryb","mode.mix":"Mieszany","mode.new":"Nowe","mode.due":"Powtórki","g.streak":"dni z rzędu","g.oftoday":"z {0} dziś","g.record":"Rekord","g.goal.toast":"Cel dzienny: {0} kart","g.goal.hit":"Cel osiągnięty! 🔥 Seria {0} dni","g.today.line":"Dziś: <b>{0}</b> z {1} kart.","st.show":"Pokaż odpowiedź","gr.again":"Jeszcze raz","gr.hard":"Trudne","gr.good":"Dobrze","gr.easy":"Łatwe","gr.knew":"Wiem","pres.new":"Nowe słowo — najpierw zobacz","pres.know":"Już znam","pres.next":"Dalej","cnt.practice":"Ćwiczenie","cnt.card":"Karta {0} z {1}","cnt.due":"{0} do powtórki","cnt.new":"{0} nowych","u.min":"min","u.day":"dni","u.mon":"mies","stx.empty.h":"Brak słów","stx.empty.p":"Dodaj pierwsze słowo i zaczynaj.","stx.empty.b":"+ Nowe słowo","stx.notopic.h":"Brak aktywnej talii","stx.notopic.p":"Wybierz talię powyżej, aby się uczyć.","stx.nonew.h":"Brak nowych słów","stx.nonew.p":"Wszystkie słowa z aktywnych talii są już w planie.","stx.nodue.h":"Nic do powtórki","stx.nodue.p":"Wszystkie karty na dziś zrobione.","stx.nodue.b":"Ćwicz mimo to","nd.min":"Następna powtórka: za kilka minut.","nd.today":"Następna powtórka: później dziś.","nd.tomorrow":"Następna powtórka: jutro.","nd.days":"Następna powtórka: za {0} dni.","done.h":"Runda ukończona","done.hp":"Runda ćwiczeń ukończona","done.stats":"<b>{0}</b> znane · <b>{1}</b> powtórzone","done.left":"Jeszcze <b>{0}</b> kart.","done.pnote":"Bez oceny — plan się nie zmienia.","done.next":"Następna runda","done.more":"Ćwicz dalej","done.repeat":"Powtórz tę rundę","done.repeat2":"Powtórz jeszcze raz","done.back":"Wróć do nauki","ls.search":"Szukaj …","ls.words1":"słowo","ls.wordsN":"słów","ls.select":"Wybierz","ls.done":"Gotowe","ls.selected":"Wybrano: <b>{0}</b>","ls.practice":"Ćwicz","ls.learn":"Ucz się","ls.none":"Nic nie znaleziono.","ls.del":"Usuń","ls.sure":"Na pewno?","wd.new":"Nowe — jeszcze nieuczone","wd.learning":"W trakcie nauki","wd.learned":"Nauczone","wd.duenow":"do powtórki teraz","wd.duein":"powtórka za {0}","wd.ivl":"interwał {0} dni","wd.article":"Rodzajnik","wd.trans":"Tłumaczenie","wd.example":"Przykład","wd.tip":"Wskazówka","wd.topic":"Talia","wd.reset":"Resetuj jako nowe","wd.mark":"Oznacz jako nauczone","wd.edit":"Edytuj","wd.reset.t":"Zresetowano jako nowe","wd.mark.t":"Nauczone — powtórka za {0} dni","f.new":"Nowe słowo","f.edit":"Edytuj słowo","f.word":"Słowo *","f.trans":"Tłumaczenie *","f.ex":"Zdanie przykładowe","f.ext":"Tłumaczenie przykładu","f.note":"Notatka","f.topic":"Talia","f.ai":"Wypełnij AI","f.save":"Zapisz","f.update":"Aktualizuj","f.cancel":"Anuluj","f.hint":"Wpisz słowo + Enter → AI uzupełni rodzajnik, tłumaczenie i przykład","t.wordfirst":"Najpierw wpisz słowo","t.transmissing":"Brak tłumaczenia – dodaj je","t.saved":"Zapisano – następne?","t.savedart":"Zapisano: {0} {1}","t.updated":"Zaktualizowano","t.deleted":"Usunięto","t.aidone":"Wypełniono – sprawdź i zapisz","t.aifail":"AI niedostępne","t.art":"Rodzajnik: {0}","t.artg":" (zgadnięte po -{0})","t.noart":"Brak rodzajnika – to nie rzeczownik","t.artfail":"Nie wykryto rodzajnika – wybierz","t.ki":"AI myśli …","t.kifill":"AI wypełnia …","tp.add":"+ Talia","tp.ph":"Nowa talia …","tp.name":"Najpierw podaj nazwę","tp.exists":"Ta talia już istnieje","tp.created":"Utworzono talię „{0}” — dodaj słowa","tp.removed":"Talia usunięta","tp.removetitle":"Usuń pustą talię","ac.h":"Konto i synchronizacja","ac.intro":"Z kontem słowa i postępy synchronizują się między urządzeniami.","ac.user":"Nazwa / e-mail","ac.pass":"Hasło","ac.passph":"min. 6 znaków","ac.login":"Zaloguj","ac.register":"Zarejestruj","ac.cookiehint":"Logowanie używa jednego niezbędnego pliku cookie — bez śledzenia.","ac.loggedin":"Zalogowano jako","ac.lastsync":"Ostatnia sync:","ac.syncnow":"Synchronizuj teraz","ac.logout":"Wyloguj","ac.auto":"Automatycznie: ładuje przy otwarciu, zapisuje po zmianach. Wygrywa nowsze.","ac.serverhint":"Działa na własnej stronie (Vercel) ze skonfigurowanym serwerem.","ac.bye":"Wylogowano – słowa zostają tutaj","ac.synced":"Zsynchronizowano","ac.created":"Konto utworzone","ac.welcome":"Zalogowano","ac.pulled":"Wczytano najnowszy stan z serwera","e.userexists":"Nazwa zajęta","e.badcred":"Zła nazwa lub hasło","e.baduser":"Nazwa: 3–64 znaki","e.badpass":"Hasło: min. 6 znaków","e.noserver":"Serwer nieskonfigurowany (README)","e.toolarge":"Talia za duża","e.expired":"Sesja wygasła – zaloguj ponownie","e.offline":"Serwer niedostępny","e.sync":"Błąd sync ({0})","t.userfirst":"Brak nazwy","t.savefail":"Zapis nieudany","t.trfail":"Tłumaczenie niedostępne — pokazuję angielski (potrzebny serwer AI)","t.lang":"Język:","ck.text":"<b>🍪 Tylko niezbędne cookies.</b> Aplikacja używa jednego pliku cookie logowania — bez śledzenia i reklam. Słowa zostają na urządzeniu lub koncie.","ck.ok":"Jasne!","ft.nostorage":"Uwaga: brak trwałej pamięci – zmiany tylko na tę sesję."},"uk":{"tab.learn":"Вчити","tab.words":"Слова","tab.new":"+ Нове","stats.words":"слів","stats.due":"до повтору","sync.chip":"Акаунт і синхр.","lg.rev":"вивчено","lg.lrn":"вивчається","lg.new":"нове","row.perround":"За раунд","row.all":"Усі","row.mode":"Режим","mode.mix":"Мікс","mode.new":"Нові","mode.due":"Повтори","g.streak":"днів поспіль","g.oftoday":"з {0} сьогодні","g.record":"Рекорд","g.goal.toast":"Ціль дня: {0} карток","g.goal.hit":"Ціль досягнута! 🔥 Серія {0} днів","g.today.line":"Сьогодні: <b>{0}</b> з {1} карток.","st.show":"Показати відповідь","gr.again":"Ще раз","gr.hard":"Важко","gr.good":"Добре","gr.easy":"Легко","gr.knew":"Знаю","pres.new":"Нове слово — спершу подивись","pres.know":"Вже знаю","pres.next":"Далі","cnt.practice":"Тренування","cnt.card":"Картка {0} з {1}","cnt.due":"{0} до повтору","cnt.new":"{0} нових","u.min":"хв","u.day":"дн","u.mon":"міс","stx.empty.h":"Ще немає слів","stx.empty.p":"Додай перше слово і починай.","stx.empty.b":"+ Нове слово","stx.notopic.h":"Немає активних колод","stx.notopic.p":"Обери колоду зверху, щоб вчити.","stx.nonew.h":"Нових слів немає","stx.nonew.p":"Усі слова активних колод уже в розкладі.","stx.nodue.h":"Нічого повторювати","stx.nodue.p":"Усі картки на сьогодні вивчені.","stx.nodue.b":"Все одно повторити","nd.min":"Наступний повтор: за кілька хвилин.","nd.today":"Наступний повтор: сьогодні пізніше.","nd.tomorrow":"Наступний повтор: завтра.","nd.days":"Наступний повтор: за {0} днів.","done.h":"Раунд завершено","done.hp":"Тренування завершено","done.stats":"<b>{0}</b> знав · <b>{1}</b> повторив","done.left":"Ще <b>{0}</b> карток.","done.pnote":"Без оцінок — розклад не змінюється.","done.next":"Наступний раунд","done.more":"Продовжити","done.repeat":"Повторити цей раунд","done.repeat2":"Повторити ще раз","done.back":"Назад до навчання","ls.search":"Пошук …","ls.words1":"слово","ls.wordsN":"слів","ls.select":"Вибрати","ls.done":"Готово","ls.selected":"Вибрано: <b>{0}</b>","ls.practice":"Тренування","ls.learn":"Вчити","ls.none":"Нічого не знайдено.","ls.del":"Видалити","ls.sure":"Точно?","wd.new":"Нове — ще не вивчалося","wd.learning":"Вивчається","wd.learned":"Вивчено","wd.duenow":"час повторити","wd.duein":"повтор через {0}","wd.ivl":"інтервал {0} дн","wd.article":"Артикль","wd.trans":"Переклад","wd.example":"Приклад","wd.tip":"Підказка","wd.topic":"Колода","wd.reset":"Скинути як нове","wd.mark":"Позначити вивченим","wd.edit":"Редагувати","wd.reset.t":"Скинуто як нове","wd.mark.t":"Вивчено — повтор через {0} днів","f.new":"Нове слово","f.edit":"Редагувати слово","f.word":"Слово *","f.trans":"Переклад *","f.ex":"Приклад речення","f.ext":"Переклад прикладу","f.note":"Нотатка","f.topic":"Колода","f.ai":"Заповнити ШІ","f.save":"Зберегти","f.update":"Оновити","f.cancel":"Скасувати","f.hint":"Введи слово + Enter → ШІ заповнить артикль, переклад і приклад","t.wordfirst":"Спершу введи слово","t.transmissing":"Немає перекладу – додай його","t.saved":"Збережено – наступне?","t.savedart":"Збережено: {0} {1}","t.updated":"Оновлено","t.deleted":"Видалено","t.aidone":"Заповнено – перевір і збережи","t.aifail":"ШІ недоступний","t.art":"Артикль: {0}","t.artg":" (вгадано за -{0})","t.noart":"Без артикля – не іменник","t.artfail":"Артикль не визначено – обери сам","t.ki":"ШІ думає …","t.kifill":"ШІ заповнює …","tp.add":"+ Колода","tp.ph":"Нова колода …","tp.name":"Спершу введи назву","tp.exists":"Така колода вже є","tp.created":"Колоду «{0}» створено — додай слова","tp.removed":"Колоду видалено","tp.removetitle":"Видалити порожню колоду","ac.h":"Акаунт і синхронізація","ac.intro":"З акаунтом слова та прогрес синхронізуються між пристроями.","ac.user":"Ім’я / пошта","ac.pass":"Пароль","ac.passph":"мінімум 6 символів","ac.login":"Увійти","ac.register":"Реєстрація","ac.cookiehint":"Вхід ставить один необхідний cookie — без стеження.","ac.loggedin":"Ви увійшли як","ac.lastsync":"Остання синхр.:","ac.syncnow":"Синхронізувати","ac.logout":"Вийти","ac.auto":"Автоматично: завантаження при відкритті, збереження після змін. Новіше перемагає.","ac.serverhint":"Працює на власному сайті (Vercel) з налаштованим сервером.","ac.bye":"Ви вийшли – слова залишаються тут","ac.synced":"Синхронізовано","ac.created":"Акаунт створено","ac.welcome":"Ви увійшли","ac.pulled":"Завантажено найновіший стан","e.userexists":"Ім’я вже зайняте","e.badcred":"Невірне ім’я або пароль","e.baduser":"Ім’я: 3–64 символи","e.badpass":"Пароль: мінімум 6","e.noserver":"Сервер не налаштовано (README)","e.toolarge":"Колода завелика","e.expired":"Сесія закінчилася – увійди знову","e.offline":"Сервер недоступний","e.sync":"Помилка синхр. ({0})","t.userfirst":"Немає імені","t.savefail":"Не вдалося зберегти","t.trfail":"Переклад недоступний — показую англійську (потрібен ШІ-сервер)","t.lang":"Мова:","ck.text":"<b>🍪 Лише необхідні cookie.</b> Застосунок ставить один cookie для входу — без стеження та реклами. Слова залишаються на пристрої або в акаунті.","ck.ok":"Зрозуміло!","ft.nostorage":"Увага: немає постійного сховища – зміни лише на цю сесію."},"nl":{"tab.learn":"Leren","tab.words":"Woorden","tab.new":"+ Nieuw","stats.words":"woorden","stats.due":"te herhalen","sync.chip":"Account & sync","lg.rev":"geleerd","lg.lrn":"bezig","lg.new":"nieuw","row.perround":"Per ronde","row.all":"Alle","row.mode":"Modus","mode.mix":"Mix","mode.new":"Nieuwe","mode.due":"Herhaling","g.streak":"dagen op rij","g.oftoday":"van {0} vandaag","g.record":"Record","g.goal.toast":"Dagdoel: {0} kaarten","g.goal.hit":"Dagdoel gehaald! 🔥 {0} dagen op rij","g.today.line":"Vandaag: <b>{0}</b> van {1} kaarten.","st.show":"Toon antwoord","gr.again":"Opnieuw","gr.hard":"Moeilijk","gr.good":"Goed","gr.easy":"Makkelijk","gr.knew":"Wist ik","pres.new":"Nieuw woord — bekijk eerst","pres.know":"Ken ik al","pres.next":"Verder","cnt.practice":"Oefening","cnt.card":"Kaart {0} van {1}","cnt.due":"{0} te herhalen","cnt.new":"{0} nieuw","u.min":"min","u.day":"d","u.mon":"mnd","stx.empty.h":"Nog geen woorden","stx.empty.p":"Voeg je eerste woord toe en begin.","stx.empty.b":"+ Nieuw woord","stx.notopic.h":"Geen deck actief","stx.notopic.p":"Tik boven een deck aan om te leren.","stx.nonew.h":"Geen nieuwe woorden meer","stx.nonew.p":"Alle woorden in de actieve decks zijn al ingepland.","stx.nodue.h":"Niets te herhalen","stx.nodue.p":"Alle kaarten voor vandaag zijn klaar.","stx.nodue.b":"Toch alles oefenen","nd.min":"Volgende herhaling: over enkele minuten.","nd.today":"Volgende herhaling: later vandaag.","nd.tomorrow":"Volgende herhaling: morgen.","nd.days":"Volgende herhaling: over {0} dagen.","done.h":"Ronde voltooid","done.hp":"Oefenronde voltooid","done.stats":"<b>{0}</b> gekend · <b>{1}</b> herhaald","done.left":"Nog <b>{0}</b> kaarten.","done.pnote":"Zonder beoordeling — je schema blijft gelijk.","done.next":"Volgende ronde","done.more":"Doorgaan","done.repeat":"Deze ronde herhalen","done.repeat2":"Nogmaals herhalen","done.back":"Terug naar leren","ls.search":"Zoeken …","ls.words1":"woord","ls.wordsN":"woorden","ls.select":"Kies","ls.done":"Klaar","ls.selected":"<b>{0}</b> gekozen","ls.practice":"Oefenen","ls.learn":"Leren","ls.none":"Niets gevonden.","ls.del":"Verwijderen","ls.sure":"Zeker?","wd.new":"Nieuw — nog niet geleerd","wd.learning":"Bezig met leren","wd.learned":"Geleerd","wd.duenow":"nu te herhalen","wd.duein":"herhaling over {0}","wd.ivl":"interval {0} d","wd.article":"Lidwoord","wd.trans":"Vertaling","wd.example":"Voorbeeld","wd.tip":"Tip","wd.topic":"Deck","wd.reset":"Reset naar nieuw","wd.mark":"Markeer als geleerd","wd.edit":"Bewerken","wd.reset.t":"Gereset naar nieuw","wd.mark.t":"Geleerd — herhaling over {0} dagen","f.new":"Nieuw woord","f.edit":"Woord bewerken","f.word":"Woord *","f.trans":"Vertaling *","f.ex":"Voorbeeldzin","f.ext":"Vertaling voorbeeld","f.note":"Notitie","f.topic":"Deck","f.ai":"Vullen met AI","f.save":"Opslaan","f.update":"Bijwerken","f.cancel":"Annuleren","f.hint":"Typ het woord + Enter → AI vult lidwoord, vertaling en voorbeeld in","t.wordfirst":"Typ eerst een woord","t.transmissing":"Vertaling ontbreekt – vul aan","t.saved":"Opgeslagen – volgende?","t.savedart":"Opgeslagen: {0} {1}","t.updated":"Bijgewerkt","t.deleted":"Verwijderd","t.aidone":"Ingevuld – controleer en sla op","t.aifail":"AI niet bereikbaar","t.art":"Lidwoord: {0}","t.artg":" (geraden via -{0})","t.noart":"Geen lidwoord – geen zelfst. nw.","t.artfail":"Lidwoord niet herkend – kies zelf","t.ki":"AI denkt na …","t.kifill":"AI vult in …","tp.add":"+ Deck","tp.ph":"Nieuw deck …","tp.name":"Voer eerst een naam in","tp.exists":"Dit deck bestaat al","tp.created":"Deck “{0}” gemaakt — voeg woorden toe","tp.removed":"Deck verwijderd","tp.removetitle":"Leeg deck verwijderen","ac.h":"Account & synchronisatie","ac.intro":"Met een account synchroniseren je woorden en voortgang tussen apparaten.","ac.user":"Gebruikersnaam / e-mail","ac.pass":"Wachtwoord","ac.passph":"minstens 6 tekens","ac.login":"Inloggen","ac.register":"Registreren","ac.cookiehint":"Inloggen zet één noodzakelijke cookie — geen tracking.","ac.loggedin":"Ingelogd als","ac.lastsync":"Laatste sync:","ac.syncnow":"Nu synchroniseren","ac.logout":"Uitloggen","ac.auto":"Automatisch: laadt bij openen, slaat op na wijziging. Nieuwste wint.","ac.serverhint":"Werkt op je eigen site (Vercel) met geconfigureerde server.","ac.bye":"Uitgelogd – woorden blijven op dit apparaat","ac.synced":"Gesynchroniseerd","ac.created":"Account aangemaakt","ac.welcome":"Ingelogd","ac.pulled":"Nieuwste staat geladen van server","e.userexists":"Naam al in gebruik","e.badcred":"Onjuiste naam of wachtwoord","e.baduser":"Naam: 3–64 tekens","e.badpass":"Wachtwoord: minstens 6","e.noserver":"Server niet ingesteld (zie README)","e.toolarge":"Deck te groot","e.expired":"Sessie verlopen – log opnieuw in","e.offline":"Server niet bereikbaar","e.sync":"Sync-fout ({0})","t.userfirst":"Naam ontbreekt","t.savefail":"Opslaan mislukt","t.trfail":"Vertaling niet beschikbaar — Engels getoond (AI-server nodig)","t.lang":"Taal:","ck.text":"<b>🍪 Alleen noodzakelijke cookies.</b> De app zet één login-cookie — geen tracking, geen reclame. Je woorden blijven op je apparaat of account.","ck.ok":"Begrepen!","ft.nostorage":"Let op: geen permanente opslag – wijzigingen gelden alleen deze sessie."},"el":{"tab.learn":"Μάθηση","tab.words":"Λέξεις","tab.new":"+ Νέο","stats.words":"λέξεις","stats.due":"για επανάληψη","sync.chip":"Λογ/σμός & sync","lg.rev":"έμαθα","lg.lrn":"μαθαίνω","lg.new":"νέο","row.perround":"Ανά γύρο","row.all":"Όλες","row.mode":"Λειτουργία","mode.mix":"Μικτό","mode.new":"Νέες","mode.due":"Επαναλήψεις","g.streak":"μέρες σερί","g.oftoday":"από {0} σήμερα","g.record":"Ρεκόρ","g.goal.toast":"Στόχος: {0} κάρτες","g.goal.hit":"Ο στόχος πιάστηκε! 🔥 Σερί {0} ημερών","g.today.line":"Σήμερα: <b>{0}</b> από {1} κάρτες.","st.show":"Δείξε απάντηση","gr.again":"Ξανά","gr.hard":"Δύσκολο","gr.good":"Καλά","gr.easy":"Εύκολο","gr.knew":"Το ήξερα","pres.new":"Νέα λέξη — δες την πρώτα","pres.know":"Το ξέρω ήδη","pres.next":"Επόμενο","cnt.practice":"Εξάσκηση","cnt.card":"Κάρτα {0} από {1}","cnt.due":"{0} για επανάληψη","cnt.new":"{0} νέες","u.min":"λεπ","u.day":"ημ","u.mon":"μήν","stx.empty.h":"Καμία λέξη ακόμα","stx.empty.p":"Πρόσθεσε την πρώτη λέξη και ξεκίνα.","stx.empty.b":"+ Νέα λέξη","stx.notopic.h":"Κανένα ενεργό σετ","stx.notopic.p":"Πάτησε ένα σετ πάνω για να μάθεις.","stx.nonew.h":"Δεν έμειναν νέες λέξεις","stx.nonew.p":"Όλες οι λέξεις των ενεργών σετ είναι ήδη στο πλάνο.","stx.nodue.h":"Τίποτα για επανάληψη","stx.nodue.p":"Όλες οι κάρτες για σήμερα τελείωσαν.","stx.nodue.b":"Εξάσκηση σε όλες","nd.min":"Επόμενη επανάληψη: σε λίγα λεπτά.","nd.today":"Επόμενη επανάληψη: αργότερα σήμερα.","nd.tomorrow":"Επόμενη επανάληψη: αύριο.","nd.days":"Επόμενη επανάληψη: σε {0} μέρες.","done.h":"Ο γύρος ολοκληρώθηκε","done.hp":"Ο γύρος εξάσκησης τελείωσε","done.stats":"<b>{0}</b> ήξερα · <b>{1}</b> επανάληψη","done.left":"Ακόμα <b>{0}</b> κάρτες.","done.pnote":"Χωρίς βαθμολογία — το πλάνο μένει ίδιο.","done.next":"Επόμενος γύρος","done.more":"Συνέχισε","done.repeat":"Επανάλαβε τον γύρο","done.repeat2":"Επανάλαβε ξανά","done.back":"Πίσω στη μάθηση","ls.search":"Αναζήτηση …","ls.words1":"λέξη","ls.wordsN":"λέξεις","ls.select":"Επιλογή","ls.done":"Έτοιμο","ls.selected":"<b>{0}</b> επιλεγμένες","ls.practice":"Εξάσκηση","ls.learn":"Μάθηση","ls.none":"Δεν βρέθηκε τίποτα.","ls.del":"Διαγραφή","ls.sure":"Σίγουρα;","wd.new":"Νέα — δεν έχει μελετηθεί","wd.learning":"Μαθαίνεται","wd.learned":"Έμαθα","wd.duenow":"για επανάληψη τώρα","wd.duein":"επανάληψη σε {0}","wd.ivl":"διάστημα {0} ημ","wd.article":"Άρθρο","wd.trans":"Μετάφραση","wd.example":"Παράδειγμα","wd.tip":"Συμβουλή","wd.topic":"Σετ","wd.reset":"Επαναφορά ως νέα","wd.mark":"Σήμανση ως γνωστή","wd.edit":"Επεξεργασία","wd.reset.t":"Επαναφέρθηκε ως νέα","wd.mark.t":"Έμαθα — επανάληψη σε {0} μέρες","f.new":"Νέα λέξη","f.edit":"Επεξεργασία λέξης","f.word":"Λέξη *","f.trans":"Μετάφραση *","f.ex":"Παράδειγμα πρότασης","f.ext":"Μετάφραση παραδείγματος","f.note":"Σημείωση","f.topic":"Σετ","f.ai":"Συμπλήρωση με ΤΝ","f.save":"Αποθήκευση","f.update":"Ενημέρωση","f.cancel":"Άκυρο","f.hint":"Γράψε τη λέξη + Enter → η ΤΝ συμπληρώνει άρθρο, μετάφραση, παράδειγμα","t.wordfirst":"Γράψε πρώτα μια λέξη","t.transmissing":"Λείπει η μετάφραση – πρόσθεσέ την","t.saved":"Αποθηκεύτηκε – επόμενη;","t.savedart":"Αποθηκεύτηκε: {0} {1}","t.updated":"Ενημερώθηκε","t.deleted":"Διαγράφηκε","t.aidone":"Συμπληρώθηκε – έλεγξε, αποθήκευσε","t.aifail":"Η ΤΝ δεν είναι διαθέσιμη","t.art":"Άρθρο: {0}","t.artg":" (μαντεψιά από -{0})","t.noart":"Χωρίς άρθρο – όχι ουσιαστικό","t.artfail":"Δεν βρέθηκε άρθρο – διάλεξε","t.ki":"Η ΤΝ σκέφτεται …","t.kifill":"Η ΤΝ συμπληρώνει …","tp.add":"+ Σετ","tp.ph":"Νέο σετ …","tp.name":"Γράψε πρώτα ένα όνομα","tp.exists":"Το σετ υπάρχει ήδη","tp.created":"Το σετ «{0}» δημιουργήθηκε — πρόσθεσε λέξεις","tp.removed":"Το σετ αφαιρέθηκε","tp.removetitle":"Αφαίρεση κενού σετ","ac.h":"Λογαριασμός & συγχρονισμός","ac.intro":"Με λογαριασμό, λέξεις και πρόοδος συγχρονίζονται σε όλες τις συσκευές.","ac.user":"Όνομα / e-mail","ac.pass":"Κωδικός","ac.passph":"τουλάχιστον 6 χαρακτήρες","ac.login":"Σύνδεση","ac.register":"Εγγραφή","ac.cookiehint":"Η σύνδεση θέτει ένα απαραίτητο cookie — χωρίς παρακολούθηση.","ac.loggedin":"Συνδεδεμένος ως","ac.lastsync":"Τελευταίος συγχρ.:","ac.syncnow":"Συγχρονισμός τώρα","ac.logout":"Αποσύνδεση","ac.auto":"Αυτόματα: φορτώνει στο άνοιγμα, αποθηκεύει μετά από αλλαγές. Το νεότερο κερδίζει.","ac.serverhint":"Λειτουργεί στον δικό σου ιστότοπο (Vercel) με ρυθμισμένο διακομιστή.","ac.bye":"Αποσυνδέθηκες – οι λέξεις μένουν εδώ","ac.synced":"Συγχρονίστηκε","ac.created":"Ο λογαριασμός δημιουργήθηκε","ac.welcome":"Συνδέθηκες","ac.pulled":"Φορτώθηκε η νεότερη έκδοση","e.userexists":"Το όνομα υπάρχει ήδη","e.badcred":"Λάθος όνομα ή κωδικός","e.baduser":"Όνομα: 3–64 χαρακτήρες","e.badpass":"Κωδικός: τουλάχιστον 6","e.noserver":"Ο διακομιστής δεν ρυθμίστηκε (README)","e.toolarge":"Πολύ μεγάλο σετ","e.expired":"Η συνεδρία έληξε – συνδέσου ξανά","e.offline":"Ο διακομιστής δεν αποκρίνεται","e.sync":"Σφάλμα sync ({0})","t.userfirst":"Λείπει το όνομα","t.savefail":"Αποτυχία αποθήκευσης","t.trfail":"Μη διαθέσιμη μετάφραση — εμφανίζεται αγγλικά (χρειάζεται διακομιστής ΤΝ)","t.lang":"Γλώσσα:","ck.text":"<b>🍪 Μόνο απαραίτητα cookies.</b> Η εφαρμογή θέτει ένα cookie σύνδεσης — χωρίς παρακολούθηση ή διαφημίσεις. Οι λέξεις μένουν στη συσκευή ή στον λογαριασμό σου.","ck.ok":"Εντάξει!","ft.nostorage":"Σημείωση: χωρίς μόνιμη αποθήκευση – οι αλλαγές ισχύουν μόνο για αυτή τη συνεδρία."},"cs":{"tab.learn":"Učení","tab.words":"Slova","tab.new":"+ Nové","stats.words":"slov","stats.due":"k opakování","sync.chip":"Účet a sync","lg.rev":"naučeno","lg.lrn":"učím se","lg.new":"nové","row.perround":"Na kolo","row.all":"Vše","row.mode":"Režim","mode.mix":"Mix","mode.new":"Nové","mode.due":"Opakování","g.streak":"dní v řadě","g.oftoday":"z {0} dnes","g.record":"Rekord","g.goal.toast":"Denní cíl: {0} karet","g.goal.hit":"Cíl splněn! 🔥 Série {0} dní","g.today.line":"Dnes: <b>{0}</b> z {1} karet.","st.show":"Ukázat odpověď","gr.again":"Znovu","gr.hard":"Těžké","gr.good":"Dobře","gr.easy":"Snadné","gr.knew":"Věděl jsem","pres.new":"Nové slovo — nejdřív se podívej","pres.know":"Už znám","pres.next":"Dál","cnt.practice":"Procvičování","cnt.card":"Karta {0} z {1}","cnt.due":"{0} k opakování","cnt.new":"{0} nových","u.min":"min","u.day":"dní","u.mon":"měs","stx.empty.h":"Zatím žádná slova","stx.empty.p":"Přidej první slovo a začni.","stx.empty.b":"+ Nové slovo","stx.notopic.h":"Žádný balíček aktivní","stx.notopic.p":"Klepni nahoře na balíček a uč se.","stx.nonew.h":"Žádná nová slova","stx.nonew.p":"Všechna slova aktivních balíčků jsou už v plánu.","stx.nodue.h":"Nic k opakování","stx.nodue.p":"Všechny karty na dnešek hotové.","stx.nodue.b":"Procvičit i tak vše","nd.min":"Další opakování: za pár minut.","nd.today":"Další opakování: dnes později.","nd.tomorrow":"Další opakování: zítra.","nd.days":"Další opakování: za {0} dní.","done.h":"Kolo hotové","done.hp":"Procvičovací kolo hotové","done.stats":"<b>{0}</b> uměl · <b>{1}</b> opakováno","done.left":"Ještě <b>{0}</b> karet.","done.pnote":"Bez hodnocení — plán se nemění.","done.next":"Další kolo","done.more":"Pokračovat","done.repeat":"Zopakovat toto kolo","done.repeat2":"Zopakovat znovu","done.back":"Zpět k učení","ls.search":"Hledat …","ls.words1":"slovo","ls.wordsN":"slov","ls.select":"Vybrat","ls.done":"Hotovo","ls.selected":"Vybráno: <b>{0}</b>","ls.practice":"Procvičit","ls.learn":"Učit se","ls.none":"Nic nenalezeno.","ls.del":"Smazat","ls.sure":"Určitě?","wd.new":"Nové — zatím neučeno","wd.learning":"Učí se","wd.learned":"Naučeno","wd.duenow":"k opakování teď","wd.duein":"opakování za {0}","wd.ivl":"interval {0} dní","wd.article":"Člen","wd.trans":"Překlad","wd.example":"Příklad","wd.tip":"Tip","wd.topic":"Balíček","wd.reset":"Vrátit jako nové","wd.mark":"Označit jako naučené","wd.edit":"Upravit","wd.reset.t":"Vráceno jako nové","wd.mark.t":"Naučeno — opakování za {0} dní","f.new":"Nové slovo","f.edit":"Upravit slovo","f.word":"Slovo *","f.trans":"Překlad *","f.ex":"Příkladová věta","f.ext":"Překlad příkladu","f.note":"Poznámka","f.topic":"Balíček","f.ai":"Vyplnit AI","f.save":"Uložit","f.update":"Aktualizovat","f.cancel":"Zrušit","f.hint":"Napiš slovo + Enter → AI doplní člen, překlad a příklad","t.wordfirst":"Nejdřív napiš slovo","t.transmissing":"Chybí překlad – doplň ho","t.saved":"Uloženo – další?","t.savedart":"Uloženo: {0} {1}","t.updated":"Aktualizováno","t.deleted":"Smazáno","t.aidone":"Vyplněno – zkontroluj a ulož","t.aifail":"AI nedostupné","t.art":"Člen: {0}","t.artg":" (odhad podle -{0})","t.noart":"Bez členu – není podst. jméno","t.artfail":"Člen nerozpoznán – vyber sám","t.ki":"AI přemýšlí …","t.kifill":"AI vyplňuje …","tp.add":"+ Balíček","tp.ph":"Nový balíček …","tp.name":"Nejdřív zadej název","tp.exists":"Balíček už existuje","tp.created":"Balíček „{0}“ vytvořen — přidej slova","tp.removed":"Balíček odstraněn","tp.removetitle":"Odstranit prázdný balíček","ac.h":"Účet a synchronizace","ac.intro":"S účtem se slova a pokrok synchronizují mezi zařízeními.","ac.user":"Uživatel / e-mail","ac.pass":"Heslo","ac.passph":"aspoň 6 znaků","ac.login":"Přihlásit","ac.register":"Registrovat","ac.cookiehint":"Přihlášení nastaví jedno nezbytné cookie — žádné sledování.","ac.loggedin":"Přihlášen jako","ac.lastsync":"Poslední sync:","ac.syncnow":"Synchronizovat","ac.logout":"Odhlásit","ac.auto":"Automaticky: načte při otevření, uloží po změnách. Vyhrává novější.","ac.serverhint":"Funguje na vlastním webu (Vercel) s nastaveným serverem.","ac.bye":"Odhlášeno – slova zůstávají zde","ac.synced":"Synchronizováno","ac.created":"Účet vytvořen","ac.welcome":"Přihlášeno","ac.pulled":"Načten nejnovější stav ze serveru","e.userexists":"Jméno už existuje","e.badcred":"Špatné jméno nebo heslo","e.baduser":"Jméno: 3–64 znaků","e.badpass":"Heslo: aspoň 6 znaků","e.noserver":"Server nenastaven (viz README)","e.toolarge":"Balíček moc velký","e.expired":"Sezení vypršelo – přihlas se znovu","e.offline":"Server nedostupný","e.sync":"Chyba sync ({0})","t.userfirst":"Chybí jméno","t.savefail":"Uložení selhalo","t.trfail":"Překlad nedostupný — zobrazuji angličtinu (nutný AI server)","t.lang":"Jazyk:","ck.text":"<b>🍪 Jen nezbytné cookies.</b> Aplikace nastavuje jediné přihlašovací cookie — žádné sledování, žádné reklamy. Slova zůstávají v zařízení nebo v účtu.","ck.ok":"Jasně!","ft.nostorage":"Pozn.: bez trvalého úložiště – změny platí jen pro tuto relaci."},"ro":{"tab.learn":"Învață","tab.words":"Cuvinte","tab.new":"+ Nou","stats.words":"cuvinte","stats.due":"de repetat","sync.chip":"Cont și sync","lg.rev":"învățat","lg.lrn":"se învață","lg.new":"nou","row.perround":"Pe rundă","row.all":"Toate","row.mode":"Mod","mode.mix":"Mixt","mode.new":"Noi","mode.due":"Repetări","g.streak":"zile la rând","g.oftoday":"din {0} azi","g.record":"Record","g.goal.toast":"Obiectiv: {0} carduri","g.goal.hit":"Obiectiv atins! 🔥 Serie de {0} zile","g.today.line":"Azi: <b>{0}</b> din {1} carduri.","st.show":"Arată răspunsul","gr.again":"Din nou","gr.hard":"Greu","gr.good":"Bine","gr.easy":"Ușor","gr.knew":"Știam","pres.new":"Cuvânt nou — privește-l întâi","pres.know":"Îl știu deja","pres.next":"Mai departe","cnt.practice":"Exercițiu","cnt.card":"Cardul {0} din {1}","cnt.due":"{0} de repetat","cnt.new":"{0} noi","u.min":"min","u.day":"z","u.mon":"luni","stx.empty.h":"Încă niciun cuvânt","stx.empty.p":"Adaugă primul cuvânt și pornește.","stx.empty.b":"+ Cuvânt nou","stx.notopic.h":"Niciun pachet activ","stx.notopic.p":"Atinge un pachet sus ca să înveți.","stx.nonew.h":"Nu mai sunt cuvinte noi","stx.nonew.p":"Toate cuvintele din pachetele active sunt deja în plan.","stx.nodue.h":"Nimic de repetat","stx.nodue.p":"Toate cardurile de azi sunt gata.","stx.nodue.b":"Exersează oricum","nd.min":"Următoarea repetare: în câteva minute.","nd.today":"Următoarea repetare: mai târziu azi.","nd.tomorrow":"Următoarea repetare: mâine.","nd.days":"Următoarea repetare: în {0} zile.","done.h":"Rundă terminată","done.hp":"Runda de exercițiu gata","done.stats":"<b>{0}</b> știute · <b>{1}</b> repetate","done.left":"Încă <b>{0}</b> carduri.","done.pnote":"Fără notare — planul rămâne neschimbat.","done.next":"Runda următoare","done.more":"Continuă","done.repeat":"Repetă runda","done.repeat2":"Repetă din nou","done.back":"Înapoi la învățare","ls.search":"Caută …","ls.words1":"cuvânt","ls.wordsN":"cuvinte","ls.select":"Selectează","ls.done":"Gata","ls.selected":"<b>{0}</b> selectate","ls.practice":"Exersează","ls.learn":"Învață","ls.none":"Nimic găsit.","ls.del":"Șterge","ls.sure":"Sigur?","wd.new":"Nou — încă neînvățat","wd.learning":"Se învață","wd.learned":"Învățat","wd.duenow":"de repetat acum","wd.duein":"repetare în {0}","wd.ivl":"interval {0} z","wd.article":"Articol","wd.trans":"Traducere","wd.example":"Exemplu","wd.tip":"Sfat","wd.topic":"Pachet","wd.reset":"Resetează ca nou","wd.mark":"Marchează ca învățat","wd.edit":"Editează","wd.reset.t":"Resetat ca nou","wd.mark.t":"Învățat — repetare în {0} zile","f.new":"Cuvânt nou","f.edit":"Editează cuvântul","f.word":"Cuvânt *","f.trans":"Traducere *","f.ex":"Propoziție exemplu","f.ext":"Traducerea exemplului","f.note":"Notă","f.topic":"Pachet","f.ai":"Completează cu AI","f.save":"Salvează","f.update":"Actualizează","f.cancel":"Anulează","f.hint":"Scrie cuvântul + Enter → AI completează articolul, traducerea și exemplul","t.wordfirst":"Scrie întâi un cuvânt","t.transmissing":"Lipsește traducerea – adaug-o","t.saved":"Salvat – următorul?","t.savedart":"Salvat: {0} {1}","t.updated":"Actualizat","t.deleted":"Șters","t.aidone":"Completat – verifică și salvează","t.aifail":"AI indisponibil","t.art":"Articol: {0}","t.artg":" (ghicit după -{0})","t.noart":"Fără articol – nu e substantiv","t.artfail":"Articol nedetectat – alege tu","t.ki":"AI gândește …","t.kifill":"AI completează …","tp.add":"+ Pachet","tp.ph":"Pachet nou …","tp.name":"Scrie întâi un nume","tp.exists":"Pachetul există deja","tp.created":"Pachetul „{0}” creat — adaugă cuvinte","tp.removed":"Pachet eliminat","tp.removetitle":"Elimină pachetul gol","ac.h":"Cont și sincronizare","ac.intro":"Cu un cont, cuvintele și progresul se sincronizează între dispozitive.","ac.user":"Utilizator / e-mail","ac.pass":"Parolă","ac.passph":"minim 6 caractere","ac.login":"Autentificare","ac.register":"Înregistrare","ac.cookiehint":"Autentificarea setează un cookie necesar — fără urmărire.","ac.loggedin":"Autentificat ca","ac.lastsync":"Ultima sinc.:","ac.syncnow":"Sincronizează acum","ac.logout":"Deconectare","ac.auto":"Automat: încarcă la deschidere, salvează după modificări. Cel mai nou câștigă.","ac.serverhint":"Funcționează pe site-ul tău (Vercel) cu serverul configurat.","ac.bye":"Deconectat – cuvintele rămân aici","ac.synced":"Sincronizat","ac.created":"Cont creat","ac.welcome":"Autentificat","ac.pulled":"Încărcat cel mai nou de pe server","e.userexists":"Nume deja folosit","e.badcred":"Nume sau parolă greșite","e.baduser":"Nume: 3–64 caractere","e.badpass":"Parolă: minim 6","e.noserver":"Server neconfigurat (vezi README)","e.toolarge":"Pachet prea mare","e.expired":"Sesiune expirată – reautentifică-te","e.offline":"Server inaccesibil","e.sync":"Eroare sync ({0})","t.userfirst":"Lipsește numele","t.savefail":"Salvarea a eșuat","t.trfail":"Traducere indisponibilă — afișez engleza (necesită server AI)","t.lang":"Limbă:","ck.text":"<b>🍪 Doar cookie-uri necesare.</b> Aplicația setează un singur cookie de login — fără urmărire, fără reclame. Cuvintele rămân pe dispozitiv sau în cont.","ck.ok":"Am înțeles!","ft.nostorage":"Notă: fără stocare persistentă – modificările țin doar de această sesiune."},"hu":{"tab.learn":"Tanulás","tab.words":"Szavak","tab.new":"+ Új","stats.words":"szó","stats.due":"esedékes","sync.chip":"Fiók és sync","lg.rev":"megtanult","lg.lrn":"tanulás alatt","lg.new":"új","row.perround":"Körönként","row.all":"Mind","row.mode":"Mód","mode.mix":"Vegyes","mode.new":"Újak","mode.due":"Esedékes","g.streak":"napos sorozat","g.oftoday":"/ {0} ma","g.record":"Rekord","g.goal.toast":"Napi cél: {0} kártya","g.goal.hit":"Napi cél kész! 🔥 {0} napos sorozat","g.today.line":"Ma: <b>{0}</b> / {1} kártya.","st.show":"Válasz mutatása","gr.again":"Újra","gr.hard":"Nehéz","gr.good":"Jó","gr.easy":"Könnyű","gr.knew":"Tudtam","pres.new":"Új szó — először nézd meg","pres.know":"Már tudom","pres.next":"Tovább","cnt.practice":"Gyakorlás","cnt.card":"{0}/{1}. kártya","cnt.due":"{0} esedékes","cnt.new":"{0} új","u.min":"perc","u.day":"nap","u.mon":"hó","stx.empty.h":"Még nincs szó","stx.empty.p":"Add hozzá az első szót és kezdd el.","stx.empty.b":"+ Új szó","stx.notopic.h":"Nincs aktív pakli","stx.notopic.p":"Válassz fent egy paklit a tanuláshoz.","stx.nonew.h":"Nincs több új szó","stx.nonew.p":"Az aktív paklik minden szava már be van ütemezve.","stx.nodue.h":"Nincs esedékes","stx.nodue.p":"A mai kártyák megvannak.","stx.nodue.b":"Gyakorold mindet mégis","nd.min":"Következő ismétlés: pár perc múlva.","nd.today":"Következő ismétlés: ma később.","nd.tomorrow":"Következő ismétlés: holnap.","nd.days":"Következő ismétlés: {0} nap múlva.","done.h":"Kör kész","done.hp":"Gyakorló kör kész","done.stats":"<b>{0}</b> tudott · <b>{1}</b> ismételt","done.left":"Még <b>{0}</b> kártya.","done.pnote":"Értékelés nélkül — a terved nem változik.","done.next":"Következő kör","done.more":"Folytatás","done.repeat":"Kör ismétlése","done.repeat2":"Ismételd újra","done.back":"Vissza a tanuláshoz","ls.search":"Keresés …","ls.words1":"szó","ls.wordsN":"szó","ls.select":"Kijelölés","ls.done":"Kész","ls.selected":"<b>{0}</b> kijelölve","ls.practice":"Gyakorlás","ls.learn":"Tanulás","ls.none":"Nincs találat.","ls.del":"Törlés","ls.sure":"Biztos?","wd.new":"Új — még nem tanult","wd.learning":"Tanulás alatt","wd.learned":"Megtanult","wd.duenow":"most esedékes","wd.duein":"ismétlés {0} múlva","wd.ivl":"intervallum {0} nap","wd.article":"Névelő","wd.trans":"Fordítás","wd.example":"Példa","wd.tip":"Tipp","wd.topic":"Pakli","wd.reset":"Újként visszaállít","wd.mark":"Megtanultnak jelöl","wd.edit":"Szerkesztés","wd.reset.t":"Újként visszaállítva","wd.mark.t":"Megtanulva — ismétlés {0} nap múlva","f.new":"Új szó","f.edit":"Szó szerkesztése","f.word":"Szó *","f.trans":"Fordítás *","f.ex":"Példamondat","f.ext":"Példa fordítása","f.note":"Jegyzet","f.topic":"Pakli","f.ai":"Kitöltés MI-vel","f.save":"Mentés","f.update":"Frissítés","f.cancel":"Mégse","f.hint":"Írd be a szót + Enter → az MI kitölti a névelőt, fordítást és példát","t.wordfirst":"Előbb írj be egy szót","t.transmissing":"Hiányzik a fordítás – add meg","t.saved":"Mentve – következő?","t.savedart":"Mentve: {0} {1}","t.updated":"Frissítve","t.deleted":"Törölve","t.aidone":"Kitöltve – ellenőrizd és mentsd","t.aifail":"Az MI nem elérhető","t.art":"Névelő: {0}","t.artg":" (-{0} végződésből)","t.noart":"Nincs névelő – nem főnév","t.artfail":"Névelő nem található – válaszd ki","t.ki":"Az MI gondolkodik …","t.kifill":"Az MI kitölti …","tp.add":"+ Pakli","tp.ph":"Új pakli …","tp.name":"Előbb adj meg egy nevet","tp.exists":"Ez a pakli már létezik","tp.created":"„{0}” pakli létrehozva — adj hozzá szavakat","tp.removed":"Pakli eltávolítva","tp.removetitle":"Üres pakli törlése","ac.h":"Fiók és szinkron","ac.intro":"Fiókkal a szavaid és a haladásod minden eszközön szinkronizálódik.","ac.user":"Felhasználónév / e-mail","ac.pass":"Jelszó","ac.passph":"legalább 6 karakter","ac.login":"Bejelentkezés","ac.register":"Regisztráció","ac.cookiehint":"A belépés egy szükséges sütit használ — nincs követés.","ac.loggedin":"Bejelentkezve mint","ac.lastsync":"Utolsó szinkron:","ac.syncnow":"Szinkron most","ac.logout":"Kijelentkezés","ac.auto":"Automatikus: megnyitáskor betölt, változás után ment. A legújabb nyer.","ac.serverhint":"Saját oldaladon (Vercel) működik beállított szerverrel.","ac.bye":"Kijelentkezve – a szavak itt maradnak","ac.synced":"Szinkronizálva","ac.created":"Fiók létrehozva","ac.welcome":"Bejelentkezve","ac.pulled":"A legújabb állapot betöltve","e.userexists":"A név foglalt","e.badcred":"Hibás név vagy jelszó","e.baduser":"Név: 3–64 karakter","e.badpass":"Jelszó: legalább 6","e.noserver":"A szerver nincs beállítva (README)","e.toolarge":"Túl nagy pakli","e.expired":"Lejárt munkamenet – lépj be újra","e.offline":"A szerver nem elérhető","e.sync":"Szinkronhiba ({0})","t.userfirst":"Hiányzik a név","t.savefail":"Mentés sikertelen","t.trfail":"A fordítás nem elérhető — angol jelenik meg (MI-szerver kell)","t.lang":"Nyelv:","ck.text":"<b>🍪 Csak szükséges sütik.</b> Az app egyetlen bejelentkezési sütit használ — nincs követés, nincs reklám. A szavaid az eszközön vagy a fiókodban maradnak.","ck.ok":"Rendben!","ft.nostorage":"Megjegyzés: nincs tartós tárhely – a változások csak erre a munkamenetre érvényesek."},"sv":{"tab.learn":"Lär dig","tab.words":"Ord","tab.new":"+ Ny","stats.words":"ord","stats.due":"att repetera","sync.chip":"Konto & synk","lg.rev":"inlärt","lg.lrn":"lär mig","lg.new":"ny","row.perround":"Per runda","row.all":"Alla","row.mode":"Läge","mode.mix":"Mix","mode.new":"Nya","mode.due":"Repetition","g.streak":"dagar i rad","g.oftoday":"av {0} idag","g.record":"Rekord","g.goal.toast":"Dagsmål: {0} kort","g.goal.hit":"Dagsmål nått! 🔥 {0} dagar i rad","g.today.line":"Idag: <b>{0}</b> av {1} kort.","st.show":"Visa svar","gr.again":"Igen","gr.hard":"Svårt","gr.good":"Bra","gr.easy":"Lätt","gr.knew":"Kunde det","pres.new":"Nytt ord — titta först","pres.know":"Kan det redan","pres.next":"Nästa","cnt.practice":"Övning","cnt.card":"Kort {0} av {1}","cnt.due":"{0} att repetera","cnt.new":"{0} nya","u.min":"min","u.day":"d","u.mon":"mån","stx.empty.h":"Inga ord än","stx.empty.p":"Lägg till ditt första ord och kör.","stx.empty.b":"+ Nytt ord","stx.notopic.h":"Ingen aktiv lek","stx.notopic.p":"Tryck på en lek ovan för att lära dig.","stx.nonew.h":"Inga nya ord kvar","stx.nonew.p":"Alla ord i aktiva lekar är redan schemalagda.","stx.nodue.h":"Inget att repetera","stx.nodue.p":"Alla kort för idag är klara.","stx.nodue.b":"Öva alla ändå","nd.min":"Nästa repetition: om några minuter.","nd.today":"Nästa repetition: senare idag.","nd.tomorrow":"Nästa repetition: imorgon.","nd.days":"Nästa repetition: om {0} dagar.","done.h":"Runda klar","done.hp":"Övningsrunda klar","done.stats":"<b>{0}</b> kunde · <b>{1}</b> repeterade","done.left":"<b>{0}</b> kort kvar.","done.pnote":"Utan betyg — schemat påverkas inte.","done.next":"Nästa runda","done.more":"Fortsätt öva","done.repeat":"Upprepa rundan","done.repeat2":"Upprepa igen","done.back":"Tillbaka till lärandet","ls.search":"Sök …","ls.words1":"ord","ls.wordsN":"ord","ls.select":"Välj","ls.done":"Klart","ls.selected":"<b>{0}</b> valda","ls.practice":"Öva","ls.learn":"Lär dig","ls.none":"Inget hittades.","ls.del":"Radera","ls.sure":"Säkert?","wd.new":"Nytt — inte pluggat än","wd.learning":"Lär mig","wd.learned":"Inlärt","wd.duenow":"dags att repetera","wd.duein":"repetition om {0}","wd.ivl":"intervall {0} d","wd.article":"Artikel","wd.trans":"Översättning","wd.example":"Exempel","wd.tip":"Tips","wd.topic":"Lek","wd.reset":"Återställ som nytt","wd.mark":"Markera som inlärt","wd.edit":"Redigera","wd.reset.t":"Återställt som nytt","wd.mark.t":"Inlärt — repetition om {0} dagar","f.new":"Nytt ord","f.edit":"Redigera ord","f.word":"Ord *","f.trans":"Översättning *","f.ex":"Exempelmening","f.ext":"Exempelöversättning","f.note":"Anteckning","f.topic":"Lek","f.ai":"Fyll i med AI","f.save":"Spara","f.update":"Uppdatera","f.cancel":"Avbryt","f.hint":"Skriv ordet + Enter → AI fyller i artikel, översättning och exempel","t.wordfirst":"Skriv ett ord först","t.transmissing":"Översättning saknas – lägg till","t.saved":"Sparat – nästa ord?","t.savedart":"Sparat: {0} {1}","t.updated":"Uppdaterat","t.deleted":"Raderat","t.aidone":"Ifyllt – kolla och spara","t.aifail":"AI ej nåbar","t.art":"Artikel: {0}","t.artg":" (gissat via -{0})","t.noart":"Ingen artikel – inget substantiv","t.artfail":"Artikel hittades ej – välj själv","t.ki":"AI tänker …","t.kifill":"AI fyller i …","tp.add":"+ Lek","tp.ph":"Ny lek …","tp.name":"Ange ett namn först","tp.exists":"Leken finns redan","tp.created":"Leken ”{0}” skapad — lägg till ord","tp.removed":"Leken borttagen","tp.removetitle":"Ta bort tom lek","ac.h":"Konto & synkronisering","ac.intro":"Med ett konto synkas dina ord och framsteg mellan enheter.","ac.user":"Användarnamn / e-post","ac.pass":"Lösenord","ac.passph":"minst 6 tecken","ac.login":"Logga in","ac.register":"Registrera","ac.cookiehint":"Inloggning sätter en nödvändig cookie — ingen spårning.","ac.loggedin":"Inloggad som","ac.lastsync":"Senaste synk:","ac.syncnow":"Synka nu","ac.logout":"Logga ut","ac.auto":"Automatiskt: laddar vid öppning, sparar efter ändringar. Nyast vinner.","ac.serverhint":"Fungerar på din egen sida (Vercel) med konfigurerad server.","ac.bye":"Utloggad – orden stannar här","ac.synced":"Synkat","ac.created":"Konto skapat","ac.welcome":"Inloggad","ac.pulled":"Senaste läget laddat från servern","e.userexists":"Namnet är upptaget","e.badcred":"Fel namn eller lösenord","e.baduser":"Namn: 3–64 tecken","e.badpass":"Lösenord: minst 6 tecken","e.noserver":"Servern ej konfigurerad (se README)","e.toolarge":"För stor lek","e.expired":"Sessionen har gått ut – logga in igen","e.offline":"Servern kan inte nås","e.sync":"Synkfel ({0})","t.userfirst":"Namn saknas","t.savefail":"Kunde inte spara","t.trfail":"Översättning saknas — visar engelska (AI-server krävs)","t.lang":"Språk:","ck.text":"<b>🍪 Endast nödvändiga cookies.</b> Appen sätter en enda inloggningscookie — ingen spårning, inga annonser. Dina ord stannar på enheten eller i kontot.","ck.ok":"Uppfattat!","ft.nostorage":"Obs: ingen beständig lagring – ändringar gäller bara denna session."}};
+function t(k){
+  const l=(deck&&deck.lang)||'de';
+  let s=(I18N[l]&&I18N[l][k])||I18N.de[k]||k;
+  for(let i=1;i<arguments.length;i++)s=s.split('{'+(i-1)+'}').join(arguments[i]);
+  return s;
+}
+function applyStatic(){
+  document.documentElement.lang=(deck&&deck.lang)||'de';
+  document.querySelectorAll('[data-i18n]').forEach(el=>{el.textContent=t(el.dataset.i18n);});
+  document.querySelectorAll('[data-i18n-html]').forEach(el=>{el.innerHTML=t(el.dataset.i18nHtml);});
+  document.querySelectorAll('[data-i18n-ph]').forEach(el=>{el.placeholder=t(el.dataset.i18nPh);});
+}
 
 function localStore(){
   try{
@@ -1703,26 +1716,26 @@ function newTopicKey(e){
 function createTopic(){
   const inp=$('new-topic-input');
   const name=(inp?inp.value:'').trim();
-  if(!name){toast('Erst einen Namen eingeben');return;}
-  if(allTopics().some(t=>t.toLowerCase()===name.toLowerCase())){toast('Dieses Thema gibt es schon');return;}
+  if(!name){toast(t('tp.name'));return;}
+  if(allTopics().some(t=>t.toLowerCase()===name.toLowerCase())){toast(t('tp.exists'));return;}
   deck.customTopics=deck.customTopics||[];
   deck.customTopics.push(name);
   addingTopic=false;
   saveDeck();
   renderTopics();
-  toast('Thema „'+name+'“ angelegt — jetzt Wörter hinzufügen');
+  toast(t('tp.created',name));
   goAdd();
   $('f-topic').value=name;
 }
 function removeTopic(e,i){
   e.stopPropagation();
-  const t=TOPICS[i];
-  if(t===undefined)return;
-  deck.customTopics=(deck.customTopics||[]).filter(x=>x!==t);
-  deck.inactive=(deck.inactive||[]).filter(x=>x!==t);
+  const tp=TOPICS[i];
+  if(tp===undefined)return;
+  deck.customTopics=(deck.customTopics||[]).filter(x=>x!==tp);
+  deck.inactive=(deck.inactive||[]).filter(x=>x!==tp);
   saveDeck();
   renderTopics();
-  toast('Thema entfernt');
+  toast(t('tp.removed'));
 }
 function topicActive(t){return (deck.inactive||[]).indexOf(t)<0;}
 function toggleTopic(i){
@@ -1743,28 +1756,28 @@ function topicStats(t){
 }
 function renderTopics(){
   TOPICS=allTopics();
-  $('topic-chips').innerHTML=TOPICS.map((t,i)=>{
-    const on=topicActive(t);
-    const s=topicStats(t);
+  $('topic-chips').innerHTML=TOPICS.map((tp,i)=>{
+    const on=topicActive(tp);
+    const s=topicStats(tp);
     const tick=on
       ?'<span class="tick"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 13l5 5L20 7"/></svg></span>'
       :'<span class="tick"></span>';
-    const en=TOPIC_EN[t];
+    const en=TOPIC_EN[tp];
     const revPct=s.total?(s.rev/s.total*100):0;
     const lrnPct=s.total?(s.lrn/s.total*100):0;
     const bar='<span class="tbar"><span class="tb tb-rev" style="width:'+revPct.toFixed(1)+'%"></span><span class="tb tb-lrn" style="width:'+lrnPct.toFixed(1)+'%"></span></span>';
     const cnt=(s.total>0&&s.nw===0?'✓ ':'')+s.total;
-    const info=s.nw+' neu · '+s.lrn+' am Lernen · '+s.rev+' gelernt';
-    const emptyCustom=s.total===0&&(deck.customTopics||[]).indexOf(t)>=0;
+    const info=s.nw+' '+t('lg.new')+' · '+s.lrn+' '+t('lg.lrn')+' · '+s.rev+' '+t('lg.rev');
+    const emptyCustom=s.total===0&&(deck.customTopics||[]).indexOf(tp)>=0;
     const tcHtml=emptyCustom
-      ?'<span class="tc tc-x" title="Leeres Thema entfernen" onclick="removeTopic(event,'+i+')">×</span>'
+      ?'<span class="tc tc-x" title="'+esc(t('tp.removetitle'))+'" onclick="removeTopic(event,'+i+')">×</span>'
       :'<span class="tc">'+cnt+'</span>';
     return '<button class="tchip'+(on?' on':'')+'" title="'+info+'" onclick="toggleTopic('+i+')">'+tick+
-      '<span class="tlbl">'+esc(t)+(en?'<span class="tsub">'+esc(en)+'</span>':'')+bar+'</span>'+
+      '<span class="tlbl">'+esc(tp)+(en?'<span class="tsub">'+esc(en)+'</span>':'')+bar+'</span>'+
       tcHtml+'</button>';
   }).join('')+(addingTopic
-    ?'<span class="tchip tchip-new-input"><input id="new-topic-input" class="ntin" placeholder="Neues Thema …" maxlength="40" onkeydown="newTopicKey(event)"><button class="ntbtn" title="Anlegen" onclick="createTopic()">✓</button><button class="ntbtn ntcancel" title="Abbrechen" onclick="cancelTopic()">×</button></span>'
-    :'<button class="tchip tchip-new" onclick="showTopicInput()">+ Thema</button>');
+    ?'<span class="tchip tchip-new-input"><input id="new-topic-input" class="ntin" placeholder="'+esc(t('tp.ph'))+'" maxlength="40" onkeydown="newTopicKey(event)"><button class="ntbtn" onclick="createTopic()">✓</button><button class="ntbtn ntcancel" onclick="cancelTopic()">×</button></span>'
+    :'<button class="tchip tchip-new" onclick="showTopicInput()">'+esc(t('tp.add'))+'</button>');
   $('topics-dl').innerHTML=TOPICS.map(t=>{
     const en=TOPIC_EN[t];
     return '<option value="'+esc(t)+'"'+(en?' label="'+esc(en)+'"':'')+'>';
@@ -1780,7 +1793,7 @@ async function loadDeck(){
 }
 function saveDeck(touch){
   if(touch!==false){deck.updatedAt=Date.now();schedulePush();}
-  store.set(KEY,JSON.stringify(deck)).catch(()=>toast('Speichern fehlgeschlagen'));
+  store.set(KEY,JSON.stringify(deck)).catch(()=>toast(t('t.savefail')));
 }
 
 function updateStats(){
@@ -1847,11 +1860,11 @@ function schedule(w,q){
 }
 function fmtDue(ms){
   const m=Math.round(ms/MINUTE);
-  if(m<60)return m+' Min';
+  if(m<60)return m+' '+t('u.min');
   const d=Math.max(1,Math.round(ms/DAY));
-  if(d<60)return d+' T';
+  if(d<60)return d+' '+t('u.day');
   const mo=d/30;
-  return (mo<10?String(Math.round(mo*10)/10).replace('.',','):String(Math.round(mo)))+' Mo';
+  return (mo<10?String(Math.round(mo*10)/10).replace('.',','):String(Math.round(mo)))+' '+t('u.mon');
 }
 function lvl(w){
   nrm(w);
@@ -1882,21 +1895,24 @@ function gamiTick(){
     celebrate();
   }
 }
+function i18nToday(g){
+  const n=g.day===todayStr()?g.today:0;
+  return t('g.today.line',n,g.goal||20);
+}
 function gamiLine(){
   const g=deck.gami;
   if(!g)return'';
-  const t=g.day===todayStr()?g.today:0;
-  return '<br>Heute: <b>'+t+'</b> von '+(g.goal||20)+' Karten.';
+  return '<br>'+i18nToday(g);
 }
 function cycleGoal(){
   const opts=[10,20,30,50];
   const g=gamiGet();
   g.goal=opts[(opts.indexOf(g.goal||20)+1)%opts.length];
-  const t=g.day===todayStr()?g.today:0;
-  g.goalHit=t>=g.goal;
+  const n=g.day===todayStr()?g.today:0;
+  g.goalHit=n>=g.goal;
   saveDeck();
   renderGami();
-  toast('Tagesziel: '+g.goal+' Karten');
+  toast(t('g.goal.toast',g.goal));
 }
 function renderGami(){
   const el=$('gami');
@@ -1910,18 +1926,18 @@ function renderGami(){
   const pct=Math.min(1,today/goal);
   const R=9.5,C=2*Math.PI*R;
   el.innerHTML=
-    '<div class="g-item"><span class="g-emoji">🔥</span><div class="g-txt"><b>'+streak+'</b><span>Tage-Serie</span></div></div>'+
+    '<div class="g-item"><span class="g-emoji">🔥</span><div class="g-txt"><b>'+streak+'</b><span>'+esc(t('g.streak'))+'</span></div></div>'+
     '<div class="g-sep"></div>'+
     '<button class="g-item g-goal" onclick="cycleGoal()" title="Tippen, um das Tagesziel zu ändern">'+
       '<svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="'+R+'" fill="none" stroke="#E6E9E7" stroke-width="4"/><circle cx="14" cy="14" r="'+R+'" fill="none" stroke="'+(pct>=1?'#0A7A52':'#0A7A52')+'" stroke-width="4" stroke-linecap="round" stroke-dasharray="'+C.toFixed(1)+'" stroke-dashoffset="'+(C*(1-pct)).toFixed(1)+'" transform="rotate(-90 14 14)"/></svg>'+
-      '<div class="g-txt"><b>'+today+'</b><span>von '+goal+' heute</span></div>'+
+      '<div class="g-txt"><b>'+today+'</b><span>'+esc(t('g.oftoday',goal))+'</span></div>'+
     '</button>'+
     '<div class="g-sep"></div>'+
-    '<div class="g-item"><span class="g-emoji">🏆</span><div class="g-txt"><b>'+(g.best||0)+'</b><span>Rekord</span></div></div>';
+    '<div class="g-item"><span class="g-emoji">🏆</span><div class="g-txt"><b>'+(g.best||0)+'</b><span>'+esc(t('g.record'))+'</span></div></div>';
 }
 function celebrate(){
   const g=deck.gami;
-  toast('Tagesziel erreicht! 🔥 '+(g&&g.streak?g.streak+'-Tage-Serie':'Weiter so!'));
+  toast(t('g.goal.hit',(g&&g.streak)||1));
   const colors=['#0A7A52','#E8A13D','#C43020','#1A3C8A','#7BC7A3'];
   for(let i=0;i<26;i++){
     const p=document.createElement('div');
@@ -1964,7 +1980,14 @@ function computeRoundInfo(){
     if(!w)return;
     if(nrm(w).phase==='new')neu++;else rev++;
   });
-  roundInfo=(rev?rev+' fällig':'')+(rev&&neu?' + ':'')+(neu?neu+' neu':'');
+  roundInfo={rev:rev,neu:neu};
+}
+function roundInfoTxt(){
+  if(!roundInfo||practice)return'';
+  const p=[];
+  if(roundInfo.rev)p.push(t('cnt.due',roundInfo.rev));
+  if(roundInfo.neu)p.push(t('cnt.new',roundInfo.neu));
+  return p.length?' · '+p.join(' + '):'';
 }
 function startSession(all){
   const now=Date.now();
@@ -2028,10 +2051,10 @@ function nextDueText(){
   const fut=deck.words.filter(w=>topicActive(w.topic||'Meine Wörter')).map(w=>w.due||0).filter(d=>d>now);
   if(!fut.length)return'';
   const diff=Math.min.apply(null,fut)-now;
-  if(diff<36e5)return'Nächste Wiederholung: in ein paar Minuten.';
-  if(diff<DAY)return'Nächste Wiederholung: später heute.';
+  if(diff<36e5)return t('nd.min');
+  if(diff<DAY)return t('nd.today');
   const days=Math.ceil(diff/DAY);
-  return days<=1?'Nächste Wiederholung: morgen.':'Nächste Wiederholung: in '+days+' Tagen.';
+  return days<=1?t('nd.tomorrow'):t('nd.days',days);
 }
 
 function boxDots(b){
@@ -2050,16 +2073,16 @@ function doneBox(){
   const svg='<svg width="52" height="52" viewBox="0 0 52 52"><circle cx="26" cy="26" r="25" fill="#E3F2EB"/><path d="M16 27l7 7 13-14" stroke="#0A7A52" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   if(practice){
     return '<div class="state">'+svg+
-      '<div class="state-h">Übungsrunde geschafft</div>'+
-      '<div class="state-p"><b>'+sessionKnew+'</b> gewusst · <b>'+sessionAgain+'</b> wiederholt<br>Ohne Wertung — dein Lernplan bleibt unverändert.</div>'+
-      '<button class="btn knew" onclick="repeatRound()">Nochmal wiederholen</button>'+
-      '<button class="btn ghost" onclick="startSession()">Zurück zum Lernen</button></div>';
+      '<div class="state-h">'+esc(t('done.hp'))+'</div>'+
+      '<div class="state-p">'+t('done.stats',sessionKnew,sessionAgain)+'<br>'+esc(t('done.pnote'))+'</div>'+
+      '<button class="btn knew" onclick="repeatRound()">'+esc(t('done.repeat2'))+'</button>'+
+      '<button class="btn ghost" onclick="startSession()">'+esc(t('done.back'))+'</button></div>';
   }
   return '<div class="state">'+svg+
-    '<div class="state-h">Runde geschafft</div>'+
-    '<div class="state-p"><b>'+sessionKnew+'</b> gewusst · <b>'+sessionAgain+'</b> wiederholt'+(left?'<br>Noch <b>'+left+'</b> Karten fällig.':'')+gamiLine()+'</div>'+
-    '<button class="btn knew" onclick="startSession()">'+(left?'Nächste Runde':'Weiter üben')+'</button>'+
-    (roundIds.length?'<button class="btn ghost" onclick="repeatRound()">Diese Runde wiederholen</button>':'')+'</div>';
+    '<div class="state-h">'+esc(t('done.h'))+'</div>'+
+    '<div class="state-p">'+t('done.stats',sessionKnew,sessionAgain)+(left?'<br>'+t('done.left',left):'')+gamiLine()+'</div>'+
+    '<button class="btn knew" onclick="startSession()">'+esc(left?t('done.next'):t('done.more'))+'</button>'+
+    (roundIds.length?'<button class="btn ghost" onclick="repeatRound()">'+esc(t('done.repeat'))+'</button>':'')+'</div>';
 }
 
 function cardHtml(w){
@@ -2081,21 +2104,21 @@ function cardHtml(w){
       '</div>'+
     '</div>'+
   '</div>'+
-  '<div class="counter">'+(practice?'Übung · ':'')+'Karte '+(qi+1)+' von '+queue.length+(roundInfo&&!practice?' · '+roundInfo:'')+'</div>';
+  '<div class="counter">'+(practice?t('cnt.practice')+' · ':'')+t('cnt.card',qi+1,queue.length)+roundInfoTxt()+'</div>';
 }
 function presentHtml(w){
   const artTxt=w.art?'<span class="art-'+w.art+'-t">'+w.art+'</span> ':'';
   const tLen=((w.art?w.art+' ':'')+w.de).length;
   const tCls=tLen>36?' xlong':tLen>18?' long':'';
   return '<div class="card"><div class="present-face">'+
-    '<div class="new-pill">Neues Wort — erst mal ansehen</div>'+
+    '<div class="new-pill">'+esc(t('pres.new'))+'</div>'+
     '<div class="term'+tCls+'">'+artTxt+esc(w.de)+'</div>'+
     '<div class="trans'+(locEn(w).length>32?' long':'')+'">'+esc(locEn(w))+'</div>'+
     (w.ex?'<div class="ex">„'+esc(w.ex)+'“</div>':'')+
     (w.ex&&locExt(w)?'<div class="ext">'+esc(locExt(w))+'</div>':'')+
     (w.note?'<div class="note">'+esc(w.note)+'</div>':'')+
   '</div></div>'+
-  '<div class="counter">'+(practice?'Übung · ':'')+'Karte '+(qi+1)+' von '+queue.length+(roundInfo&&!practice?' · '+roundInfo:'')+'</div>';
+  '<div class="counter">'+(practice?t('cnt.practice')+' · ':'')+t('cnt.card',qi+1,queue.length)+roundInfoTxt()+'</div>';
 }
 
 function renderStudy(){
@@ -2105,18 +2128,18 @@ function renderStudy(){
 
   if(deck.words.length===0){
     prog.style.visibility='hidden';acts.innerHTML='';
-    stage.innerHTML=stateBox('Noch keine Wörter','Füg dein erstes Wort hinzu und leg los.','+ Neues Wort','goAdd()');
+    stage.innerHTML=stateBox(esc(t('stx.empty.h')),esc(t('stx.empty.p')),esc(t('stx.empty.b')),'goAdd()');
     return;
   }
   if(queue.length===0){
     prog.style.visibility='hidden';acts.innerHTML='';
     const activePool=deck.words.filter(w=>topicActive(w.topic||'Meine Wörter'));
     if(activePool.length===0){
-      stage.innerHTML=stateBox('Kein Thema aktiv','Tippe oben ein Thema an, um zu lernen.','','');
+      stage.innerHTML=stateBox(esc(t('stx.notopic.h')),esc(t('stx.notopic.p')),'','');
     }else if(roundMode()==='new'&&!activePool.some(w=>nrm(w).phase==='new')){
-      stage.innerHTML=stateBox('Keine neuen Wörter mehr','Alle Wörter der aktiven Themen sind schon im Lernplan.','Modus: Mix','setMode(\'mix\')');
+      stage.innerHTML=stateBox(esc(t('stx.nonew.h')),esc(t('stx.nonew.p')),esc(t('row.mode'))+': '+esc(t('mode.mix')),'setMode(\'mix\')');
     }else{
-      stage.innerHTML=stateBox('Nichts fällig','Alle Karten sind für heute gelernt. '+nextDueText(),'Trotzdem alle üben','startSession(true)');
+      stage.innerHTML=stateBox(esc(t('stx.nodue.h')),esc(t('stx.nodue.p'))+' '+esc(nextDueText()),esc(t('stx.nodue.b')),'startSession(true)');
     }
     return;
   }
@@ -2136,18 +2159,18 @@ function renderActions(){
   const acts=$('study-actions');
   if(deck.words.length===0||queue.length===0||qi>=queue.length){acts.innerHTML='';return;}
   if(toPresent.has(queue[qi])){
-    acts.innerHTML='<div class="grade"><button class="btn ghost" onclick="presentNext(true)">Kenn ich schon</button><button class="btn knew" onclick="presentNext(false)">Weiter</button></div>';
+    acts.innerHTML='<div class="grade"><button class="btn ghost" onclick="presentNext(true)">'+esc(t('pres.know'))+'</button><button class="btn knew" onclick="presentNext(false)">'+esc(t('pres.next'))+'</button></div>';
     return;
   }
-  if(!flipped){acts.innerHTML='<button class="btn ghost" onclick="flipCard()">Antwort zeigen</button>';return;}
+  if(!flipped){acts.innerHTML='<button class="btn ghost" onclick="flipCard()">'+esc(t('st.show'))+'</button>';return;}
   if(practice){
-    acts.innerHTML='<div class="grade"><button class="btn again" onclick="gradeCard(0)">Nochmal</button><button class="btn knew" onclick="gradeCard(2)">Gewusst</button></div>';
+    acts.innerHTML='<div class="grade"><button class="btn again" onclick="gradeCard(0)">'+esc(t('gr.again'))+'</button><button class="btn knew" onclick="gradeCard(2)">'+esc(t('gr.knew'))+'</button></div>';
     return;
   }
   const w=deck.words.find(x=>x.id===queue[qi]);
   nrm(w);
   const gb=(q,cls,label)=>'<button class="btn '+cls+'" onclick="gradeCard('+q+')">'+label+'<span class="ivl-hint">'+fmtDue(schedule(w,q).dueMs)+'</span></button>';
-  acts.innerHTML='<div class="grade">'+gb(0,'again','Nochmal')+gb(1,'hard','Schwer')+gb(2,'knew','Gut')+gb(3,'easy','Leicht')+'</div>';
+  acts.innerHTML='<div class="grade">'+gb(0,'again',esc(t('gr.again')))+gb(1,'hard',esc(t('gr.hard')))+gb(2,'knew',esc(t('gr.good')))+gb(3,'easy',esc(t('gr.easy')))+'</div>';
 }
 
 function flipCard(){
@@ -2191,9 +2214,9 @@ function renderListTopics(){
   const el=$('list-topics');
   if(!el)return;
   LT=[''].concat(allTopics());
-  const h=LT.map((t,i)=>{
-    const n=t?deck.words.filter(w=>(w.topic||'Meine Wörter')===t).length:deck.words.length;
-    return '<button class="schip ltchip'+(listTopic===t?' on':'')+'" onclick="setListTopic('+i+')">'+(t?esc(t):'Alle')+' '+n+'</button>';
+  const h=LT.map((tp,i)=>{
+    const n=tp?deck.words.filter(w=>(w.topic||'Meine Wörter')===tp).length:deck.words.length;
+    return '<button class="schip ltchip'+(listTopic===tp?' on':'')+'" onclick="setListTopic('+i+')">'+(tp?esc(tp):esc(t('row.all')))+' '+n+'</button>';
   }).join('');
   if(h!==lastLT){el.innerHTML=h;lastLT=h;}
 }
@@ -2216,7 +2239,7 @@ function wordReset(id){
   if(!w)return;
   w.phase='new';w.ivl=0;w.ease=START_EASE;w.step=0;w.due=0;w.reps=0;w.lapses=0;
   saveDeck();updateStats();renderList();
-  toast('Als neu zurückgesetzt');
+  toast(t('wd.reset.t'));
 }
 function wordLearned(id){
   const w=deck.words.find(x=>x.id===id);
@@ -2224,30 +2247,30 @@ function wordLearned(id){
   nrm(w);
   w.phase='review';w.ivl=EASY_IVL;w.ease=Math.max(w.ease||START_EASE,START_EASE);w.step=0;w.due=Date.now()+EASY_IVL*DAY;
   saveDeck();updateStats();renderList();
-  toast('Als gelernt markiert — Wiederholung in '+EASY_IVL+' Tagen');
+  toast(t('wd.mark.t',EASY_IVL));
 }
 function detailHtml(w){
   nrm(w);
   const now=Date.now();
-  const st=w.phase==='new'?['Neu — noch nicht gelernt','d-new']:(w.phase==='review'?['Gelernt','d-rev']:['Am Lernen','d-lrn']);
+  const st=w.phase==='new'?[t('wd.new'),'d-new']:(w.phase==='review'?[t('wd.learned'),'d-rev']:[t('wd.learning'),'d-lrn']);
   let due='';
   if(w.phase!=='new'){
-    due=(w.due||0)<=now?'jetzt fällig':'Wiederholung in '+fmtDue(w.due-now);
-    if(w.phase==='review')due+=' · Intervall '+w.ivl+' T';
+    due=(w.due||0)<=now?t('wd.duenow'):t('wd.duein',fmtDue(w.due-now));
+    if(w.phase==='review')due+=' · '+t('wd.ivl',w.ivl);
   }
   return '<div class="wdetail">'+
     '<div class="wd-status"><span class="wd-pill '+st[1]+'">'+st[0]+'</span>'+(due?'<span class="wd-due">'+due+'</span>':'')+'</div>'+
     '<div class="wd-grid">'+
-      '<div class="wd-k">Artikel</div><div class="wd-v">'+(w.art?'<b class="art-'+w.art+'-t">'+w.art+'</b>':'—')+'</div>'+
-      '<div class="wd-k">Übersetzung</div><div class="wd-v">'+esc(locEn(w))+(curLang()!=='en'&&locEn(w)!==w.en?'<br><span class="wd-ext">EN: '+esc(w.en)+'</span>':'')+'</div>'+
-      (w.ex?'<div class="wd-k">Beispiel</div><div class="wd-v">„'+esc(w.ex)+'“'+(locExt(w)?'<br><span class="wd-ext">'+esc(locExt(w))+'</span>':'')+'</div>':'')+
-      (w.note?'<div class="wd-k">Tipp</div><div class="wd-v"><span class="wd-note">'+esc(w.note)+'</span></div>':'')+
-      '<div class="wd-k">Thema</div><div class="wd-v">'+esc(w.topic||'Meine Wörter')+'</div>'+
+      '<div class="wd-k">'+esc(t('wd.article'))+'</div><div class="wd-v">'+(w.art?'<b class="art-'+w.art+'-t">'+w.art+'</b>':'—')+'</div>'+
+      '<div class="wd-k">'+esc(t('wd.trans'))+'</div><div class="wd-v">'+esc(locEn(w))+(curLang()!=='en'&&curLang()!=='de'&&locEn(w)!==w.en?'<br><span class="wd-ext">EN: '+esc(w.en)+'</span>':'')+'</div>'+
+      (w.ex?'<div class="wd-k">'+esc(t('wd.example'))+'</div><div class="wd-v">„'+esc(w.ex)+'“'+(locExt(w)?'<br><span class="wd-ext">'+esc(locExt(w))+'</span>':'')+'</div>':'')+
+      (w.note?'<div class="wd-k">'+esc(t('wd.tip'))+'</div><div class="wd-v"><span class="wd-note">'+esc(w.note)+'</span></div>':'')+
+      '<div class="wd-k">'+esc(t('wd.topic'))+'</div><div class="wd-v">'+esc(w.topic||'Meine Wörter')+'</div>'+
     '</div>'+
     '<div class="wd-actions">'+
-      (w.phase!=='new'?'<button class="btn ghost wd-btn" onclick="wordReset(\''+w.id+'\')">Als neu zurücksetzen</button>':'')+
-      (w.phase!=='review'?'<button class="btn easy wd-btn" onclick="wordLearned(\''+w.id+'\')">Als gelernt markieren</button>':'')+
-      '<button class="btn knew wd-btn" onclick="openEdit(\''+w.id+'\')">Bearbeiten</button>'+
+      (w.phase!=='new'?'<button class="btn ghost wd-btn" onclick="wordReset(\''+w.id+'\')">'+esc(t('wd.reset'))+'</button>':'')+
+      (w.phase!=='review'?'<button class="btn easy wd-btn" onclick="wordLearned(\''+w.id+'\')">'+esc(t('wd.mark'))+'</button>':'')+
+      '<button class="btn knew wd-btn" onclick="openEdit(\''+w.id+'\')">'+esc(t('wd.edit'))+'</button>'+
     '</div>'+
   '</div>';
 }
@@ -2255,7 +2278,7 @@ function renderList(){
   renderListTopics();
   const q=($('search').value||'').toLowerCase();
   const rows=deck.words.filter(w=>(!listTopic||(w.topic||'Meine Wörter')===listTopic)&&((w.art||'')+' '+w.de+' '+w.en+' '+(w.topic||'')).toLowerCase().includes(q));
-  $('count-label').textContent=rows.length+(rows.length===1?' Wort':' Wörter');
+  $('count-label').textContent=rows.length+' '+(rows.length===1?t('ls.words1'):t('ls.wordsN'));
   const TICK='<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 13l5 5L20 7"/></svg>';
   $('word-list').innerHTML=rows.map(w=>{
     const g=w.art||'none';
@@ -2278,9 +2301,9 @@ function renderList(){
         '<div class="row-en">'+esc(w.en)+'<span class="row-topic"> · '+esc(w.topic||'Meine Wörter')+'</span></div>'+
       '</div>'+
       '<div class="dots small">'+boxDots(lvl(w))+'</div>'+
-      '<button class="icon-btn'+(armedDelete===w.id?' armed':'')+'" onclick="delWord(\''+w.id+'\')" title="Löschen">'+(armedDelete===w.id?'Sicher?':TRASH)+'</button>'+
+      '<button class="icon-btn'+(armedDelete===w.id?' armed':'')+'" onclick="delWord(\''+w.id+'\')" title="'+esc(t('ls.del'))+'">'+(armedDelete===w.id?esc(t('ls.sure')):TRASH)+'</button>'+
     '</div>'+(open?detailHtml(w):'');
-  }).join('')||'<div class="empty-list">Nichts gefunden.</div>';
+  }).join('')||'<div class="empty-list">'+esc(t('ls.none'))+'</div>';
   renderSelBar();
 }
 
@@ -2298,14 +2321,14 @@ function delWord(id){
   if(qi>queue.length)qi=queue.length;
   armedDelete=null;
   saveDeck();updateStats();renderList();renderTopics();
-  toast('Gelöscht');
+  toast(t('t.deleted'));
 }
 
 function toggleSelect(){
   selectMode=!selectMode;
   selIds.clear();
   const b=$('btn-select');
-  b.textContent=selectMode?'Fertig':'Auswählen';
+  b.textContent=selectMode?t('ls.done'):t('ls.select');
   b.classList.toggle('on',selectMode);
   renderList();
 }
@@ -2317,7 +2340,7 @@ function renderSelBar(){
   const bar=$('sel-bar');
   const show=selectMode&&selIds.size>0&&currentView==='list';
   bar.classList.toggle('hidden',!show);
-  if(show)$('sel-count').innerHTML='<b>'+selIds.size+'</b> ausgewählt';
+  if(show)$('sel-count').innerHTML=t('ls.selected',selIds.size);
 }
 function startSelected(prac){
   const ids=[...selIds];
@@ -2333,8 +2356,8 @@ function setArt(a,byUser){
 function resetForm(){
   editingId=null;setArt('');artTouched=false;
   ['f-word','f-trans','f-ex','f-ext','f-note','f-topic'].forEach(i=>$(i).value='');
-  $('form-title').textContent='Neues Wort';
-  $('btn-save').textContent='Speichern';
+  $('form-title').textContent=t('f.new');
+  $('btn-save').textContent=t('f.save');
   $('btn-cancel').classList.add('hidden');
 }
 function openEdit(id){
@@ -2343,8 +2366,8 @@ function openEdit(id){
   show('add');
   editingId=id;setArt(w.art||'',true);
   $('f-word').value=w.de;$('f-trans').value=w.en;$('f-ex').value=w.ex||'';$('f-ext').value=w.ext||'';$('f-note').value=w.note||'';$('f-topic').value=w.topic||'Meine Wörter';
-  $('form-title').textContent='Wort bearbeiten';
-  $('btn-save').textContent='Aktualisieren';
+  $('form-title').textContent=t('f.edit');
+  $('btn-save').textContent=t('f.update');
   $('btn-cancel').classList.remove('hidden');
 }
 const SUFFIX=[['schaft','die'],['ismus','der'],['heit','die'],['keit','die'],['ment','das'],['chen','das'],['lein','das'],['ling','der'],['ung','die'],['ion','die'],['tät','die'],['enz','die'],['anz','die'],['ant','der'],['ent','der'],['ist','der'],['eur','der'],['tum','das'],['nis','das'],['ik','die'],['ei','die'],['ie','die'],['ur','die'],['or','der'],['um','das'],['ma','das'],['ich','der'],['ig','der'],['e','die']];
@@ -2380,32 +2403,33 @@ async function aiArticle(word){
 async function autoArticle(silent){
   const input=$('f-word');
   const word=input.value.trim();
-  if(!word){if(!silent)toast('Erst ein Wort eingeben');return null;}
+  if(!word){if(!silent)toast(t('t.wordfirst'));return null;}
   const btn=$('btn-auto');
   btn.disabled=true;btn.innerHTML='…';
   let art=null,guessed=false,suf='';
   try{art=await aiArticle(word);}
   catch(e){const g=guessArticle(word);if(g){art=g.art;guessed=true;suf=g.suf;}}
   btn.disabled=false;btn.innerHTML=AUTO_LABEL;
-  if(art===null){toast('Artikel nicht erkannt – bitte selbst wählen');return null;}
-  if(art==='kein'){setArt('',true);if(!silent)toast('Kein Artikel – kein Nomen');return'';}
+  if(art===null){toast(t('t.artfail'));return null;}
+  if(art==='kein'){setArt('',true);if(!silent)toast(t('t.noart'));return'';}
   setArt(art,true);
   input.value=word.charAt(0).toUpperCase()+word.slice(1);
-  toast('Artikel: '+art+(guessed?' (geraten, Endung -'+suf+')':''));
+  toast(t('t.art',art)+(guessed?t('t.artg',suf):''));
   return art;
 }
 async function aiFill(fromSave){
   const wIn=$('f-word');
   const word=wIn.value.trim();
-  if(!word){if(!fromSave)toast('Erst ein Wort eingeben');return false;}
+  if(!word){if(!fromSave)toast(t('t.wordfirst'));return false;}
   const btn=$('btn-fill');
   const old=btn.innerHTML;
-  btn.disabled=true;btn.innerHTML='KI denkt …';
+  btn.disabled=true;btn.innerHTML=esc(t('t.ki'));
   let ok=false;
   try{
     const givenTrans=$('f-trans').value.trim();
     const givenEx=$('f-ex').value.trim();
-    const prompt='Du hilfst einem Deutschlerner (Niveau A2). Wort: "'+word+'".'+(givenTrans?' Die englische Übersetzung ist: "'+givenTrans+'".':'')+(givenEx?' Der Beispielsatz ist: "'+givenEx+'" — übernimm ihn unverändert als "beispiel" und übersetze genau diesen Satz.':'')+' Antworte NUR mit einem JSON-Objekt ohne Markdown, ohne Erklärung: {"wort":"das Wort in korrekter deutscher Schreibweise, ohne Artikel","artikel":"der|die|das|kein","uebersetzung":"kurze englische Übersetzung","beispiel":"ein einfacher deutscher Beispielsatz (A2-Niveau)","beispiel_uebersetzung":"englische Übersetzung des Beispielsatzes","notiz":"sehr kurzer Grammatik-Hinweis auf Deutsch (z.B. Gegenteil, Kasus, trennbar, Plural) oder leerer String"}';
+    const tgt=(curLang()==='de'||curLang()==='en')?'English':LANG_PROMPT[curLang()];
+    const prompt='Du hilfst einem Deutschlerner (Niveau A2). Wort: "'+word+'".'+(givenTrans?' Die Übersetzung ist: "'+givenTrans+'".':'')+(givenEx?' Der Beispielsatz ist: "'+givenEx+'" — übernimm ihn unverändert als "beispiel" und übersetze genau diesen Satz.':'')+' Antworte NUR mit einem JSON-Objekt ohne Markdown, ohne Erklärung: {"wort":"das Wort in korrekter deutscher Schreibweise, ohne Artikel","artikel":"der|die|das|kein","uebersetzung":"kurze Übersetzung auf '+tgt+'","beispiel":"ein einfacher deutscher Beispielsatz (A2-Niveau)","beispiel_uebersetzung":"Übersetzung des Beispielsatzes auf '+tgt+'","notiz":"sehr kurzer Grammatik-Hinweis auf Deutsch (z.B. Gegenteil, Kasus, trennbar, Plural) oder leerer String"}';
     const data=await aiMessages({model:AI_MODEL,max_tokens:1000,messages:[{role:'user',content:prompt}]});
     const txt=(data.content||[]).map(c=>c.type==='text'?c.text:'').join('').replace(/```json|```/g,'').trim();
     const j=JSON.parse(txt);
@@ -2419,11 +2443,11 @@ async function aiFill(fromSave){
     if(!$('f-ext').value.trim()&&j.beispiel_uebersetzung)$('f-ext').value=String(j.beispiel_uebersetzung).trim();
     if(!$('f-note').value.trim()&&j.notiz)$('f-note').value=String(j.notiz).trim();
     ok=true;
-    if(!fromSave)toast('Ausgefüllt – prüfen und speichern');
+    if(!fromSave)toast(t('t.aidone'));
   }catch(e){
     const g=guessArticle(word);
     if(g&&!artTouched)setArt(g.art,true);
-    if(!fromSave)toast('KI nicht erreichbar');
+    if(!fromSave)toast(t('t.aifail'));
   }
   btn.disabled=false;btn.innerHTML=old;
   return ok;
@@ -2432,17 +2456,17 @@ function enterSave(e){if(e.key==='Enter')saveWord();}
 async function saveWord(){
   if(saving)return;
   let de=$('f-word').value.trim();
-  if(!de){toast('Erst ein Wort eingeben');return;}
+  if(!de){toast(t('t.wordfirst'));return;}
   saving=true;
   if(!editingId&&(!$('f-trans').value.trim()||!artTouched)){
-    $('btn-save').textContent='KI füllt aus …';
+    $('btn-save').textContent=t('t.kifill');
     await aiFill(true);
     de=$('f-word').value.trim();
   }
   const en=$('f-trans').value.trim();
   if(!en){
-    toast('Übersetzung fehlt – bitte ergänzen');
-    $('btn-save').textContent=editingId?'Aktualisieren':'Speichern';
+    toast(t('t.transmissing'));
+    $('btn-save').textContent=editingId?t('f.update'):t('f.save');
     saving=false;return;
   }
   const ex=$('f-ex').value.trim(),ext=$('f-ext').value.trim(),note=$('f-note').value.trim();
@@ -2451,14 +2475,14 @@ async function saveWord(){
     const w=deck.words.find(x=>x.id===editingId);
     if(w)Object.assign(w,{de,en,ex,ext,note,topic,art:selArt});
     saveDeck();updateStats();renderTopics();
-    toast('Aktualisiert');
+    toast(t('t.updated'));
     resetForm();show('list');
   }else{
     const nw={id:'w'+Date.now().toString(36)+Math.random().toString(36).slice(2,5),de,en,ex,ext,note,topic,art:selArt,phase:'new',ivl:0,ease:START_EASE,step:0,reps:0,lapses:0,due:0,created:Date.now()};
     deck.words.unshift(nw);
     if(topicActive(topic))queue.push(nw.id);
     saveDeck();updateStats();renderTopics();
-    toast(selArt?('Gespeichert: '+selArt+' '+de):'Gespeichert – nächstes Wort?');
+    toast(selArt?t('t.savedart',selArt,de):t('t.saved'));
     resetForm();$('f-word').focus();
   }
   saving=false;
@@ -2504,10 +2528,10 @@ function maybeCookieNote(){
 }
 
 // ---------- Übersetzungssprache ----------
-const LANGS={en:'English',tr:'Türkçe',az:'Azərbaycanca',ru:'Русский',es:'Español',fr:'Français',it:'Italiano',pt:'Português',pl:'Polski',uk:'Українська',nl:'Nederlands',el:'Ελληνικά',cs:'Čeština',ro:'Română',hu:'Magyar',sv:'Svenska'};
+const LANGS={de:'Deutsch',en:'English',tr:'Türkçe',az:'Azərbaycanca',ru:'Русский',es:'Español',fr:'Français',it:'Italiano',pt:'Português',pl:'Polski',uk:'Українська',nl:'Nederlands',el:'Ελληνικά',cs:'Čeština',ro:'Română',hu:'Magyar',sv:'Svenska'};
 const LANG_PROMPT={tr:'Turkish',az:'Azerbaijani (Azərbaycan dili)',ru:'Russian',es:'Spanish',fr:'French',it:'Italian',pt:'Portuguese',pl:'Polish',uk:'Ukrainian',nl:'Dutch',el:'Greek',cs:'Czech',ro:'Romanian',hu:'Hungarian',sv:'Swedish'};
 let trCache={},trBusy=false,trWarned=false;
-function curLang(){return deck.lang||'en';}
+function curLang(){return deck.lang||'de';}
 function loadTrCache(l){
   if(trCache[l])return;
   try{trCache[l]=JSON.parse(localStorage.getItem('wortschatz-tr-'+l))||{};}catch(e){trCache[l]={};}
@@ -2517,21 +2541,21 @@ function saveTrCache(l){
 }
 function locEn(w){
   const l=curLang();
-  if(l==='en')return w.en;
+  if(l==='en'||l==='de')return w.en;
   loadTrCache(l);
   const c=trCache[l][w.id];
   return (c&&c[0])?c[0]:w.en;
 }
 function locExt(w){
   const l=curLang();
-  if(l==='en')return w.ext||'';
+  if(l==='en'||l==='de')return w.ext||'';
   loadTrCache(l);
   const c=trCache[l][w.id];
   return (c&&c[1])?c[1]:(w.ext||'');
 }
 async function translateWords(ids){
   const l=curLang();
-  if(l==='en'||trBusy)return false;
+  if(l==='en'||l==='de'||trBusy)return false;
   loadTrCache(l);
   const todo=ids.map(id=>deck.words.find(w=>w.id===id)).filter(w=>w&&!trCache[l][w.id]).slice(0,30);
   if(!todo.length)return false;
@@ -2548,12 +2572,13 @@ async function translateWords(ids){
     return true;
   }catch(e){
     trBusy=false;
-    if(!trWarned){trWarned=true;toast('Übersetzung nicht verfügbar — zeige Englisch (KI-Server nötig)');}
+    if(!trWarned){trWarned=true;toast(t('t.trfail'));}
     return false;
   }
 }
 function kickTranslate(){
-  if(curLang()==='en')return;
+  const l=curLang();
+  if(l==='en'||l==='de')return;
   translateWords(queue.slice(qi,qi+30)).then(ok=>{
     if(ok&&currentView==='study'&&!flipped)renderStudy();
   });
@@ -2567,10 +2592,18 @@ function setLang(l){
   deck.lang=l;
   saveDeck();
   renderLangSel();
+  applyStatic();
+  renderSyncChip();
+  lastLT='';
+  renderTopics();
+  renderGami();
   if(currentView==='study')renderStudy();
   if(currentView==='list')renderList();
+  if(currentView==='account')renderAccount();
+  $('form-title').textContent=editingId?t('f.edit'):t('f.new');
+  $('btn-save').textContent=editingId?t('f.update'):t('f.save');
   kickTranslate();
-  toast(l==='en'?'Übersetzung: English':'Übersetzung: '+LANGS[l]);
+  toast(t('t.lang')+' '+LANGS[l]);
 }
 
 // ---------- Konto & Sync ----------
@@ -2588,38 +2621,38 @@ async function syncApi(body){
   return data;
 }
 function errMsg(e){
-  const m={'user-exists':'Benutzername schon vergeben','bad-credentials':'Falscher Name oder falsches Passwort','bad-user':'Benutzername: 3–64 Zeichen (Buchstaben, Zahlen, . _ @ + -)','bad-pass':'Passwort: mindestens 6 Zeichen','not-configured':'Sync-Server nicht eingerichtet (siehe README)','too-large':'Deck zu groß für Sync','unauthorized':'Sitzung abgelaufen – bitte neu anmelden'};
-  if(e.status===0)return'Server nicht erreichbar';
-  return m[e.message]||'Sync-Fehler ('+e.message+')';
+  const m={'user-exists':t('e.userexists'),'bad-credentials':t('e.badcred'),'bad-user':t('e.baduser'),'bad-pass':t('e.badpass'),'not-configured':t('e.noserver'),'too-large':t('e.toolarge'),'unauthorized':t('e.expired')};
+  if(e.status===0)return t('e.offline');
+  return m[e.message]||t('e.sync',e.message);
 }
 function renderSyncChip(){
   const c=$('sync-chip');
-  if(c)c.innerHTML=CLOUD+(syncMeta?esc(syncMeta.user):'Konto & Sync');
+  if(c)c.innerHTML=CLOUD+(syncMeta?esc(syncMeta.user):esc(t('sync.chip')));
 }
 function renderAccount(){
   const el=$('acct-box');
   if(!el)return;
   if(!syncMeta){
-    el.innerHTML='<div class="acct-status">Mit einem Konto werden deine Wörter und dein Lernfortschritt zwischen allen Geräten synchronisiert.</div>'+
-      '<div class="field"><label>Benutzername / E-Mail</label><input id="f-user" class="input" autocomplete="username" placeholder="farhad"></div>'+
-      '<div class="field"><label>Passwort</label><input id="f-pass" type="password" class="input" autocomplete="current-password" placeholder="mindestens 6 Zeichen"></div>'+
-      '<div class="form-actions"><button class="btn knew" onclick="acctLogin(false)">Anmelden</button><button class="btn ghost" style="flex:1" onclick="acctLogin(true)">Registrieren</button></div>'+
-      '<div class="hint">Beim Anmelden wird ein notwendiges Cookie gesetzt, damit du angemeldet bleibst — keine Tracking-Cookies. Funktioniert auf der eigenen Website (Vercel) mit eingerichtetem Sync-Server.</div>';
+    el.innerHTML='<div class="acct-status">'+esc(t('ac.intro'))+'</div>'+
+      '<div class="field"><label>'+esc(t('ac.user'))+'</label><input id="f-user" class="input" autocomplete="username" placeholder="farhad"></div>'+
+      '<div class="field"><label>'+esc(t('ac.pass'))+'</label><input id="f-pass" type="password" class="input" autocomplete="current-password" placeholder="'+esc(t('ac.passph'))+'"></div>'+
+      '<div class="form-actions"><button class="btn knew" onclick="acctLogin(false)">'+esc(t('ac.login'))+'</button><button class="btn ghost" style="flex:1" onclick="acctLogin(true)">'+esc(t('ac.register'))+'</button></div>'+
+      '<div class="hint">'+esc(t('ac.cookiehint'))+' '+esc(t('ac.serverhint'))+'</div>';
   }else{
-    el.innerHTML='<div class="acct-status">Angemeldet als <b>'+esc(syncMeta.user)+'</b>'+(syncMeta.lastSync?('<br>Zuletzt synchronisiert: '+new Date(syncMeta.lastSync).toLocaleString('de-DE')):'')+'</div>'+
-      '<div class="form-actions"><button class="btn knew" onclick="syncNow()">Jetzt synchronisieren</button><button class="btn ghost" style="flex:0 0 auto;width:auto;padding:0 18px" onclick="acctLogout()">Abmelden</button></div>'+
-      '<div class="hint">Automatisch: beim Öffnen wird geladen, nach Änderungen gespeichert. Der neueste Stand gewinnt.</div>';
+    el.innerHTML='<div class="acct-status">'+esc(t('ac.loggedin'))+' <b>'+esc(syncMeta.user)+'</b>'+(syncMeta.lastSync?('<br>'+esc(t('ac.lastsync'))+' '+new Date(syncMeta.lastSync).toLocaleString()):'')+'</div>'+
+      '<div class="form-actions"><button class="btn knew" onclick="syncNow()">'+esc(t('ac.syncnow'))+'</button><button class="btn ghost" style="flex:0 0 auto;width:auto;padding:0 18px" onclick="acctLogout()">'+esc(t('ac.logout'))+'</button></div>'+
+      '<div class="hint">'+esc(t('ac.auto'))+'</div>';
   }
   renderSyncChip();
 }
 async function acctLogin(reg){
   const user=$('f-user').value.trim().toLowerCase(),pass=$('f-pass').value;
-  if(!user){toast('Benutzername fehlt');return;}
-  if(pass.length<6){toast('Passwort: mindestens 6 Zeichen');return;}
+  if(!user){toast(t('t.userfirst'));return;}
+  if(pass.length<6){toast(t('e.badpass'));return;}
   try{
     const r=await syncApi({action:reg?'register':'login',user,pass});
     syncMeta={user:r.user};saveSyncMeta();
-    toast(reg?'Konto erstellt':'Angemeldet');
+    toast(reg?t('ac.created'):t('ac.welcome'));
     await initialSync();
     renderAccount();
   }catch(e){toast(errMsg(e));}
@@ -2638,10 +2671,10 @@ async function restoreSession(){
 async function acctLogout(){
   if(syncMeta){syncApi({action:'logout',token:syncMeta.token}).catch(()=>{});}
   syncMeta=null;saveSyncMeta();renderAccount();
-  toast('Abgemeldet – Wörter bleiben auf diesem Gerät');
+  toast(t('ac.bye'));
 }
 async function syncNow(){
-  try{await initialSync(true);toast('Synchronisiert');}catch(e){toast(errMsg(e));}
+  try{await initialSync(true);toast(t('ac.synced'));}catch(e){toast(errMsg(e));}
   renderAccount();
 }
 async function initialSync(rethrow){
@@ -2655,7 +2688,7 @@ async function initialSync(rethrow){
       if(migrate())saveDeck(false);else saveDeck(false);
       renderTopics();syncSize();updateStats();startSession();
       if(currentView==='list')renderList();
-      toast('Neuester Stand vom Server geladen');
+      toast(t('ac.pulled'));
     }else if(!sdeck||lu>su){
       await doPush(true);
     }
@@ -2691,7 +2724,8 @@ document.addEventListener('visibilitychange',()=>{if(document.visibilityState===
   if(loaded&&Array.isArray(loaded.words)&&loaded.words.length)deck=loaded;
   else deck={words:seedWords()};
   if(migrate())saveDeck(false);
-  if(!storageOK)$('foot').textContent='Hinweis: Kein dauerhafter Speicher verfügbar – Änderungen gelten nur für diese Sitzung.';
+  applyStatic();
+  if(!storageOK)$('foot').textContent=t('ft.nostorage');
   renderTopics();
   syncSize();
   syncMode();
