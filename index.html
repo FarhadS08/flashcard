@@ -48,7 +48,8 @@ h1{font-size:26px;font-weight:700;letter-spacing:-.01em;line-height:1.1}
 .tchip.on{border-color:#0A7A52;background:#E3F2EB;color:#0A7A52}
 .tchip.on .tick{background:#0A7A52;border-color:#0A7A52}
 
-.size-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.size-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+#mode-row{margin-bottom:18px}
 .size-label{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#8A8F8B;margin-right:2px}
 .schip{border:1.5px solid #E4E7E5;background:#fff;color:#9A9A9A;border-radius:999px;padding:6px 13px;font:inherit;font-size:13px;font-weight:600;cursor:pointer;transition:all .13s}
 .schip:hover{border-color:#C9CFCB}
@@ -228,6 +229,12 @@ label{display:block;font-size:11.5px;font-weight:600;letter-spacing:.08em;text-t
       <button class="schip" data-n="15" onclick="setSize(15)">15</button>
       <button class="schip" data-n="25" onclick="setSize(25)">25</button>
     </div>
+    <div class="size-row" id="mode-row">
+      <span class="size-label">Modus</span>
+      <button class="schip mchip" data-m="mix" onclick="setMode('mix')">Mix</button>
+      <button class="schip mchip" data-m="new" onclick="setMode('new')">Neue</button>
+      <button class="schip mchip" data-m="due" onclick="setMode('due')">Fällige</button>
+    </div>
     <div class="progress" id="study-progress"><div id="study-bar"></div></div>
     <div id="stage"></div>
     <div id="study-actions"></div>
@@ -301,6 +308,7 @@ const AUTO_LABEL='<svg width="13" height="13" viewBox="0 0 24 24" fill="currentC
 let deck={words:[]};
 let queue=[],qi=0,flipped=false,sessionKnew=0,sessionAgain=0;
 let practice=false,roundIds=[],toPresent=new Set();
+let sessionSeen=new Set(),roundInfo='';
 let selectMode=false,selIds=new Set();
 let editingId=null,armedDelete=null,armTimer=null,selArt='',currentView='study';
 let artTouched=false,saving=false;
@@ -1738,23 +1746,52 @@ function markPresentations(){
     return w&&nrm(w).phase==='new';
   }));
 }
+function roundMode(){return deck.roundMode||'mix';}
+function setMode(m){
+  deck.roundMode=m;
+  saveDeck();syncMode();startSession();
+}
+function syncMode(){
+  document.querySelectorAll('.mchip').forEach(b=>b.classList.toggle('on',b.dataset.m===roundMode()));
+}
+function computeRoundInfo(){
+  let rev=0,neu=0;
+  queue.forEach(id=>{
+    const w=deck.words.find(x=>x.id===id);
+    if(!w)return;
+    if(nrm(w).phase==='new')neu++;else rev++;
+  });
+  roundInfo=(rev?rev+' fällig':'')+(rev&&neu?' + ':'')+(neu?neu+' neu':'');
+}
 function startSession(all){
   const now=Date.now();
-  const pool=deck.words.filter(w=>topicActive(w.topic||'Meine Wörter')&&(all||(w.due||0)<=now));
-  queue=shuffle(pool.map(w=>w.id));
+  let pool=deck.words.filter(w=>topicActive(w.topic||'Meine Wörter')&&(all||(w.due||0)<=now));
+  pool.forEach(nrm);
+  const mode=roundMode();
+  if(mode==='new')pool=pool.filter(w=>w.phase==='new');
+  else if(mode==='due')pool=pool.filter(w=>w.phase!=='new');
+  // keine Wiederholung innerhalb einer Sitzung, solange es frische Karten gibt
+  const fresh=pool.filter(w=>!sessionSeen.has(w.id));
+  if(fresh.length)pool=fresh;
+  // feste Reihenfolge: überfällige Wiederholungen zuerst, dann Lern-Karten, dann neue in Buch-Reihenfolge
+  const rank=w=>w.phase==='review'?0:(w.phase==='learn'||w.phase==='relearn')?1:2;
+  pool.sort((a,b)=>rank(a)-rank(b)||(rank(a)<2?(a.due||0)-(b.due||0):0));
+  queue=pool.map(w=>w.id);
   const lim=sessionSize();
   if(lim&&queue.length>lim)queue=queue.slice(0,lim);
   practice=false;
   roundIds=queue.slice();
   markPresentations();
+  computeRoundInfo();
   qi=0;flipped=false;sessionKnew=0;sessionAgain=0;
   renderStudy();
 }
 function startRound(ids,opts){
-  queue=shuffle(ids.filter(id=>deck.words.some(w=>w.id===id)));
+  queue=ids.filter(id=>deck.words.some(w=>w.id===id));
   practice=!!(opts&&opts.practice);
   roundIds=queue.slice();
   markPresentations();
+  computeRoundInfo();
   qi=0;flipped=false;sessionKnew=0;sessionAgain=0;
   show('study');
 }
@@ -1771,6 +1808,7 @@ function presentNext(known){
     w.phase=r.phase;w.ivl=r.ivl;w.ease=r.ease;w.step=r.step;
     w.due=Date.now()+r.dueMs;
     sessionKnew++;
+    sessionSeen.add(id);
     saveDeck();
   }else if(!known){
     queue.push(id);
@@ -1837,7 +1875,7 @@ function cardHtml(w){
       '</div>'+
     '</div>'+
   '</div>'+
-  '<div class="counter">'+(practice?'Übung · ':'')+'Karte '+(qi+1)+' von '+queue.length+'</div>';
+  '<div class="counter">'+(practice?'Übung · ':'')+'Karte '+(qi+1)+' von '+queue.length+(roundInfo&&!practice?' · '+roundInfo:'')+'</div>';
 }
 function presentHtml(w){
   const artTxt=w.art?'<span class="art-'+w.art+'-t">'+w.art+'</span> ':'';
@@ -1851,7 +1889,7 @@ function presentHtml(w){
     (w.ex&&w.ext?'<div class="ext">'+esc(w.ext)+'</div>':'')+
     (w.note?'<div class="note">'+esc(w.note)+'</div>':'')+
   '</div></div>'+
-  '<div class="counter">'+(practice?'Übung · ':'')+'Karte '+(qi+1)+' von '+queue.length+'</div>';
+  '<div class="counter">'+(practice?'Übung · ':'')+'Karte '+(qi+1)+' von '+queue.length+(roundInfo&&!practice?' · '+roundInfo:'')+'</div>';
 }
 
 function renderStudy(){
@@ -1869,6 +1907,8 @@ function renderStudy(){
     const activePool=deck.words.filter(w=>topicActive(w.topic||'Meine Wörter'));
     if(activePool.length===0){
       stage.innerHTML=stateBox('Kein Thema aktiv','Tippe oben ein Thema an, um zu lernen.','','');
+    }else if(roundMode()==='new'&&!activePool.some(w=>nrm(w).phase==='new')){
+      stage.innerHTML=stateBox('Keine neuen Wörter mehr','Alle Wörter der aktiven Themen sind schon im Lernplan.','Modus: Mix','setMode(\'mix\')');
     }else{
       stage.innerHTML=stateBox('Nichts fällig','Alle Karten sind für heute gelernt. '+nextDueText(),'Trotzdem alle üben','startSession(true)');
     }
@@ -1931,6 +1971,7 @@ function gradeCard(q){
   w.due=Date.now()+r.dueMs;
   if(q===0){sessionAgain++;}else{sessionKnew++;}
   if(r.requeue)queue.push(w.id);
+  else sessionSeen.add(w.id);
   qi++;flipped=false;
   saveDeck();
   renderStudy();
@@ -2306,6 +2347,7 @@ document.addEventListener('visibilitychange',()=>{if(document.visibilityState===
   if(!storageOK)$('foot').textContent='Hinweis: Kein dauerhafter Speicher verfügbar – Änderungen gelten nur für diese Sitzung.';
   renderTopics();
   syncSize();
+  syncMode();
   updateStats();
   startSession();
   show('study');
