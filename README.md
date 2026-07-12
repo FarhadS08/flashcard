@@ -27,7 +27,7 @@ You stay logged in via a secure (`HttpOnly`) session cookie that renews itself f
 - **Smart round composition ("Modus")** — rounds are dealt deterministically, not randomly: overdue reviews first, then cards in learning, then new words in book order; words you finished this sitting don't repeat in the next rounds; the counter shows the mix ("3 fällig + 7 neu"); switch the mode to Mix / Neue / Fällige
 - **Learn state for new words** — cards you have never studied are presented first (word, translation, example and note all visible) before they get quizzed later in the same round; "Kenn ich schon" skips a known word straight to a 4-day interval
 - **Repeat & drill** — "Diese Runde wiederholen" runs the same words again as an ungraded practice round (your schedule stays untouched); in the word list, "Auswählen" lets you hand-pick any words and start them as a real learning round or a drill
-- **Unlimited words** — add your own words in the *+ Neu* tab
+- **Unlimited words & own decks** — add your own words in the *+ Neu* tab, and create your own categories with the dashed *+ Thema* chip (empty decks persist, sync with your account, and can be removed again via their ×)
 - **AI assist** — type just the German word and the AI fills in the article, translation, example sentence (with English translation) and a grammar note
 - **Example translations** — cards with an example sentence show its English translation right below it
 - **Search & edit** — full word list with search, inline edit and delete

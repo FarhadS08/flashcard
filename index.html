@@ -64,6 +64,14 @@ h1{font-size:26px;font-weight:700;letter-spacing:-.01em;line-height:1.1}
 .tchip .tb-rev{background:#0A7A52}
 .tchip .tb-lrn{background:#E8A13D}
 .tchip:not(.on) .tbar{opacity:.5}
+.tchip-new{border-style:dashed;color:#0A7A52;border-color:#BFE0D2;background:#fff;padding:7px 14px}
+.tchip-new:hover{background:#E3F2EB;border-color:#0A7A52}
+.tchip-new-input{border-color:#0A7A52;background:#fff;gap:6px;padding:5px 8px 5px 12px}
+.ntin{border:0;outline:none;font:inherit;font-size:13px;font-weight:600;width:128px;background:transparent;color:#111111}
+.ntbtn{border:0;background:#E3F2EB;color:#0A7A52;width:24px;height:24px;border-radius:50%;font:inherit;font-size:13px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;flex:none}
+.ntbtn.ntcancel{background:#F2F4F3;color:#777777}
+.tc-x{font-weight:700;color:#C43020;opacity:.75;font-size:15px;cursor:pointer;padding:0 2px}
+.tc-x:hover{opacity:1}
 .topic-legend{display:flex;gap:12px;align-items:center;flex-wrap:wrap;font-size:10.5px;color:#9A9A9A;margin:-8px 2px 14px}
 .lg-dot{width:7px;height:7px;border-radius:50%;display:inline-block;margin-right:4px;vertical-align:0}
 .lg-rev{background:#0A7A52}.lg-lrn{background:#E8A13D}.lg-new{background:#D6DAD7}
@@ -1602,6 +1610,7 @@ function migrate(){
   deck.words.forEach(w=>{if(!w.topic){w.topic='Meine Wörter';changed=true;}});
   if(!deck.packs){deck.packs=[];changed=true;}
   if(!deck.inactive){deck.inactive=[];changed=true;}
+  if(!deck.customTopics){deck.customTopics=[];changed=true;}
   if(deck.packs.indexOf('adjektive')<0){deck.words=deck.words.concat(adjPack());deck.packs.push('adjektive');changed=true;}
   if(deck.packs.indexOf('praepositionen')<0){deck.words=deck.words.concat(prepPack());deck.packs.push('praepositionen');changed=true;}
   if(deck.packs.indexOf('floskeln')<0){deck.words=deck.words.concat(floskelnPack());deck.packs.push('floskeln');changed=true;}
@@ -1639,7 +1648,44 @@ let TOPICS=[];
 function allTopics(){
   const s=[];
   deck.words.forEach(w=>{const t=w.topic||'Meine Wörter';if(s.indexOf(t)<0)s.push(t);});
+  (deck.customTopics||[]).forEach(t=>{if(s.indexOf(t)<0)s.push(t);});
   return s;
+}
+let addingTopic=false;
+function showTopicInput(){
+  addingTopic=true;
+  renderTopics();
+  const i=$('new-topic-input');
+  if(i)i.focus();
+}
+function cancelTopic(){addingTopic=false;renderTopics();}
+function newTopicKey(e){
+  if(e.key==='Enter')createTopic();
+  else if(e.key==='Escape')cancelTopic();
+}
+function createTopic(){
+  const inp=$('new-topic-input');
+  const name=(inp?inp.value:'').trim();
+  if(!name){toast('Erst einen Namen eingeben');return;}
+  if(allTopics().some(t=>t.toLowerCase()===name.toLowerCase())){toast('Dieses Thema gibt es schon');return;}
+  deck.customTopics=deck.customTopics||[];
+  deck.customTopics.push(name);
+  addingTopic=false;
+  saveDeck();
+  renderTopics();
+  toast('Thema „'+name+'“ angelegt — jetzt Wörter hinzufügen');
+  goAdd();
+  $('f-topic').value=name;
+}
+function removeTopic(e,i){
+  e.stopPropagation();
+  const t=TOPICS[i];
+  if(t===undefined)return;
+  deck.customTopics=(deck.customTopics||[]).filter(x=>x!==t);
+  deck.inactive=(deck.inactive||[]).filter(x=>x!==t);
+  saveDeck();
+  renderTopics();
+  toast('Thema entfernt');
 }
 function topicActive(t){return (deck.inactive||[]).indexOf(t)<0;}
 function toggleTopic(i){
@@ -1672,10 +1718,16 @@ function renderTopics(){
     const bar='<span class="tbar"><span class="tb tb-rev" style="width:'+revPct.toFixed(1)+'%"></span><span class="tb tb-lrn" style="width:'+lrnPct.toFixed(1)+'%"></span></span>';
     const cnt=(s.total>0&&s.nw===0?'✓ ':'')+s.total;
     const info=s.nw+' neu · '+s.lrn+' am Lernen · '+s.rev+' gelernt';
+    const emptyCustom=s.total===0&&(deck.customTopics||[]).indexOf(t)>=0;
+    const tcHtml=emptyCustom
+      ?'<span class="tc tc-x" title="Leeres Thema entfernen" onclick="removeTopic(event,'+i+')">×</span>'
+      :'<span class="tc">'+cnt+'</span>';
     return '<button class="tchip'+(on?' on':'')+'" title="'+info+'" onclick="toggleTopic('+i+')">'+tick+
       '<span class="tlbl">'+esc(t)+(en?'<span class="tsub">'+esc(en)+'</span>':'')+bar+'</span>'+
-      '<span class="tc">'+cnt+'</span></button>';
-  }).join('');
+      tcHtml+'</button>';
+  }).join('')+(addingTopic
+    ?'<span class="tchip tchip-new-input"><input id="new-topic-input" class="ntin" placeholder="Neues Thema …" maxlength="40" onkeydown="newTopicKey(event)"><button class="ntbtn" title="Anlegen" onclick="createTopic()">✓</button><button class="ntbtn ntcancel" title="Abbrechen" onclick="cancelTopic()">×</button></span>'
+    :'<button class="tchip tchip-new" onclick="showTopicInput()">+ Thema</button>');
   $('topics-dl').innerHTML=TOPICS.map(t=>{
     const en=TOPIC_EN[t];
     return '<option value="'+esc(t)+'"'+(en?' label="'+esc(en)+'"':'')+'>';
