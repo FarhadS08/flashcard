@@ -61,8 +61,12 @@ h1{font-size:26px;font-weight:700;letter-spacing:-.01em;line-height:1.1}
 .setup-panel .topic-legend{margin:-4px 2px 12px}
 .setup-panel .size-row{margin-bottom:8px}
 .topics{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
-.deck-group{font-size:10.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#8A8F8B;margin:4px 2px 8px;display:flex;justify-content:space-between;align-items:center}
-.dg-toggle{border:0;background:none;color:#0A7A52;font:inherit;font-size:11px;font-weight:600;cursor:pointer;text-transform:none;letter-spacing:0;padding:2px 0}
+.deck-group{font-size:10.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#8A8F8B;margin:0 0 8px;display:flex;gap:8px;align-items:center;background:#FAFBFA;border:1px solid #EEF0EF;border-radius:11px;padding:10px 12px;cursor:pointer;user-select:none;transition:border-color .15s}
+.deck-group:hover{border-color:#C9CFCB}
+.dg-chev{flex:none;color:#A5AAA6;transition:transform .15s}
+.deck-group.open .dg-chev{transform:rotate(90deg)}
+.dg-count{margin-left:auto;color:#A5AAA6;font-weight:600;letter-spacing:0;text-transform:none;font-size:11px;white-space:nowrap}
+.dg-toggle{border:0;background:none;color:#0A7A52;font:inherit;font-size:11px;font-weight:600;cursor:pointer;text-transform:none;letter-spacing:0;padding:2px 0;flex:none}
 .dg-toggle:hover{text-decoration:underline}
 .deck-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
 .dcard{position:relative;background:#fff;border:1.5px solid #E7EAE8;border-radius:14px;padding:11px 12px 10px;cursor:pointer;text-align:left;font:inherit;transition:border-color .15s,background .15s;display:flex;flex-direction:column;gap:6px;min-width:0}
@@ -2068,6 +2072,13 @@ function groupToggle(gi){
   renderSetupSum();
   startSession();
 }
+let groupOpen={};
+try{groupOpen=JSON.parse(localStorage.getItem('ws-groups-open')||'{}')||{};}catch(e){groupOpen={};}
+function toggleGroup(gi){
+  groupOpen[gi]=!groupOpen[gi];
+  try{localStorage.setItem('ws-groups-open',JSON.stringify(groupOpen));}catch(e){}
+  renderTopics();
+}
 function renderTopics(){
   TOPICS=allTopics();
   const defs=[[t('ui.more')],['Sätze & Floskeln'],['Grundwortschatz'],[t('ui.laender')]];
@@ -2081,9 +2092,14 @@ function renderTopics(){
   deckGroups.forEach((idxs,gi)=>{
     if(!idxs.length&&gi!==0)return;
     const allOn=idxs.length>0&&idxs.every(i=>topicActive(TOPICS[i]));
-    out+='<div class="deck-group"><span>'+esc(defs[gi][0])+'</span>'+
-      (idxs.length>1?'<button class="dg-toggle" onclick="groupToggle('+gi+')">'+esc(allOn?t('ui.alloff'):t('ui.allon'))+'</button>':'')+
-      '</div><div class="deck-grid">'+
+    const actN=idxs.filter(i=>topicActive(TOPICS[i])).length;
+    const open=!!groupOpen[gi]||(gi===0&&addingTopic);
+    out+='<div class="deck-group'+(open?' open':'')+'" onclick="toggleGroup('+gi+')">'+
+      '<svg class="dg-chev" width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l8 7-8 7"/></svg>'+
+      '<span>'+esc(defs[gi][0])+'</span>'+
+      '<span class="dg-count">'+actN+'/'+idxs.length+' '+esc(t('ui.active'))+'</span>'+
+      (idxs.length>1?'<button class="dg-toggle" onclick="event.stopPropagation();groupToggle('+gi+')">'+esc(allOn?t('ui.alloff'):t('ui.allon'))+'</button>':'')+
+      '</div><div class="deck-grid'+(open?'':' hidden')+'">'+
       idxs.map(i=>deckCard(TOPICS[i],i)).join('')+
       (gi===0?addTile():'')+
       '</div>';
