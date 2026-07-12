@@ -24,6 +24,8 @@ You stay logged in via a secure (`HttpOnly`) session cookie that renews itself f
 - **Spaced repetition (SM-2)** — the Anki-style algorithm: four grades (Nochmal / Schwer / Gut / Leicht) with the projected interval shown on each button, learning steps for new cards (1/10 min), growing review intervals (interval × per-card ease factor, with fuzz), and lapse handling (failed reviews drop into relearning with a reduced interval and ease). Decks from the previous Leitner version migrate automatically with progress preserved
 - **Topics** — toggle categories on/off with the chips above the card deck
 - **Rounds ("Pro Runde")** — practice in chunks of 5 / 10 / 15 / 25 cards instead of everything at once; the done screen shows how many cards are still due and starts the next chunk
+- **Learn state for new words** — cards you have never studied are presented first (word, translation, example and note all visible) before they get quizzed later in the same round; "Kenn ich schon" skips a known word straight to a 4-day interval
+- **Repeat & drill** — "Diese Runde wiederholen" runs the same words again as an ungraded practice round (your schedule stays untouched); in the word list, "Auswählen" lets you hand-pick any words and start them as a real learning round or a drill
 - **Unlimited words** — add your own words in the *+ Neu* tab
 - **AI assist** — type just the German word and the AI fills in the article, translation, example sentence (with English translation) and a grammar note
 - **Example translations** — cards with an example sentence show its English translation right below it

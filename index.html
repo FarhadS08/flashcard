@@ -96,6 +96,14 @@ h1{font-size:26px;font-weight:700;letter-spacing:-.01em;line-height:1.1}
 .ghost:hover{border-color:#C9CFCB}
 #study-actions{min-height:54px}
 
+.present-face{position:absolute;inset:0;background:#fff;border:1px solid #E4E7E5;border-radius:22px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:34px 28px;box-shadow:0 10px 30px rgba(17,40,30,.06);cursor:default}
+.new-pill{position:absolute;top:16px;left:50%;transform:translateX(-50%);font-size:10.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#0A7A52;background:#E3F2EB;padding:4px 12px;border-radius:999px;white-space:nowrap}
+.present-face .term{font-size:29px;margin-bottom:6px}
+.present-face .term.long{font-size:24px}
+.present-face .term.xlong{font-size:19px}
+.present-face .trans{font-size:20px;color:#333333}
+.present-face .trans.long{font-size:17px}
+
 .state{background:#fff;border:1px solid #E4E7E5;border-radius:22px;padding:52px 30px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:10px}
 .state-h{font-size:21px;font-weight:600}
 .state-p{font-size:14.5px;color:#666666;margin-bottom:10px;line-height:1.6}
@@ -105,6 +113,15 @@ h1{font-size:26px;font-weight:700;letter-spacing:-.01em;line-height:1.1}
 #search{flex:1;height:46px;border:1px solid #E4E7E5;border-radius:13px;padding:0 16px;font:inherit;font-size:16px;background:#fff;outline:none;transition:border .15s,box-shadow .15s}
 #search:focus{border-color:#0A7A52;box-shadow:0 0 0 3px rgba(10,122,82,.12)}
 #count-label{font-size:13px;color:#9A9A9A;white-space:nowrap}
+.btn-select{border:1px solid #E4E7E5;background:#fff;color:#555555;border-radius:13px;height:46px;padding:0 14px;font:inherit;font-size:13.5px;font-weight:600;cursor:pointer;flex:none;transition:all .13s}
+.btn-select.on{border-color:#0A7A52;color:#0A7A52;background:#E3F2EB}
+.selbox{width:18px;height:18px;border-radius:50%;border:1.5px solid #C9CFCB;flex:none;display:inline-flex;align-items:center;justify-content:center}
+.row.selon{border-color:#0A7A52;background:#F3FAF6}
+.row.selon .selbox{background:#0A7A52;border-color:#0A7A52}
+#sel-bar{position:fixed;left:50%;bottom:calc(14px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);width:calc(100% - 28px);max-width:600px;background:#fff;border:1px solid #E4E7E5;border-radius:16px;box-shadow:0 12px 40px rgba(17,40,30,.16);padding:10px 14px;display:flex;align-items:center;gap:10px;z-index:55;font-size:13.5px;color:#555555}
+#sel-bar b{color:#111111}
+#sel-bar .spacer{flex:1}
+#sel-bar .btn{height:40px;font-size:13.5px;padding:0 16px;flex:none;width:auto}
 .row{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid #E4E7E5;border-radius:15px;padding:13px 15px;margin-bottom:9px}
 .gdot{width:9px;height:9px;border-radius:50%;flex:none}
 .g-der{background:#1A3C8A}.g-die{background:#C43020}.g-das{background:#0A7A52}.g-none{background:#C9CFCB}
@@ -220,6 +237,7 @@ label{display:block;font-size:11.5px;font-weight:600;letter-spacing:.08em;text-t
     <div class="list-head">
       <input id="search" placeholder="Suchen …" oninput="renderList()">
       <span id="count-label"></span>
+      <button class="btn-select" id="btn-select" onclick="toggleSelect()">Auswählen</button>
     </div>
     <div id="word-list"></div>
   </section>
@@ -262,6 +280,8 @@ label{display:block;font-size:11.5px;font-weight:600;letter-spacing:.08em;text-t
   <div class="foot" id="foot"></div>
 </div>
 
+<div id="sel-bar" class="hidden"><span id="sel-count"></span><span class="spacer"></span><button class="btn ghost" onclick="startSelected(true)">Üben</button><button class="btn knew" onclick="startSelected(false)">Lernen</button></div>
+
 <div id="cookie-note" class="hidden" role="region" aria-label="Cookie-Hinweis">
   <div class="cn-text"><b>🍪 Nur notwendige Cookies.</b> Fürs Angemeldet-Bleiben setzt die App ein einziges Login-Cookie — kein Tracking, keine Werbung. Deine Wörter bleiben auf dem Gerät bzw. in deinem Konto.</div>
   <button class="btn knew" onclick="cookieOk()">Alles klar!</button>
@@ -280,6 +300,8 @@ const AUTO_LABEL='<svg width="13" height="13" viewBox="0 0 24 24" fill="currentC
 
 let deck={words:[]};
 let queue=[],qi=0,flipped=false,sessionKnew=0,sessionAgain=0;
+let practice=false,roundIds=[],toPresent=new Set();
+let selectMode=false,selIds=new Set();
 let editingId=null,armedDelete=null,armTimer=null,selArt='',currentView='study';
 let artTouched=false,saving=false;
 let storageOK=true;
@@ -1644,6 +1666,7 @@ function show(v){
   if(v==='list')renderList();
   if(v==='study')renderStudy();
   if(v==='account')renderAccount();
+  if(v!=='list')$('sel-bar').classList.add('hidden');
 }
 function goAdd(){resetForm();show('add');$('f-word').focus();}
 
@@ -1709,13 +1732,50 @@ function setSize(n){
 function syncSize(){
   document.querySelectorAll('.schip').forEach(b=>b.classList.toggle('on',Number(b.dataset.n)===sessionSize()));
 }
+function markPresentations(){
+  toPresent=new Set(queue.filter(id=>{
+    const w=deck.words.find(x=>x.id===id);
+    return w&&nrm(w).phase==='new';
+  }));
+}
 function startSession(all){
   const now=Date.now();
   const pool=deck.words.filter(w=>topicActive(w.topic||'Meine Wörter')&&(all||(w.due||0)<=now));
   queue=shuffle(pool.map(w=>w.id));
   const lim=sessionSize();
   if(lim&&queue.length>lim)queue=queue.slice(0,lim);
+  practice=false;
+  roundIds=queue.slice();
+  markPresentations();
   qi=0;flipped=false;sessionKnew=0;sessionAgain=0;
+  renderStudy();
+}
+function startRound(ids,opts){
+  queue=shuffle(ids.filter(id=>deck.words.some(w=>w.id===id)));
+  practice=!!(opts&&opts.practice);
+  roundIds=queue.slice();
+  markPresentations();
+  qi=0;flipped=false;sessionKnew=0;sessionAgain=0;
+  show('study');
+}
+function repeatRound(){startRound(roundIds,{practice:true});}
+function presentNext(known){
+  const id=queue[qi];
+  const w=deck.words.find(x=>x.id===id);
+  if(!w)return;
+  toPresent.delete(id);
+  if(known&&!practice){
+    nrm(w);
+    const r=schedule(w,3);
+    w.reps=(w.reps||0)+1;
+    w.phase=r.phase;w.ivl=r.ivl;w.ease=r.ease;w.step=r.step;
+    w.due=Date.now()+r.dueMs;
+    sessionKnew++;
+    saveDeck();
+  }else if(!known){
+    queue.push(id);
+  }
+  qi++;flipped=false;
   renderStudy();
 }
 
@@ -1743,11 +1803,19 @@ function stateBox(t,p,label,action){
 function doneBox(){
   const now=Date.now();
   const left=deck.words.filter(w=>topicActive(w.topic||'Meine Wörter')&&(w.due||0)<=now).length;
-  return '<div class="state">'+
-    '<svg width="52" height="52" viewBox="0 0 52 52"><circle cx="26" cy="26" r="25" fill="#E3F2EB"/><path d="M16 27l7 7 13-14" stroke="#0A7A52" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>'+
+  const svg='<svg width="52" height="52" viewBox="0 0 52 52"><circle cx="26" cy="26" r="25" fill="#E3F2EB"/><path d="M16 27l7 7 13-14" stroke="#0A7A52" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  if(practice){
+    return '<div class="state">'+svg+
+      '<div class="state-h">Übungsrunde geschafft</div>'+
+      '<div class="state-p"><b>'+sessionKnew+'</b> gewusst · <b>'+sessionAgain+'</b> wiederholt<br>Ohne Wertung — dein Lernplan bleibt unverändert.</div>'+
+      '<button class="btn knew" onclick="repeatRound()">Nochmal wiederholen</button>'+
+      '<button class="btn ghost" onclick="startSession()">Zurück zum Lernen</button></div>';
+  }
+  return '<div class="state">'+svg+
     '<div class="state-h">Runde geschafft</div>'+
     '<div class="state-p"><b>'+sessionKnew+'</b> gewusst · <b>'+sessionAgain+'</b> wiederholt'+(left?'<br>Noch <b>'+left+'</b> Karten fällig.':'')+'</div>'+
-    '<button class="btn knew" onclick="startSession()">'+(left?'Nächste Runde':'Weiter üben')+'</button></div>';
+    '<button class="btn knew" onclick="startSession()">'+(left?'Nächste Runde':'Weiter üben')+'</button>'+
+    (roundIds.length?'<button class="btn ghost" onclick="repeatRound()">Diese Runde wiederholen</button>':'')+'</div>';
 }
 
 function cardHtml(w){
@@ -1769,7 +1837,21 @@ function cardHtml(w){
       '</div>'+
     '</div>'+
   '</div>'+
-  '<div class="counter">Karte '+(qi+1)+' von '+queue.length+'</div>';
+  '<div class="counter">'+(practice?'Übung · ':'')+'Karte '+(qi+1)+' von '+queue.length+'</div>';
+}
+function presentHtml(w){
+  const artTxt=w.art?'<span class="art-'+w.art+'-t">'+w.art+'</span> ':'';
+  const tLen=((w.art?w.art+' ':'')+w.de).length;
+  const tCls=tLen>36?' xlong':tLen>18?' long':'';
+  return '<div class="card"><div class="present-face">'+
+    '<div class="new-pill">Neues Wort — erst mal ansehen</div>'+
+    '<div class="term'+tCls+'">'+artTxt+esc(w.de)+'</div>'+
+    '<div class="trans'+(w.en.length>32?' long':'')+'">'+esc(w.en)+'</div>'+
+    (w.ex?'<div class="ex">„'+esc(w.ex)+'“</div>':'')+
+    (w.ex&&w.ext?'<div class="ext">'+esc(w.ext)+'</div>':'')+
+    (w.note?'<div class="note">'+esc(w.note)+'</div>':'')+
+  '</div></div>'+
+  '<div class="counter">'+(practice?'Übung · ':'')+'Karte '+(qi+1)+' von '+queue.length+'</div>';
 }
 
 function renderStudy(){
@@ -1800,14 +1882,22 @@ function renderStudy(){
   prog.style.visibility='visible';
   $('study-bar').style.width=Math.round(qi/queue.length*100)+'%';
   const w=deck.words.find(x=>x.id===queue[qi]);
-  stage.innerHTML=cardHtml(w);
+  stage.innerHTML=toPresent.has(w.id)?presentHtml(w):cardHtml(w);
   renderActions();
 }
 
 function renderActions(){
   const acts=$('study-actions');
   if(deck.words.length===0||queue.length===0||qi>=queue.length){acts.innerHTML='';return;}
+  if(toPresent.has(queue[qi])){
+    acts.innerHTML='<div class="grade"><button class="btn ghost" onclick="presentNext(true)">Kenn ich schon</button><button class="btn knew" onclick="presentNext(false)">Weiter</button></div>';
+    return;
+  }
   if(!flipped){acts.innerHTML='<button class="btn ghost" onclick="flipCard()">Antwort zeigen</button>';return;}
+  if(practice){
+    acts.innerHTML='<div class="grade"><button class="btn again" onclick="gradeCard(0)">Nochmal</button><button class="btn knew" onclick="gradeCard(2)">Gewusst</button></div>';
+    return;
+  }
   const w=deck.words.find(x=>x.id===queue[qi]);
   nrm(w);
   const gb=(q,cls,label)=>'<button class="btn '+cls+'" onclick="gradeCard('+q+')">'+label+'<span class="ivl-hint">'+fmtDue(schedule(w,q).dueMs)+'</span></button>';
@@ -1816,6 +1906,7 @@ function renderActions(){
 
 function flipCard(){
   if(qi>=queue.length)return;
+  if(toPresent.has(queue[qi]))return;
   flipped=!flipped;
   const c=document.querySelector('.card');
   if(c)c.classList.toggle('flipped',flipped);
@@ -1825,6 +1916,12 @@ function flipCard(){
 function gradeCard(q){
   const w=deck.words.find(x=>x.id===queue[qi]);
   if(!w)return;
+  if(practice){
+    if(q===0){sessionAgain++;queue.push(w.id);}else{sessionKnew++;}
+    qi++;flipped=false;
+    renderStudy();
+    return;
+  }
   nrm(w);
   const wasReview=w.phase==='review';
   const r=schedule(w,q);
@@ -1843,8 +1940,20 @@ function renderList(){
   const q=($('search').value||'').toLowerCase();
   const rows=deck.words.filter(w=>((w.art||'')+' '+w.de+' '+w.en+' '+(w.topic||'')).toLowerCase().includes(q));
   $('count-label').textContent=rows.length+(rows.length===1?' Wort':' Wörter');
+  const TICK='<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 13l5 5L20 7"/></svg>';
   $('word-list').innerHTML=rows.map(w=>{
     const g=w.art||'none';
+    if(selectMode){
+      const on=selIds.has(w.id);
+      return '<div class="row selrow'+(on?' selon':'')+'" onclick="toggleSel(\''+w.id+'\')" style="cursor:pointer">'+
+        '<span class="selbox">'+(on?TICK:'')+'</span>'+
+        '<div class="row-main">'+
+          '<div class="row-de">'+(w.art?w.art+' ':'')+esc(w.de)+'</div>'+
+          '<div class="row-en">'+esc(w.en)+'<span class="row-topic"> · '+esc(w.topic||'Meine Wörter')+'</span></div>'+
+        '</div>'+
+        '<div class="dots small">'+boxDots(lvl(w))+'</div>'+
+      '</div>';
+    }
     return '<div class="row">'+
       '<span class="gdot g-'+g+'"></span>'+
       '<div class="row-main" onclick="openEdit(\''+w.id+'\')">'+
@@ -1855,6 +1964,7 @@ function renderList(){
       '<button class="icon-btn'+(armedDelete===w.id?' armed':'')+'" onclick="delWord(\''+w.id+'\')" title="Löschen">'+(armedDelete===w.id?'Sicher?':TRASH)+'</button>'+
     '</div>';
   }).join('')||'<div class="empty-list">Nichts gefunden.</div>';
+  renderSelBar();
 }
 
 function delWord(id){
@@ -1866,12 +1976,37 @@ function delWord(id){
   }
   deck.words=deck.words.filter(w=>w.id!==id);
   queue=queue.filter(x=>x!==id);
+  selIds.delete(id);toPresent.delete(id);
   if(qi>queue.length)qi=queue.length;
   armedDelete=null;
   saveDeck();updateStats();renderList();renderTopics();
   toast('Gelöscht');
 }
 
+function toggleSelect(){
+  selectMode=!selectMode;
+  selIds.clear();
+  const b=$('btn-select');
+  b.textContent=selectMode?'Fertig':'Auswählen';
+  b.classList.toggle('on',selectMode);
+  renderList();
+}
+function toggleSel(id){
+  if(selIds.has(id))selIds.delete(id);else selIds.add(id);
+  renderList();
+}
+function renderSelBar(){
+  const bar=$('sel-bar');
+  const show=selectMode&&selIds.size>0&&currentView==='list';
+  bar.classList.toggle('hidden',!show);
+  if(show)$('sel-count').innerHTML='<b>'+selIds.size+'</b> ausgewählt';
+}
+function startSelected(prac){
+  const ids=[...selIds];
+  if(!ids.length)return;
+  toggleSelect();
+  startRound(ids,{practice:prac});
+}
 function setArt(a,byUser){
   selArt=a;
   if(byUser)artTouched=true;
@@ -2023,6 +2158,10 @@ document.addEventListener('keydown',e=>{
   if(currentView!=='study')return;
   const tag=document.activeElement&&document.activeElement.tagName;
   if(tag==='INPUT'||tag==='TEXTAREA')return;
+  if(qi<queue.length&&toPresent.has(queue[qi])){
+    if(e.code==='Space'||e.key==='ArrowRight'){e.preventDefault();presentNext(false);}
+    return;
+  }
   if(e.code==='Space'){e.preventDefault();flipCard();}
   else if(flipped&&e.key==='ArrowLeft')gradeCard(0);
   else if(flipped&&e.key==='ArrowRight')gradeCard(2);
